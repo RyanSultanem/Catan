@@ -1,0 +1,5 @@
+Debug/
+*.db
+x64/
+.vs/
+*.user

@@ -13,6 +13,8 @@ class PointReceiver : public Owner
 {
 public:
    virtual void receivePoints(int points) = 0;
+   virtual void decreaseSettlmentCount() = 0;
+   virtual void increaseSettlmentCount() = 0;
 };
 
 }

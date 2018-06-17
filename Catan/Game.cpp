@@ -2,9 +2,10 @@
 
 #include <algorithm>
 
-Game::Game(Interface & interface)
-   : m_interface(interface)
+Game::Game(Interface & interface, int numberOfPlayers)
+   : m_interface(interface), m_numberOfPlayers(numberOfPlayers)
 {
+   m_players.reserve(numberOfPlayers);
 }
 
 
@@ -20,13 +21,14 @@ void Game::play()
 
    initialSettlmentPlacement();
 
-   m_interface.updateBoard();
-
-
+   //m_interface.updateBoard();
+   m_interface.printBoard(m_board.serialize());
 }
 
 void Game::setupPlayers()
 {
+   for(int i = 0; i < m_numberOfPlayers; ++i)
+      m_players.push_back(player::Player(m_playerId++));
 }
 
 void Game::initialSettlmentPlacement()

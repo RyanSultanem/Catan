@@ -18,7 +18,8 @@ public:
    virtual int getPoints() const = 0;
    std::string serialize() const override;
 
-private:
+//private: to check
+protected:
    player::PointReceiver & m_pointReceiver;
 };
 
@@ -29,6 +30,7 @@ public:
 
 	const std::map<card::Ressource, int>& getCost() const override;
 	int getPoints() const override;
+   void setPlaced() const;
 
    std::string serialize() const override;
 };
@@ -40,6 +42,7 @@ public:
 
 	const std::map<card::Ressource, int>& getCost() const override;
 	int getPoints() const override;
+   void setPlaced() const;
 
    std::string serialize() const override;
 };

@@ -11,6 +11,8 @@ class Token : public serialize::Serializable
 {
 public:
 	virtual const std::map<card::Ressource, int>& getCost() const = 0;
+   virtual void setPlaced() const = 0;
+
 	virtual ~Token() {};
 };
 

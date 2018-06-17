@@ -22,7 +22,7 @@ std::string containerSerialize(const std::vector<SerializableItem> & input, cons
    });
 
    std::string result = std::accumulate(std::next(vecResult.begin()), vecResult.end(), initalValue + tag + vecResult[0], [](const std::string & res, const std::string & element) {
-      return res + '-' + element;
+      return res + " - " + element;
    });
 
    return std::move(result + '\n');

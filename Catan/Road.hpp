@@ -13,6 +13,7 @@ public:
    Road(player::Owner & owner);
 
 	const std::map<card::Ressource, int>& getCost() const override;
+   void setPlaced() const override;
    bool operator==(const Road& other) const;
 
    std::string serialize() const override;

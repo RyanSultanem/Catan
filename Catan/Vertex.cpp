@@ -32,6 +32,7 @@ bool Vertex::hasEdge(int id) const
 void Vertex::setBuilding(token::building::Building& building)
 {
 	m_building = &building;
+   building.setPlaced();
 }
 
 const std::optional<token::building::Building*>& Vertex::getBuilding() const

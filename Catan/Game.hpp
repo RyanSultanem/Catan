@@ -10,14 +10,18 @@
 class Game
 {
 public:
-   Game(Interface & interface);
+   Game(Interface & interface, int numberOfPlayers);
    ~Game();
 
    void play();
 
 private:
    board::Board m_board;
+
+   int m_playerId = 0;
+   int m_numberOfPlayers;
    std::vector<player::Player> m_players;
+   
    Interface & m_interface;
 
    void setupPlayers();

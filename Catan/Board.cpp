@@ -162,6 +162,9 @@ bool Board::isConnectedEdges(std::vector<int> edgeIds) const
 
 bool Board::placeSettlement(int position, token::building::Settlement & settlement)
 {
+   if (position < 0 || position >= m_vertices.size())
+      return false;
+
    auto & vertex = m_vertices.at(position);
    
    if(!vertex.getBuilding())

@@ -17,6 +17,11 @@ const std::map<card::Ressource, int>& Road::getCost() const
 	return ROAD_COST;
 }
 
+void Road::setPlaced() const
+{
+
+}
+
 bool Road::operator==(const Road & other) const
 {
    return true;

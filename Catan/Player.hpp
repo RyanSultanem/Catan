@@ -11,12 +11,15 @@ namespace player {
 class Player : public PointReceiver
 {
 public:
-   Player(int id);
+   explicit Player(int id);
+   Player(const Player & player);
    ~Player();
 
    std::optional<token::building::SettlementRef> getSettlement();
    int getId() const override;
    void receivePoints(int points) override;
+   void increaseSettlmentCount() override;
+   void decreaseSettlmentCount() override;
 
 private:
    int m_id;

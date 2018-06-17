@@ -10,6 +10,8 @@ class PointReceiverMock : public player::PointReceiver
 {
    int getId() const override { return 0; }
    void receivePoints(int points) override {}
+   void increaseSettlmentCount() override {}
+   void decreaseSettlmentCount() override {}
 };
 
 PointReceiverMock globalPointReceiver;

@@ -18,7 +18,12 @@ public:
 
    int getBuildingPlacementPosition(int playerId) override
    {
-      return 0;
+      int position;
+
+      std::cout << "Choose a position for initial settlment for Player " << playerId << ": ";
+      std::cin >> position;
+
+      return position;
    }
 
 };
@@ -26,6 +31,6 @@ public:
 TEST(GameTest, canaryTest)
 {
    InterfaceStub interface;
-   Game game(interface);
+   Game game(interface, 3);
    game.play();
 }

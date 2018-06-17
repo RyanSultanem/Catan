@@ -44,6 +44,11 @@ int Settlement::getPoints() const
 	return SETTLEMENT_POINTS;
 }
 
+void Settlement::setPlaced() const
+{
+   m_pointReceiver.decreaseSettlmentCount();
+}
+
 std::string Settlement::serialize() const
 {
    return "S" + '|' + Building::serialize();
@@ -61,6 +66,10 @@ const std::map<card::Ressource, int>& City::getCost() const
 int City::getPoints() const
 {
 	return CITY_POINTS;
+}
+
+void City::setPlaced() const
+{
 }
 
 std::string City::serialize() const

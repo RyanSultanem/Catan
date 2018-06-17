@@ -1,4 +1,5 @@
 Debug/
+Release/
 *.db
 x64/
 .vs/

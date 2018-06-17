@@ -28,7 +28,7 @@ TEST(EdgeTest, EdgeCreation)
 TEST(EdgeTest, EdgeRoadCreation)
 {
    Vertex v1, v2;
-   Edge edge(v1, v2);
+   Edge edge(v1, v2); 
 
    token::Road road(ownerMock);
 

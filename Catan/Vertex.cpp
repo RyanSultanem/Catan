@@ -2,6 +2,7 @@
 
 #include "Vertex.h"
 #include "Edge.h"
+#include "Building.hpp"
 
 namespace board {
 
@@ -36,6 +37,12 @@ void Vertex::setBuilding(token::building::Building& building)
 const std::optional<token::building::Building*>& Vertex::getBuilding() const
 {
 	return m_building;
+}
+
+std::string Vertex::serialize() const
+{
+   return std::to_string(m_id) + ',' +
+      (m_building ? m_building.value()->serialize() : "N");
 }
 
 } // namespace board

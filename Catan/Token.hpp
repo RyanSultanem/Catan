@@ -3,10 +3,11 @@
 
 #include <map>
 #include "Card.h"
+#include "Serializable.hpp"
 
 namespace token {
 
-class Token
+class Token : public serialize::Serializable
 {
 public:
 	virtual const std::map<card::Ressource, int>& getCost() const = 0;

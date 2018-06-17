@@ -17,7 +17,7 @@ public:
 
 private:
    board::Board m_board;
-   std::vector<Player> m_players;
+   std::vector<player::Player> m_players;
    Interface & m_interface;
 
    void setupPlayers();

@@ -2,13 +2,14 @@
 
 #include "Game.hpp"
 #include "Interface.hpp"
+#include <iostream>
 
 class InterfaceStub : public Interface
 {
 public:
-   void printBoard() override
+   void printBoard(const std::string & board) override
    {
-      
+      std::cout << board << std::endl;
    }
    void updateBoard() override
    {

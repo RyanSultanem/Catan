@@ -86,7 +86,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Users\Ryan\Documents\Visual Studio 2015\Projects\Catan\Catan;C:\Users\Ryan\Documents\Visual Studio 2015\Projects\googletest-master\googletest\;C:\Users\Ryan\Documents\Visual Studio 2015\Projects\googletest-master\googletest\include;$(IncludePath)</IncludePath>
+    <IncludePath>..\Catan;C:\Users\Ryan\Documents\Visual Studio 2015\Projects\googletest-master\googletest\;C:\Users\Ryan\Documents\Visual Studio 2015\Projects\googletest-master\googletest\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>

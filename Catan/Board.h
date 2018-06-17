@@ -9,10 +9,11 @@
 #include "Cell.h"
 #include "Vertex.h"
 #include "Edge.h"
+#include "Serializable.hpp"
 
 namespace board {
 
-class Board
+class Board : public serialize::Serializable
 {
 public:
 	Board();
@@ -25,12 +26,15 @@ public:
 	bool isConnectedEdges(std::vector<int> edgeIds) const;
    bool placeSettlement(int position, token::building::Settlement & settlement);
 
+   std::string serialize() const override;
+
 private:
 	int m_cellId = 0;
 	std::vector<cell::Cell> m_cells;
 
 	int m_vertexId = 0;
 	std::vector<Vertex> m_vertices;
+
 	int m_edgeId = 0;
 	std::vector<Edge> m_edges;
 

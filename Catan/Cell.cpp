@@ -14,3 +14,10 @@ int cell::Cell::getId() const
 {
 	return m_id;
 }
+
+std::string cell::Cell::serialize() const
+{
+   return std::to_string(m_id) + ',' + 
+      std::to_string(m_number) + ',' + 
+      std::to_string(static_cast<int>(m_land.getRessourceType()));
+}

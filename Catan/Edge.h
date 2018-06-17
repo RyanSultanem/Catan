@@ -6,11 +6,12 @@
 
 #include "Edge.fwd.h"
 #include "Vertex.fwd.h"
-#include "Road.hpp"
+#include "Road.fwd.hpp"
+#include "Serializable.hpp"
 
 namespace board {
 
-class Edge
+class Edge : public serialize::Serializable
 {
 public:
 	Edge(const Vertex& v1, const Vertex& v2, int id = 0);
@@ -20,14 +21,16 @@ public:
 	bool hasNeighboorEdge(int id) const;
 
 	void setRoad(token::Road& road);
-	const std::optional<token::Road>& getRoad() const;
+	const std::optional<token::Road*>& getRoad() const;
+
+   std::string serialize() const override;
 
 private:
 	int m_id;
 	const Vertex& m_v1;
 	const Vertex& m_v2;
 
-   std::optional<token::Road> m_road;
+   std::optional<token::Road*> m_road;
 };
 
 } // namespace board

@@ -16,7 +16,7 @@ struct BoardTest : public testing::Test
 	{
 		delete board;
 	}
-};
+}; 
 
 Board* BoardTest::board = nullptr;
 

@@ -5,11 +5,12 @@
 #include <optional>
 #include "Vertex.fwd.h"
 #include "Edge.fwd.h"
-#include "Building.hpp"
+#include "Building.fwd.hpp"
+#include "Serializable.hpp"
 
 namespace board {
 
-class Vertex
+class Vertex : public serialize::Serializable
 {
 public:
 	Vertex(int id = 0);
@@ -18,6 +19,8 @@ public:
 	bool hasEdge(int id) const;
 	void setBuilding(token::building::Building& building);
 	const std::optional<token::building::Building*>& getBuilding() const;
+
+   std::string serialize() const override;
 
 private:
 	std::vector<EdgeRef> m_edges;

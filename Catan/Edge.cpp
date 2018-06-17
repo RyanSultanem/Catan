@@ -1,5 +1,6 @@
 #include "Edge.h"
 #include "Vertex.h"
+#include "Road.hpp"
 
 namespace board {
 
@@ -25,12 +26,18 @@ bool Edge::hasNeighboorEdge(int id) const
 
 void Edge::setRoad(token::Road & road)
 {
-	m_road = road;
+	m_road = &road;
 }
 
-const std::optional<token::Road> & Edge::getRoad() const
+const std::optional<token::Road*> & Edge::getRoad() const
 {
 	return m_road;
+}
+
+std::string Edge::serialize() const
+{
+   return std::to_string(m_id) + ',' +
+      (m_road ? m_road.value()->serialize(): "N");
 }
 
 } // namespace board

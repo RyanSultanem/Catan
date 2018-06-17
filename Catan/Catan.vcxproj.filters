@@ -78,6 +78,12 @@
     <ClInclude Include="Interface.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Serializable.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerInterface.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Card.cpp">

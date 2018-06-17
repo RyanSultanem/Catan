@@ -16,7 +16,7 @@ void Game::play()
 {
    setupPlayers();
 
-   m_interface.printBoard();
+   m_interface.printBoard(m_board.serialize());
 
    initialSettlmentPlacement();
 
@@ -31,23 +31,18 @@ void Game::setupPlayers()
 
 void Game::initialSettlmentPlacement()
 {
-   auto placeSettlement = [&](Player & player)
+   auto placeSettlement = [&](player::Player & player)
    {
       bool success = false;
       
-      while(success)
+      while(!success)
       {
          std::optional<token::building::SettlementRef> settlement = player.getSettlement();
-         if(settlement)
+         if (settlement)
          {
             int position = m_interface.getBuildingPlacementPosition(player.getId());
             success = m_board.placeSettlement(position, settlement.value());
-         }
-         else
-         {
-            success = false;
-         }
-         
+         }   
       }
    };
 

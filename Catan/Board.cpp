@@ -1,10 +1,9 @@
 #include "Board.h"
-#include "Cell.h"
 #include "Card.h"
 #include "Land.h"
-#include "Edge.h"
-#include "Vertex.h"
+#include "Building.hpp"
 #include <algorithm>
+#include <numeric>
 
 namespace board {
 
@@ -100,6 +99,11 @@ void Board::initializeCells()
 std::vector<VertexRef> Board::createVerticesVector(const std::vector<int>& indices)
 {
 	std::vector<VertexRef> cellVertices;
+   cellVertices.reserve(indices.size());
+
+   //std::transform(indices.begin(), indices.end(), std::back_inserter(cellVertices), [&](int i) {
+   //   return m_vertices[i];
+   //});
 
 	std::for_each(begin(indices), end(indices), [&](int i) {
 		cellVertices.push_back(m_vertices[i]);
@@ -158,17 +162,27 @@ bool Board::isConnectedEdges(std::vector<int> edgeIds) const
 
 bool Board::placeSettlement(int position, token::building::Settlement & settlement)
 {
-   bool success = false;
-
    auto & vertex = m_vertices.at(position);
    
    if(!vertex.getBuilding())
    {
       vertex.setBuilding(settlement);
-      success = true;
+      return true;
    }
 
-   return success;
+   return false;
+}
+
+
+std::string Board::serialize() const
+{
+   std::string board;
+
+   board = serialize::containerSerialize(m_cells, board, "Cells: ");
+   board = serialize::containerSerialize(m_vertices, board, "Vertices: ");
+   board = serialize::containerSerialize(m_edges, board, "Edges: ");
+
+   return board;
 }
 
 } // namespace board

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -19,13 +19,14 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{5D9418C8-51EB-4C58-B861-60C7E2B0B04F}</ProjectGuid>
-    <RootNamespace>Catan</RootNamespace>
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{745A326D-3C77-47FA-B675-65168656EA48}</ProjectGuid>
+    <RootNamespace>TestGuiProject</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
@@ -74,7 +75,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <ConformanceMode>true</ConformanceMode>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -82,6 +83,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -91,6 +93,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -104,6 +107,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -111,40 +115,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Board.fwd.h" />
-    <ClInclude Include="Board.h" />
-    <ClInclude Include="Building.fwd.hpp" />
-    <ClInclude Include="Building.hpp" />
-    <ClInclude Include="Card.fwd.h" />
-    <ClInclude Include="Card.h" />
-    <ClInclude Include="Cell.fwd.h" />
-    <ClInclude Include="Cell.h" />
-    <ClInclude Include="Edge.fwd.h" />
-    <ClInclude Include="Edge.h" />
-    <ClInclude Include="Game.hpp" />
-    <ClInclude Include="Interface.hpp" />
-    <ClInclude Include="Land.fwd.h" />
-    <ClInclude Include="Land.h" />
-    <ClInclude Include="PlayerInterface.hpp" />
-    <ClInclude Include="Player.hpp" />
-    <ClInclude Include="Road.fwd.hpp" />
-    <ClInclude Include="Road.hpp" />
-    <ClInclude Include="Serializable.hpp" />
-    <ClInclude Include="Token.hpp" />
-    <ClInclude Include="Vertex.fwd.h" />
-    <ClInclude Include="Vertex.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Board.cpp" />
-    <ClCompile Include="Building.cpp" />
-    <ClCompile Include="Card.cpp" />
-    <ClCompile Include="Cell.cpp" />
-    <ClCompile Include="Edge.cpp" />
-    <ClCompile Include="Game.cpp" />
-    <ClCompile Include="Land.cpp" />
-    <ClCompile Include="Player.cpp" />
-    <ClCompile Include="Road.cpp" />
-    <ClCompile Include="Vertex.cpp" />
+    <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

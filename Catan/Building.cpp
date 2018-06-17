@@ -3,17 +3,6 @@
 namespace token {
 namespace building {
 
-
-bool Building::isOnBoard() const
-{
-   return m_onBoard;
-}
-
-void Building::setOnBoard(bool onBoard)
-{
-   m_onBoard = onBoard;
-}
-
 const std::map<card::Ressource, int> SETTLEMENT_COST =
 {
 	{ card::Ressource(card::RessourceType::BRICK), 1 },
@@ -32,6 +21,19 @@ const std::map<card::Ressource, int> CITY_COST =
 
 const int CITY_POINTS = 2;
 
+Building::Building(player::PointReceiver& pointReceiver) : m_pointReceiver(pointReceiver)
+{
+}
+
+std::string Building::serialize() const
+{
+   return std::to_string(m_pointReceiver.getId());
+}
+
+Settlement::Settlement(player::PointReceiver& pointReceiver) : Building(pointReceiver)
+{
+}
+
 const std::map<card::Ressource, int>& Settlement::getCost() const
 {
 	return SETTLEMENT_COST;
@@ -42,6 +44,15 @@ int Settlement::getPoints() const
 	return SETTLEMENT_POINTS;
 }
 
+std::string Settlement::serialize() const
+{
+   return "S" + '|' + Building::serialize();
+}
+
+City::City(player::PointReceiver& pointReceiver) : Building(pointReceiver)
+{
+}
+
 const std::map<card::Ressource, int>& City::getCost() const
 {
 	return CITY_COST;
@@ -50,6 +61,11 @@ const std::map<card::Ressource, int>& City::getCost() const
 int City::getPoints() const
 {
 	return CITY_POINTS;
+}
+
+std::string City::serialize() const
+{
+   return "C" + '|' + Building::serialize();
 }
 
 } // namespace building

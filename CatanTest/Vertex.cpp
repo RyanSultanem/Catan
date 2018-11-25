@@ -6,16 +6,6 @@
 
 using namespace board;
 
-class PointReceiverMock : public player::PointReceiver
-{
-   int getId() const override { return 0; }
-   void receivePoints(int points) override {}
-   void increaseSettlmentCount() override {}
-   void decreaseSettlmentCount() override {}
-};
-
-PointReceiverMock globalPointReceiver;
-
 TEST(VertexTest, VertexCreation)
 {
    Vertex v0;
@@ -36,7 +26,7 @@ TEST(VertexTest, VertexSettlmentConstruction)
 {
    Vertex vertex;
 
-   token::building::Settlement settlment(globalPointReceiver);
+   token::building::Settlement settlment(0);
    
    vertex.setBuilding(settlment);
 
@@ -48,7 +38,7 @@ TEST(VertexTest, VertexCityConsutrction)
 {
    Vertex vertex;
 
-   token::building::City city(globalPointReceiver);
+   token::building::City city(0);
 
    vertex.setBuilding(city);
 

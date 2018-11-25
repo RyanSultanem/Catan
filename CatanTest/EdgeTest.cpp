@@ -6,14 +6,6 @@
 
 using namespace board;
 
-class OwnerMock : public player::Owner
-{
-public:
-   int getId() const override { return 0; }
-};
-
-static OwnerMock ownerMock;
-
 TEST(EdgeTest, EdgeCreation)
 {
    Vertex v1, v2;
@@ -30,7 +22,7 @@ TEST(EdgeTest, EdgeRoadCreation)
    Vertex v1, v2;
    Edge edge(v1, v2); 
 
-   token::Road road(ownerMock);
+   token::Road road(0);
 
    ASSERT_EQ(std::nullopt, edge.getRoad());
 

@@ -21,16 +21,13 @@ const std::map<card::Ressource, int> CITY_COST =
 
 const int CITY_POINTS = 2;
 
-Building::Building(player::PointReceiver& pointReceiver) : m_pointReceiver(pointReceiver)
+Building::Building(int reference) 
+   : Token(reference)
 {
 }
 
-std::string Building::serialize() const
-{
-   return std::to_string(m_pointReceiver.getId());
-}
-
-Settlement::Settlement(player::PointReceiver& pointReceiver) : Building(pointReceiver)
+Settlement::Settlement(int reference) : 
+   Building(reference)
 {
 }
 
@@ -44,18 +41,13 @@ int Settlement::getPoints() const
 	return SETTLEMENT_POINTS;
 }
 
-void Settlement::setPlaced() const
-{
-   m_pointReceiver.decreaseSettlmentCount();
-   m_pointReceiver.receivePoints(1);
-}
-
 std::string Settlement::serialize() const
 {
-   return "S" + '|' + Building::serialize();
+   return "S/" + Token::serialize();
 }
 
-City::City(player::PointReceiver& pointReceiver) : Building(pointReceiver)
+City::City(int reference) : 
+   Building(reference)
 {
 }
 
@@ -69,13 +61,9 @@ int City::getPoints() const
 	return CITY_POINTS;
 }
 
-void City::setPlaced() const
-{
-}
-
 std::string City::serialize() const
 {
-   return "C" + '|' + Building::serialize();
+   return "C/" + Token::serialize();
 }
 
 } // namespace building

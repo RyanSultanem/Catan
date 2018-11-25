@@ -9,14 +9,6 @@ public:
    virtual int getId() const = 0;
 };
 
-class PointReceiver : public Owner
-{
-public:
-   virtual void receivePoints(int points) = 0;
-   virtual void decreaseSettlmentCount() = 0;
-   virtual void increaseSettlmentCount() = 0;
-};
-
 }
 
 #endif // !PLAYER_INTERFACE_HPP

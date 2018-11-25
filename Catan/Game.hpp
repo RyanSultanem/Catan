@@ -18,14 +18,14 @@ public:
 private:
    board::Board m_board;
 
-   int m_playerId = 0;
-   int m_numberOfPlayers;
    std::vector<player::Player> m_players;
    
    Interface & m_interface;
 
-   void setupPlayers();
+   void setupPlayers(int numberOfPlayers);
    void initialSettlmentPlacement();
+
+   void showStatus();
 };
 
 #endif // GAME_HPP

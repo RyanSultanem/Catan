@@ -4,11 +4,11 @@
 
 namespace player {
 
-Player::Player(int id) : m_id(id), m_settlmentCount(5), m_points(0), m_settlment(*this)
+Player::Player(int id) : m_id(id), m_settlmentCount(5), m_points(0), m_settlment(id)
 {
 }
 
-Player::Player(const Player & player) : m_id(player.m_id), m_settlmentCount(player.m_settlmentCount), m_points(player.m_points), m_settlment(*this)
+Player::Player(const Player & player) : m_id(player.m_id), m_settlmentCount(player.m_settlmentCount), m_points(player.m_points), m_settlment(player.m_settlment)
 {
 }
 

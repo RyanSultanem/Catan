@@ -3,11 +3,10 @@
 #include <algorithm>
 
 Game::Game(Interface & interface, int numberOfPlayers)
-   : m_interface(interface), m_numberOfPlayers(numberOfPlayers)
+   : m_interface(interface)
 {
-   m_players.reserve(numberOfPlayers);
+   setupPlayers(numberOfPlayers);
 }
-
 
 Game::~Game()
 {
@@ -15,41 +14,51 @@ Game::~Game()
 
 void Game::play()
 {
-   setupPlayers();
-
-   m_interface.printBoard(m_board.serialize());
-   m_interface.printPlayerInfos(serialize::containerSerialize(m_players, "",  "Players: "));
+   showStatus();
 
    initialSettlmentPlacement();
 
-   //m_interface.updateBoard();
-   m_interface.printBoard(m_board.serialize());
-   m_interface.printPlayerInfos(serialize::containerSerialize(m_players, "", "Players: "));
+   showStatus();
 }
 
-void Game::setupPlayers()
+void Game::setupPlayers(int numberOfPlayers)
 {
-   for(int i = 0; i < m_numberOfPlayers; ++i)
-      m_players.push_back(player::Player(m_playerId++));
+   m_players.reserve(numberOfPlayers);
+   for(int i = 0; i < numberOfPlayers; ++i)
+      m_players.push_back(player::Player(i));
 }
 
 void Game::initialSettlmentPlacement()
 {
    auto placeSettlement = [&](player::Player & player)
    {
-      bool success = false;
-      
-      while(!success)
+      std::optional<token::building::SettlementRef> settlementOpt = player.getSettlement();
+      if (settlementOpt)
       {
-         std::optional<token::building::SettlementRef> settlement = player.getSettlement();
-         if (settlement)
+         token::building::Settlement & settlement = settlementOpt.value().get();
+         bool success = false;
+
+         while(!success)
          {
             int position = m_interface.getBuildingPlacementPosition(player.getId());
-            success = m_board.placeSettlement(position, settlement.value());
+            success = m_board.placeSettlement(position, settlement);
+
+            if(success)
+            {
+               //player::Player & p = m_players[settlement.getReference()]; //or find
+               player.decreaseSettlmentCount();
+               player.receivePoints(settlement.getPoints());
+            }
          }   
       }
    };
 
    std::for_each(m_players.begin(), m_players.end(), placeSettlement);
    std::for_each(m_players.rbegin(), m_players.rend(), placeSettlement);
+}
+
+void Game::showStatus()
+{
+   m_interface.printBoard(m_board.serialize());
+   m_interface.printPlayerInfos(serialize::containerSerialize(m_players, "", "Players: "));
 }

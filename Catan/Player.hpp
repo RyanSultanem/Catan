@@ -8,7 +8,7 @@
 
 namespace player {
    
-class Player : public PointReceiver, public serialize::Serializable
+class Player : public Owner, public serialize::Serializable
 {
 public:
    explicit Player(int id);
@@ -17,9 +17,9 @@ public:
 
    std::optional<token::building::SettlementRef> getSettlement();
    int getId() const override;
-   void receivePoints(int points) override;
-   void increaseSettlmentCount() override;
-   void decreaseSettlmentCount() override;
+   void receivePoints(int points);
+   void increaseSettlmentCount();
+   void decreaseSettlmentCount();
 
    std::string serialize() const override;
 

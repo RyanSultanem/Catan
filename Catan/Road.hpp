@@ -10,16 +10,12 @@ namespace token {
 class Road : public Token
 {
 public:
-   Road(player::Owner & owner);
+   explicit Road(int reference);
 
 	const std::map<card::Ressource, int>& getCost() const override;
-   void setPlaced() const override;
    bool operator==(const Road& other) const;
 
    std::string serialize() const override;
-
-private:
-   player::Owner & m_owner;
 };
 
 } //  namespace token

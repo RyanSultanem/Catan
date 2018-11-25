@@ -8,7 +8,7 @@
 
 namespace player {
    
-class Player : public PointReceiver
+class Player : public PointReceiver, public serialize::Serializable
 {
 public:
    explicit Player(int id);
@@ -20,6 +20,8 @@ public:
    void receivePoints(int points) override;
    void increaseSettlmentCount() override;
    void decreaseSettlmentCount() override;
+
+   std::string serialize() const override;
 
 private:
    int m_id;

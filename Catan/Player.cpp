@@ -48,4 +48,10 @@ void Player::decreaseSettlmentCount()
       m_settlmentCount--;
 }
 
+std::string Player::serialize() const
+{
+   return std::to_string(m_id) + ","
+      + std::to_string(m_points);
+}
+
 } // namespace player

@@ -47,6 +47,7 @@ int Settlement::getPoints() const
 void Settlement::setPlaced() const
 {
    m_pointReceiver.decreaseSettlmentCount();
+   m_pointReceiver.receivePoints(1);
 }
 
 std::string Settlement::serialize() const

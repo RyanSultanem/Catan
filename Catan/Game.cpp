@@ -18,11 +18,13 @@ void Game::play()
    setupPlayers();
 
    m_interface.printBoard(m_board.serialize());
+   m_interface.printPlayerInfos(serialize::containerSerialize(m_players, "",  "Players: "));
 
    initialSettlmentPlacement();
 
    //m_interface.updateBoard();
    m_interface.printBoard(m_board.serialize());
+   m_interface.printPlayerInfos(serialize::containerSerialize(m_players, "", "Players: "));
 }
 
 void Game::setupPlayers()

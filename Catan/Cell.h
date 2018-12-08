@@ -18,6 +18,8 @@ public:
 	card::RessourceType getLandRessourceType() const;
 	int getId() const;
 
+	bool hasVertex(int vertexId) const;
+
    std::string serialize() const override;
 
 private:

@@ -1,5 +1,7 @@
 #include "Game.hpp"
 
+#include "PlayerActions.hpp"
+
 #include <algorithm>
 
 Game::Game(Interface & interface, int numberOfPlayers)
@@ -30,7 +32,7 @@ void Game::setupPlayers(int numberOfPlayers)
 
 void Game::initialSettlmentPlacement()
 {
-   auto placeSettlement = [&](player::Player & player)
+   auto placeSettlement = [&](player::Player & player) -> int
    {
       std::optional<token::building::SettlementRef> settlementOpt = player.getSettlement();
       if (settlementOpt)
@@ -45,16 +47,34 @@ void Game::initialSettlmentPlacement()
 
             if(success)
             {
-               //player::Player & p = m_players[settlement.getReference()]; //or find
-               player.decreaseSettlmentCount();
-               player.receivePoints(settlement.getPoints());
+               //player::Player & player = m_players[settlement.getReference()]; //or find
+            	player::actions::playerSettlmentPlacementReaction(player, settlement);
+
+				return position;
             }
          }   
       }
+
+	  return -1;
    };
 
+	auto placeSettlementWithRessources = [&](player::Player & player) -> void
+	{
+		int position = placeSettlement(player);
+
+		if(position != -1)
+		{
+			const std::vector<card::RessourceType> ressources = m_board.getRessourcesFromVertexPosition(position);
+			std::for_each(ressources.begin(), ressources.end(),
+				[&player](const card::RessourceType & ressourceType)
+			{
+				player.addRessource(ressourceType, 1);
+			});
+		}	
+	};
+
    std::for_each(m_players.begin(), m_players.end(), placeSettlement);
-   std::for_each(m_players.rbegin(), m_players.rend(), placeSettlement);
+   std::for_each(m_players.rbegin(), m_players.rend(), placeSettlementWithRessources);
 }
 
 void Game::showStatus()

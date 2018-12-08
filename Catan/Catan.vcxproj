@@ -128,6 +128,8 @@
     <ClInclude Include="Interface.hpp" />
     <ClInclude Include="Land.fwd.h" />
     <ClInclude Include="Land.h" />
+    <ClInclude Include="Player.fwd.hpp" />
+    <ClInclude Include="PlayerActions.hpp" />
     <ClInclude Include="PlayerInterface.hpp" />
     <ClInclude Include="Player.hpp" />
     <ClInclude Include="Road.fwd.hpp" />
@@ -146,6 +148,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Land.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayerActions.cpp" />
     <ClCompile Include="Road.cpp" />
     <ClCompile Include="Vertex.cpp" />
   </ItemGroup>

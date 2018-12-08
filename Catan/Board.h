@@ -26,6 +26,8 @@ public:
 	bool isConnectedEdges(std::vector<int> edgeIds) const;
    bool placeSettlement(int position, token::building::Settlement & settlement);
 
+   std::vector<card::RessourceType> getRessourcesFromVertexPosition(int position);
+
    std::string serialize() const override;
 
 private:

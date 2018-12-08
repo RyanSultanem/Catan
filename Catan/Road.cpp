@@ -2,7 +2,7 @@
 
 namespace token {
 
-const std::map<card::Ressource, int> ROAD_COST =
+const std::unordered_map<card::Ressource, int> ROAD_COST =
 {
 	{ card::Ressource(card::RessourceType::LUMBER), 1 },
 	{ card::Ressource(card::RessourceType::BRICK), 1 }
@@ -13,7 +13,7 @@ Road::Road(int reference)
 {
 }
 
-const std::map<card::Ressource, int>& Road::getCost() const
+const std::unordered_map<card::Ressource, int>& Road::getCost() const
 {
 	return ROAD_COST;
 }

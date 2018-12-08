@@ -165,7 +165,7 @@ bool Board::placeSettlement(int position, token::building::Settlement & settleme
    if (position < 0 || position >= m_vertices.size())
       return false;
 
-   auto & vertex = m_vertices.at(position);
+   board::Vertex & vertex = m_vertices.at(position);
    
    if(!vertex.getBuilding())
    {
@@ -176,8 +176,25 @@ bool Board::placeSettlement(int position, token::building::Settlement & settleme
    return false;
 }
 
+std::vector<card::RessourceType> Board::getRessourcesFromVertexPosition(int position)
+{
+	std::vector<card::RessourceType> ressources;
+	ressources.reserve(3);
 
-std::string Board::serialize() const
+	std::for_each(m_cells.begin(), m_cells.end(),
+	[&](const cell::Cell & cell)
+	{
+		if(cell.hasVertex(position))
+		{
+			return ressources.push_back(cell.getLandRessourceType());
+		}
+	});
+
+	return ressources;
+}
+
+
+	std::string Board::serialize() const
 {
    std::string board;
 

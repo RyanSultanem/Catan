@@ -31,9 +31,12 @@ public:
 
       switch (m_placementCount)
       {
+	  // First round of initial Placement
       case 0: position = 1; break;
       case 1: position = 2; break;
       case 2: position = 3; break;
+
+	  // Second round of initial Placement
       case 3: position = 4; break;
       case 4: position = 5; break;
       case 5: position = 6; break; 
@@ -61,4 +64,6 @@ TEST(GameTest, canaryTest)
    InterfaceStub interface;
    Game game(interface, 3);
    game.play();
+
+	//TODO: to add test to check initial placement + ressource gathered
 }

@@ -21,13 +21,19 @@ public:
    void increaseSettlmentCount();
    void decreaseSettlmentCount();
 
+   void addRessource(card::RessourceType ressourceType, unsigned int count);
+   int getRessourceCount(card::RessourceType ressourceType) const;
+
    std::string serialize() const override;
 
 private:
    int m_id;
    int m_points;
+
    token::building::Settlement m_settlment;
    int m_settlmentCount;
+
+   std::unordered_map<card::Ressource, int> m_ressources;
 };
 
 } // namespace player

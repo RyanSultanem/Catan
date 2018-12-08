@@ -3,7 +3,7 @@
 namespace token {
 namespace building {
 
-const std::map<card::Ressource, int> SETTLEMENT_COST =
+const std::unordered_map<card::Ressource, int> SETTLEMENT_COST =
 {
 	{ card::Ressource(card::RessourceType::BRICK), 1 },
 	{ card::Ressource(card::RessourceType::GRAIN), 1 },
@@ -13,7 +13,7 @@ const std::map<card::Ressource, int> SETTLEMENT_COST =
 
 const int SETTLEMENT_POINTS = 1;
 
-const std::map<card::Ressource, int> CITY_COST =
+const std::unordered_map<card::Ressource, int> CITY_COST =
 {
 	{ card::Ressource(card::RessourceType::GRAIN), 2},
 	{ card::Ressource(card::RessourceType::ORE), 3}
@@ -31,7 +31,7 @@ Settlement::Settlement(int reference) :
 {
 }
 
-const std::map<card::Ressource, int>& Settlement::getCost() const
+const std::unordered_map<card::Ressource, int>& Settlement::getCost() const
 {
 	return SETTLEMENT_COST;
 }
@@ -51,7 +51,7 @@ City::City(int reference) :
 {
 }
 
-const std::map<card::Ressource, int>& City::getCost() const
+const std::unordered_map<card::Ressource, int>& City::getCost() const
 {
 	return CITY_COST;
 }

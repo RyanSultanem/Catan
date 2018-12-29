@@ -10,22 +10,28 @@
 class Game
 {
 public:
-   Game(Interface & interface, int numberOfPlayers);
-   ~Game();
+	Game(Interface & interface, int numberOfPlayers);
+	~Game();
 
-   void play();
+	void play();
 
 private:
-   board::Board m_board;
+	board::Board m_board;
 
-   std::vector<player::Player> m_players;
+	std::vector<player::Player> m_players;
    
-   Interface & m_interface;
+	Interface & m_interface;
 
-   void setupPlayers(int numberOfPlayers);
-   void initialSettlmentPlacement();
+	bool m_gameEnded = false;
 
-   void showStatus();
+	void setupPlayers(int numberOfPlayers);
+	void initialSettlmentPlacement();
+
+	void showStatus();
+
+	void giveRessources(int value);
+	void checkGameEnded(int turnCount);
+	void playTurns();
 };
 
 #endif // GAME_HPP

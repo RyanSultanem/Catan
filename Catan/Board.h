@@ -29,6 +29,7 @@ public:
    std::vector<card::RessourceType> getRessourcesFromVertexPosition(int position);
 
    std::string serialize() const override;
+	std::vector<cell::CellRef> getCellsWithNumber(int value);
 
 private:
 	int m_cellId = 0;

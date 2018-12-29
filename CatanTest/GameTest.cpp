@@ -7,7 +7,7 @@
 class InterfaceStub : public Interface
 {
 public:
-   void printBoard(const std::string & board) override
+   void showBoard(const std::string & board) override
    {
       std::cout << "Board Print Start" << std::endl << std::endl;
       std::cout << board << std::endl;
@@ -48,7 +48,7 @@ public:
       return position;
    }
 
-   void printPlayerInfos(const std::string & playersInfo) override
+   void showPlayerInfos(const std::string & playersInfo) override
    {
       std::cout << "PlayerInfo Print Start" << std::endl << std::endl;
       std::cout << playersInfo << std::endl;

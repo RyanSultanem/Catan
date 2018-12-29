@@ -120,7 +120,7 @@ int Board::getCellsSize() const
 int Board::getNumberOfLand(const card::RessourceType& ressource) const
 {
 	return std::count_if(m_cells.begin(), m_cells.end(), [&](const cell::Cell& p) {
-		return p.getLandRessourceType() == ressource;
+		return p.getLand().getRessourceType() == ressource;
 	});
 }
 
@@ -165,6 +165,7 @@ bool Board::placeSettlement(int position, token::building::Settlement & settleme
    if (position < 0 || position >= m_vertices.size())
       return false;
 
+	// TODO: Check position value and vector position realtion
    board::Vertex & vertex = m_vertices.at(position);
    
    if(!vertex.getBuilding())
@@ -186,7 +187,10 @@ std::vector<card::RessourceType> Board::getRessourcesFromVertexPosition(int posi
 	{
 		if(cell.hasVertex(position))
 		{
-			return ressources.push_back(cell.getLandRessourceType());
+			card::RessourceType ressourceType = cell.produceLandRessource().getType();
+			
+			if(ressourceType != card::RessourceType::NO_RESSOURCE)
+				return ressources.push_back(ressourceType);
 		}
 	});
 
@@ -194,7 +198,7 @@ std::vector<card::RessourceType> Board::getRessourcesFromVertexPosition(int posi
 }
 
 
-	std::string Board::serialize() const
+std::string Board::serialize() const
 {
    std::string board;
 
@@ -203,6 +207,25 @@ std::vector<card::RessourceType> Board::getRessourcesFromVertexPosition(int posi
    board = serialize::containerSerialize(m_edges, board, "Edges: ");
 
    return board;
+}
+
+std::vector<cell::CellRef> Board::getCellsWithNumber(int value)
+{
+	std::vector<cell::CellRef> cellsWithNumber;
+	cellsWithNumber.reserve(2);
+
+	// TODO: check if can be replaced by copy_if
+	std::for_each(m_cells.begin(), m_cells.end(), 
+		[&cellsWithNumber, &value](cell::Cell & cell)
+	{
+		if(cell.getNumber() == value)
+		{
+			// TODO: constify cell.
+			cellsWithNumber.push_back(cell);
+		}
+	});
+
+	return cellsWithNumber;
 }
 
 } // namespace board

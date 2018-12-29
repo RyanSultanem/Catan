@@ -1,6 +1,9 @@
 #include "Game.hpp"
 
-#include "PlayerActions.hpp"
+#include "Dice.hpp"
+#include "PlayerReactions.hpp"
+
+#include "Building.hpp"
 
 #include <algorithm>
 
@@ -16,11 +19,13 @@ Game::~Game()
 
 void Game::play()
 {
-   showStatus();
+	showStatus();
 
-   initialSettlmentPlacement();
+	initialSettlmentPlacement();
 
-   showStatus();
+	showStatus();
+
+	playTurns();
 }
 
 void Game::setupPlayers(int numberOfPlayers)
@@ -45,10 +50,11 @@ void Game::initialSettlmentPlacement()
             int position = m_interface.getBuildingPlacementPosition(player.getId());
             success = m_board.placeSettlement(position, settlement);
 
+			 // TODO: Need to check that no two adjacent Settlement were placed.
             if(success)
             {
                //player::Player & player = m_players[settlement.getReference()]; //or find
-            	player::actions::playerSettlmentPlacementReaction(player, settlement);
+            	player::reactions::settlmentPlacement(player, settlement);
 
 				return position;
             }
@@ -79,6 +85,50 @@ void Game::initialSettlmentPlacement()
 
 void Game::showStatus()
 {
-   m_interface.printBoard(m_board.serialize());
-   m_interface.printPlayerInfos(serialize::containerSerialize(m_players, "", "Players: "));
+   m_interface.showBoard(m_board.serialize());
+   m_interface.showPlayerInfos(serialize::containerSerialize(m_players, "", "Players: "));
+}
+
+void Game::giveRessources(int value)
+{
+	const std::vector<cell::CellRef> activeCells = m_board.getCellsWithNumber(value);
+
+	std::for_each(activeCells.begin(), activeCells.end(),
+		[this](const cell::Cell & activeCell)
+	{
+		const std::vector<token::building::Building*> activeBuildings = activeCell.getActiveBuildings();
+
+		std::for_each(activeBuildings.begin(), activeBuildings.end(),
+			[this, &activeCell](const token::building::Building * activeBuilding)
+		{
+			// TODO: check if reference is equivalent to position in vector
+			player::Player & player = m_players.at(activeBuilding->getReference());
+			player.addRessource(activeCell.produceLandRessource().getType(), activeBuilding->getPoints());
+		});
+	});
+}
+
+void Game::checkGameEnded(int turnCount)
+{
+	// TODO: used only to end game now. should do the real job someday
+	if (turnCount >= 15)
+		m_gameEnded = true;
+}
+
+void Game::playTurns()
+{
+	board::Dice dice;
+	int turnCount = 0;
+
+	while(!m_gameEnded)
+	{
+		int diceValue = dice.roll();
+
+		giveRessources(diceValue);
+
+		player::Player & activePlayer = m_players.at(turnCount % m_players.size());
+
+		++turnCount;
+		checkGameEnded(turnCount);
+	}
 }

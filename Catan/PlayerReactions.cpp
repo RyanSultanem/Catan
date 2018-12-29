@@ -1,17 +1,17 @@
-#include "PlayerActions.hpp"
+#include "PlayerReactions.hpp"
 
 #include "Player.hpp"
 #include "Building.hpp"
 
 namespace player {
-namespace actions {
+namespace reactions {
 
-void playerSettlmentPlacementReaction(Player & player, const token::building::Settlement & settlement)
+void settlmentPlacement(Player & player, const token::building::Settlement & settlement)
 {
    player.decreaseSettlmentCount();
    player.receivePoints(settlement.getPoints());
 }
 
-} // namespace actions
+} // namespace reactions
 } // namespace player
 

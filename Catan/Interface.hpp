@@ -4,11 +4,11 @@
 class Interface
 {
 public:
-   virtual void printBoard(const std::string & board) = 0;
+   virtual void showBoard(const std::string & board) = 0;
    virtual void updateBoard() = 0;
    virtual int getBuildingPlacementPosition(int playerId) = 0;
 
-   virtual void printPlayerInfos(const std::string & playersInfo) = 0;
+   virtual void showPlayerInfos(const std::string & playersInfo) = 0;
 };
 
 

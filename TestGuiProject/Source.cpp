@@ -7,7 +7,7 @@ class InterfaceStub : public Interface
 public:
    void printBoard() override
    {
-      std::cout << "printBoard" << std::endl;
+      std::cout << "showBoard" << std::endl;
    }
    void updateBoard() override
    {

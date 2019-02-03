@@ -8,14 +8,12 @@ class Dice
 public:
 	Dice();
 
-	int roll();
+	const Dice & roll();
 	int getValue() const;
 
 private:
 	int m_die1;
 	int m_die2;
-
-	static bool randInitialized;
 };
 
 }

@@ -5,6 +5,7 @@ namespace cell {
 
 class Cell;
 typedef std::reference_wrapper<Cell> CellRef;
+typedef std::reference_wrapper<const Cell> CellCRef;
 
 }
 

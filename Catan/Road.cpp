@@ -28,4 +28,9 @@ std::string Road::serialize() const
    return "R|" + Token::serialize();
 }
 
+const std::unordered_map<card::Ressource, int>& Road::getRoadCost()
+{
+	return ROAD_COST;
+}
+
 } // namespace token

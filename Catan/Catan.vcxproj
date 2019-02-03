@@ -114,6 +114,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Actions.fwd.hpp" />
+    <ClInclude Include="Actions.hpp" />
     <ClInclude Include="Board.fwd.h" />
     <ClInclude Include="Board.h" />
     <ClInclude Include="Building.fwd.hpp" />
@@ -122,10 +124,14 @@
     <ClInclude Include="Card.h" />
     <ClInclude Include="Cell.fwd.h" />
     <ClInclude Include="Cell.h" />
+    <ClInclude Include="Conditions.fwd.hpp" />
+    <ClInclude Include="Conditions.hpp" />
     <ClInclude Include="Dice.hpp" />
     <ClInclude Include="Edge.fwd.h" />
     <ClInclude Include="Edge.h" />
+    <ClInclude Include="Game.fwd.hpp" />
     <ClInclude Include="Game.hpp" />
+    <ClInclude Include="GameInterface.hpp" />
     <ClInclude Include="Interface.hpp" />
     <ClInclude Include="Land.fwd.h" />
     <ClInclude Include="Land.h" />
@@ -133,27 +139,29 @@
     <ClInclude Include="PlayerReactions.hpp" />
     <ClInclude Include="PlayerInterface.hpp" />
     <ClInclude Include="Player.hpp" />
-    <ClInclude Include="player\Actions.hpp" />
     <ClInclude Include="Road.fwd.hpp" />
     <ClInclude Include="Road.hpp" />
     <ClInclude Include="Serializable.hpp" />
+    <ClInclude Include="State.hpp" />
     <ClInclude Include="Token.hpp" />
     <ClInclude Include="Vertex.fwd.h" />
     <ClInclude Include="Vertex.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Actions.cpp" />
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="Building.cpp" />
     <ClCompile Include="Card.cpp" />
     <ClCompile Include="Cell.cpp" />
+    <ClCompile Include="Conditions.cpp" />
     <ClCompile Include="Dice.cpp" />
     <ClCompile Include="Edge.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Land.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerReactions.cpp" />
-    <ClCompile Include="player\Actions.cpp" />
     <ClCompile Include="Road.cpp" />
+    <ClCompile Include="State.cpp" />
     <ClCompile Include="Vertex.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -3,10 +3,13 @@
 #include "Vertex.h"
 #include "Edge.h"
 #include "Building.hpp"
+#include "Road.hpp"
 
 namespace board {
 
-Vertex::Vertex(int id) : m_id(id)
+Vertex::Vertex(int id) 
+	: m_id(id)
+	, m_building(std::nullopt)
 {
 }
 
@@ -43,6 +46,54 @@ std::string Vertex::serialize() const
 {
    return std::to_string(m_id) + ',' +
       (m_building ? m_building.value()->serialize() : "N");
+}
+
+bool Vertex::hasAdjencentBuilding() const
+{
+	return std::find_if(m_edges.begin(), m_edges.end(),
+		[this](const Edge & edge)
+	{
+		std::optional<VertexCRef> otherVertex = edge.getOtherVertex(*this);
+		if (otherVertex)
+			return otherVertex->get().getBuilding() != std::nullopt;
+		
+		return false;
+
+	}) != m_edges.end();
+}
+
+bool Vertex::hasAtLeastOneAdjecentRoad(int playerReference) const
+{
+	return std::find_if(m_edges.begin(), m_edges.end(),
+		[playerReference](const Edge & edge)
+	{
+		std::optional<token::Road*> roadRef = edge.getRoad();
+		if (roadRef)
+			return roadRef.value()->getReference() == playerReference;
+
+		return false;
+
+	}) != m_edges.end();
+}
+
+std::vector<EdgeCRef> Vertex::getOtherEdges(const Edge & givenEdge) const
+{	
+	std::vector<EdgeCRef> edges;
+
+	int edgeId = givenEdge.getId();
+
+	if (!hasEdge(edgeId))
+		return edges;
+
+	edges.reserve(2);
+	std::for_each(m_edges.begin(), m_edges.end(),
+		[&edges, edgeId](const Edge & edge)
+	{
+		if (edge.getId() != edgeId)
+			edges.push_back(edge);
+	});
+
+	return edges;
 }
 
 } // namespace board

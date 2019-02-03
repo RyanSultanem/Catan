@@ -26,17 +26,27 @@ Building::Building(int reference)
 {
 }
 
-Settlement::Settlement(int reference) : 
-   Building(reference)
+Settlement::Settlement(int reference) 
+	: Building(reference)
 {
 }
 
 const std::unordered_map<card::Ressource, int>& Settlement::getCost() const
 {
+	return getSettlementCost();
+}
+
+const std::unordered_map<card::Ressource, int>& Settlement::getSettlementCost()
+{
 	return SETTLEMENT_COST;
 }
 
 int Settlement::getPoints() const
+{
+	return getSettlementPoints();
+}
+
+int Settlement::getSettlementPoints()
 {
 	return SETTLEMENT_POINTS;
 }
@@ -44,19 +54,29 @@ int Settlement::getPoints() const
 std::string Settlement::serialize() const
 {
    return "S/" + Token::serialize();
-}
+}	
 
-City::City(int reference) : 
-   Building(reference)
+City::City(int reference) 
+	: Building(reference)
 {
 }
 
 const std::unordered_map<card::Ressource, int>& City::getCost() const
 {
+	return getCityCost();
+}
+
+const std::unordered_map<card::Ressource, int>& City::getCityCost()
+{
 	return CITY_COST;
 }
 
 int City::getPoints() const
+{
+	return getCityPoints();
+}
+
+int City::getCityPoints()
 {
 	return CITY_POINTS;
 }

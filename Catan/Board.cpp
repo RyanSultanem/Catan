@@ -2,6 +2,7 @@
 #include "Card.h"
 #include "Land.h"
 #include "Building.hpp"
+#include "Conditions.hpp"
 #include <algorithm>
 #include <numeric>
 
@@ -160,21 +161,52 @@ bool Board::isConnectedEdges(std::vector<int> edgeIds) const
 	return true;
 }
 
-bool Board::placeSettlement(int position, token::building::Settlement & settlement)
+bool Board::placeSettlement(int position, token::building::Settlement & settlement, const PlaceSettlementCondition & condition)
 {
    if (position < 0 || position >= m_vertices.size())
       return false;
 
-	// TODO: Check position value and vector position realtion
-   board::Vertex & vertex = m_vertices.at(position);
+   Vertex & vertex = m_vertices.at(position);
    
-   if(!vertex.getBuilding())
+   if(condition.checkCondition(vertex))
    {
       vertex.setBuilding(settlement);
       return true;
    }
 
    return false;
+}
+
+bool Board::placeRoad(int position, token::Road & road, const PlaceRoadCondition & condition)
+{
+	if (position < 0 || position >= m_edges.size())
+		return false;
+
+	Edge & edge = m_edges.at(position);
+
+	if(condition.checkCondition(edge))
+	{
+		edge.setRoad(road);
+		return true;
+	}
+
+	return false;
+}
+
+bool Board::placeCity(int position, token::building::City & city, const PlaceCityCondition & condition)
+{
+	if (position < 0 || position >= m_vertices.size())
+		return false;
+
+	Vertex & vertex = m_vertices.at(position);
+
+	if(condition.checkConditon(vertex))
+	{
+		vertex.setBuilding(city);
+		return true;
+	}
+
+	return false;
 }
 
 std::vector<card::RessourceType> Board::getRessourcesFromVertexPosition(int position)
@@ -209,18 +241,17 @@ std::string Board::serialize() const
    return board;
 }
 
-std::vector<cell::CellRef> Board::getCellsWithNumber(int value)
+std::vector<cell::CellCRef> Board::getCellsWithNumber(int value) const
 {
-	std::vector<cell::CellRef> cellsWithNumber;
+	std::vector<cell::CellCRef> cellsWithNumber;
 	cellsWithNumber.reserve(2);
 
 	// TODO: check if can be replaced by copy_if
 	std::for_each(m_cells.begin(), m_cells.end(), 
-		[&cellsWithNumber, &value](cell::Cell & cell)
+		[&cellsWithNumber, &value](const cell::Cell & cell)
 	{
 		if(cell.getNumber() == value)
 		{
-			// TODO: constify cell.
 			cellsWithNumber.push_back(cell);
 		}
 	});

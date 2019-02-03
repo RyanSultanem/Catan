@@ -21,9 +21,14 @@ public:
 	bool hasNeighboorEdge(int id) const;
 
 	void setRoad(token::Road& road);
-	const std::optional<token::Road*>& getRoad() const;
+	const std::optional<token::Road*>& getRoad() const; // TODO: return RoadCRef ?
 
-   std::string serialize() const override;
+	bool hasPlayerNeighboorRoad(int playerReference) const;
+	bool hasPlayerNeighboorBuilding(int playerReference) const;
+	bool hasVertex(int vertexReference) const;
+	std::optional<VertexCRef> getOtherVertex(const Vertex & vertex) const;
+
+	std::string serialize() const override;
 
 private:
 	int m_id;

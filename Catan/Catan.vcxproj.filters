@@ -93,8 +93,26 @@
     <ClInclude Include="PlayerReactions.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="player\Actions.hpp">
+    <ClInclude Include="Actions.hpp">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Actions.fwd.hpp">
+      <Filter>Header Files\fwd</Filter>
+    </ClInclude>
+    <ClInclude Include="GameInterface.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="State.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.fwd.hpp">
+      <Filter>Header Files\fwd</Filter>
+    </ClInclude>
+    <ClInclude Include="Conditions.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Conditions.fwd.hpp">
+      <Filter>Header Files\fwd</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -134,7 +152,13 @@
     <ClCompile Include="PlayerReactions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="player\Actions.cpp">
+    <ClCompile Include="Actions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="State.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Conditions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -13,7 +13,7 @@ class Building : public Token
 {
 public:
    explicit Building(int reference);
-   
+
    virtual int getPoints() const = 0;
 };
 
@@ -23,9 +23,12 @@ public:
    explicit Settlement(int reference);
 
 	const std::unordered_map<card::Ressource, int>& getCost() const override;
-	int getPoints() const override;
+	static const std::unordered_map<card::Ressource, int>& getSettlementCost();
 
-   std::string serialize() const override;
+	std::string serialize() const override;
+	
+	int getPoints() const override;
+	static int getSettlementPoints();
 };
 
 class City : public Building
@@ -34,9 +37,12 @@ public:
    explicit City(int reference);
 
 	const std::unordered_map<card::Ressource, int>& getCost() const override;
-	int getPoints() const override;
+	static const std::unordered_map<card::Ressource, int>& getCityCost();
 
-   std::string serialize() const override;
+	std::string serialize() const override;
+	
+	int getPoints() const override;
+	static int getCityPoints();
 };
 
 } // namespace building

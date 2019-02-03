@@ -22,6 +22,10 @@ public:
 
    std::string serialize() const override;
 
+   bool hasAdjencentBuilding() const;
+   bool hasAtLeastOneAdjecentRoad(int playerReference) const;
+   std::vector<EdgeCRef> getOtherEdges(const Edge & edge) const;
+
 private:
 	std::vector<EdgeRef> m_edges;
 	int m_id;

@@ -1,31 +1,114 @@
 #include "Game.hpp"
 
+#include "Actions.hpp"
 #include "Dice.hpp"
 #include "PlayerReactions.hpp"
 
 #include "Building.hpp"
 
 #include <algorithm>
+#include <ctime>
 
 Game::Game(Interface & interface, int numberOfPlayers)
-   : m_interface(interface)
+	: /*m_interface(interface)
+	,*/ m_activePlayer(0)
+	, m_secondInitialPlacementRun(false)
 {
-   setupPlayers(numberOfPlayers);
+	srand(time(NULL)); // TODO: In Dice? Chose to be here because on initialization of the game.
+	setupPlayers(numberOfPlayers);
 }
 
 Game::~Game()
 {
 }
 
-void Game::play()
+//void Game::play()
+//{
+//	//showStatus();
+//
+//	//initialSettlmentPlacement();
+//
+//	//showStatus();
+//
+//	playTurns();
+//}
+
+bool Game::placeInitialSetlementRoad(int settlementPosition, int roadPosition)
 {
-	showStatus();
+	PlaceInitialSettlementRoadAction action(m_players.at(m_activePlayer), settlementPosition, roadPosition, m_secondInitialPlacementRun);
 
-	initialSettlmentPlacement();
+	return processAction(action);
+}
 
-	showStatus();
+bool Game::placeSettlement(int position)
+{
+	PlaceSettlementAction action(m_players.at(m_activePlayer), position);
+	
+	return processAction(action);
+}
 
-	playTurns();
+bool Game::placeRoad(int position)
+{
+	PlaceRoadAction action(m_players.at(m_activePlayer), position);
+
+	return processAction(action);
+}
+
+bool Game::placeCity(int position)
+{
+	PlaceCityAction action(m_players.at(m_activePlayer), position);
+
+	return processAction(action);
+}
+
+bool Game::rollDice()
+{
+	RollDice action(m_players);
+
+	return processAction(action);
+}
+
+bool Game::done()
+{
+	Done action(*this);
+
+	return processAction(action);
+}
+
+int Game::getPlayerCount() const
+{
+	return m_players.size();
+}
+
+int Game::getActivePlayerId() const
+{
+	return m_activePlayer;
+}
+
+void Game::setNextActivePlayer()
+{
+	m_activePlayer = (m_activePlayer + 1) % m_players.size();
+}
+
+void Game::setNextActivePlayer(int playerId)
+{
+	if (playerId < m_players.size() && playerId >= 0)
+		m_activePlayer = playerId;
+}
+
+void Game::setSecondInitialPlacementRun()
+{
+	m_secondInitialPlacementRun = true;
+}
+
+bool Game::isSecondInitialPlacementRun() const
+{
+	return m_secondInitialPlacementRun;
+}
+
+void Game::setState(std::unique_ptr<State> && state)
+{
+	m_state = std::move(state);
 }
 
 void Game::setupPlayers(int numberOfPlayers)
@@ -35,100 +118,59 @@ void Game::setupPlayers(int numberOfPlayers)
       m_players.push_back(player::Player(i));
 }
 
-void Game::initialSettlmentPlacement()
+bool Game::processAction(const Action & action)
 {
-   auto placeSettlement = [&](player::Player & player) -> int
-   {
-      std::optional<token::building::SettlementRef> settlementOpt = player.getSettlement();
-      if (settlementOpt)
-      {
-         token::building::Settlement & settlement = settlementOpt.value().get();
-         bool success = false;
+	// TODO: This whole code could be in State to assure allignement in calls.
 
-         while(!success)
-         {
-            int position = m_interface.getBuildingPlacementPosition(player.getId());
-            success = m_board.placeSettlement(position, settlement);
+	if (!m_state->isValid(action))
+		return false;
 
-			 // TODO: Need to check that no two adjacent Settlement were placed.
-            if(success)
-            {
-               //player::Player & player = m_players[settlement.getReference()]; //or find
-            	player::reactions::settlmentPlacement(player, settlement);
+	bool actionSuccess = action.execute(m_board);
 
-				return position;
-            }
-         }   
-      }
-
-	  return -1;
-   };
-
-	auto placeSettlementWithRessources = [&](player::Player & player) -> void
-	{
-		int position = placeSettlement(player);
-
-		if(position != -1)
-		{
-			const std::vector<card::RessourceType> ressources = m_board.getRessourcesFromVertexPosition(position);
-			std::for_each(ressources.begin(), ressources.end(),
-				[&player](const card::RessourceType & ressourceType)
-			{
-				player.addRessource(ressourceType, 1);
-			});
-		}	
-	};
-
-   std::for_each(m_players.begin(), m_players.end(), placeSettlement);
-   std::for_each(m_players.rbegin(), m_players.rend(), placeSettlementWithRessources);
+	if (actionSuccess)
+		m_state->nextState(*this, action);
+	
+	return actionSuccess;
 }
 
-void Game::showStatus()
-{
-   m_interface.showBoard(m_board.serialize());
-   m_interface.showPlayerInfos(serialize::containerSerialize(m_players, "", "Players: "));
-}
+//void Game::showStatus()
+//{
+//   m_interface.showBoard(m_board.serialize());
+//   m_interface.showPlayerInfos(serialize::containerSerialize(m_players, "", "Players: "));
+//}
 
-void Game::giveRessources(int value)
-{
-	const std::vector<cell::CellRef> activeCells = m_board.getCellsWithNumber(value);
+//void Game::giveRessources(int value)
+//{
+	//const std::vector<cell::CellRef> activeCells = m_board.getCellsWithNumber(value);
 
-	std::for_each(activeCells.begin(), activeCells.end(),
-		[this](const cell::Cell & activeCell)
-	{
-		const std::vector<token::building::Building*> activeBuildings = activeCell.getActiveBuildings();
+	//std::for_each(activeCells.begin(), activeCells.end(),
+	//	[this](const cell::Cell & activeCell)
+	//{
+	//	const std::vector<token::building::Building*> activeBuildings = activeCell.getActiveBuildings();
 
-		std::for_each(activeBuildings.begin(), activeBuildings.end(),
-			[this, &activeCell](const token::building::Building * activeBuilding)
-		{
-			// TODO: check if reference is equivalent to position in vector
-			player::Player & player = m_players.at(activeBuilding->getReference());
-			player.addRessource(activeCell.produceLandRessource().getType(), activeBuilding->getPoints());
-		});
-	});
-}
+	//	std::for_each(activeBuildings.begin(), activeBuildings.end(),
+	//		[this, &activeCell](const token::building::Building * activeBuilding)
+	//	{
+	//		// TODO: check if reference is equivalent to position in vector
+	//		player::Player & player = m_players.at(activeBuilding->getReference());
+	//		player.addRessource(activeCell.produceLandRessource().getType(), activeBuilding->getPoints());
+	//	});
+	//});
+//}
 
-void Game::checkGameEnded(int turnCount)
-{
-	// TODO: used only to end game now. should do the real job someday
-	if (turnCount >= 15)
-		m_gameEnded = true;
-}
-
-void Game::playTurns()
-{
-	board::Dice dice;
-	int turnCount = 0;
-
-	while(!m_gameEnded)
-	{
-		int diceValue = dice.roll();
-
-		giveRessources(diceValue);
-
-		player::Player & activePlayer = m_players.at(turnCount % m_players.size());
-
-		++turnCount;
-		checkGameEnded(turnCount);
-	}
-}
+//void Game::playTurns()
+//{
+//	board::Dice dice;
+//	int turnCount = 0;
+//
+//	//while(!m_gameEnded)
+//	{
+//		int diceValue = dice.roll().getValue();
+//
+//		giveRessources(diceValue);
+//
+//		player::Player & activePlayer = m_players.at(turnCount % m_players.size());
+//
+//		++turnCount;
+//	}
+//}

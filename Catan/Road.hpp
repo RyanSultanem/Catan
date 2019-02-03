@@ -13,9 +13,11 @@ public:
    explicit Road(int reference);
 
 	const std::unordered_map<card::Ressource, int>& getCost() const override;
-   bool operator==(const Road& other) const;
+	static const std::unordered_map<card::Ressource, int>& getRoadCost();
 
-   std::string serialize() const override;
+	bool operator==(const Road& other) const;
+
+	std::string serialize() const override;
 };
 
 } //  namespace token

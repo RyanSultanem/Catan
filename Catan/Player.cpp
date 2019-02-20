@@ -14,12 +14,19 @@ Player::Player(int id)
 	, m_road(id)
 	, m_roadCount(15)
 	, m_ressources(5)
+	, m_exchangeCosts(5)
 {
 	m_ressources.emplace(card::RessourceType::LUMBER,	0);
 	m_ressources.emplace(card::RessourceType::BRICK,	0);
 	m_ressources.emplace(card::RessourceType::GRAIN,	0);
 	m_ressources.emplace(card::RessourceType::WOOL,		0);
 	m_ressources.emplace(card::RessourceType::ORE,		0);
+
+	m_exchangeCosts.emplace(card::RessourceType::LUMBER,	4);
+	m_exchangeCosts.emplace(card::RessourceType::BRICK,		4);
+	m_exchangeCosts.emplace(card::RessourceType::GRAIN,		4);
+	m_exchangeCosts.emplace(card::RessourceType::WOOL,		4);
+	m_exchangeCosts.emplace(card::RessourceType::ORE,		4);
 }
 
 Player::Player(const Player & player) 
@@ -32,6 +39,7 @@ Player::Player(const Player & player)
 	, m_road(player.m_road)
 	, m_roadCount(player.m_roadCount)
 	, m_ressources(player.m_ressources)
+	, m_exchangeCosts(player.m_exchangeCosts)
 {
 }
 
@@ -43,7 +51,7 @@ std::optional<token::building::SettlementRef> Player::getSettlement()
 {
    if (m_settlmentCount > 0)
    {
-      return std::optional<token::building::SettlementRef>(m_settlment);
+      return m_settlment;
    }
 
    return std::nullopt;
@@ -53,7 +61,7 @@ std::optional<token::RoadRef> Player::getRoad()
 {
 	if(m_roadCount > 0)
 	{
-		return std::optional<token::RoadRef>(m_road);
+		return m_road;
 	}
 
 	return std::nullopt;
@@ -63,7 +71,7 @@ std::optional<token::building::CityRef> Player::getCity()
 {
 	if (m_cityCount > 0)
 	{
-		return std::optional<token::building::CityRef>(m_city);
+		return m_city;
 	}
 
 	return std::nullopt;
@@ -99,28 +107,38 @@ void Player::decreaseRoadCount()
 
 void Player::addRessource(card::RessourceType ressourceType, unsigned int count)
 {
-	m_ressources[card::Ressource(ressourceType)] += count;
+	m_ressources[ressourceType] += count;
 }
 
 void Player::removeRessource(card::RessourceType ressourceType, unsigned int count)
 {
-	if (m_ressources[card::Ressource(ressourceType)] >= count)
-		m_ressources[card::Ressource(ressourceType)] = m_ressources[card::Ressource(ressourceType)] - count;
+	if (m_ressources[ressourceType] >= count)
+		m_ressources[ressourceType] = m_ressources[ressourceType] - count;
 }
 
 int Player::getRessourceCount(card::RessourceType ressourceType) const
 {
-	return m_ressources.at(card::Ressource(ressourceType));
+	return m_ressources.at(ressourceType);
+}
+
+void Player::setExchangeCost(card::RessourceType ressourceType, int cost)
+{
+	m_exchangeCosts[ressourceType] = cost;
+}
+
+int Player::getExchangeCost(card::RessourceType ressourceType) const
+{
+	return m_exchangeCosts.at(ressourceType);
 }
 
 std::string Player::serialize() const
 {
 	std::string ressourcesCounts =
-		std::to_string(m_ressources.at(card::Ressource(card::RessourceType::LUMBER))) + "|" +
-		std::to_string(m_ressources.at(card::Ressource(card::RessourceType::BRICK))) + "|" +
-		std::to_string(m_ressources.at(card::Ressource(card::RessourceType::WOOL))) + "|" +
-		std::to_string(m_ressources.at(card::Ressource(card::RessourceType::GRAIN))) + "|" +
-		std::to_string(m_ressources.at(card::Ressource(card::RessourceType::ORE)));
+		std::to_string(m_ressources.at(card::RessourceType::LUMBER)) + "|" +
+		std::to_string(m_ressources.at(card::RessourceType::BRICK)) + "|" +
+		std::to_string(m_ressources.at(card::RessourceType::WOOL)) + "|" +
+		std::to_string(m_ressources.at(card::RessourceType::GRAIN)) + "|" +
+		std::to_string(m_ressources.at(card::RessourceType::ORE));
 	
 	return std::to_string(m_id) + "," +
 		std::to_string(m_points) + ","+

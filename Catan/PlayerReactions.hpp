@@ -2,6 +2,8 @@
 #define PLAYER_REACTIONS_HPP
 
 #include "Player.fwd.hpp"
+#include "Harbor.fwd.hpp"
+#include <optional>
 
 namespace player {
 namespace reactions {
@@ -18,9 +20,11 @@ void roadPlaced(Player & player);
 bool cityRessourcesAvailable(const Player & player);
 bool cityPay(Player & player);
 void cityPlaced(Player & player);
+// -------
 
-int getExchangeTypeRate(const Player & player, const int typeToTrade);
-bool performExchangeCards(Player & player, int typeResult, int typeToTrade, int typeRateChange);
+bool performExchangeCards(Player & player, int typeResult, int typeToTrade);
+
+void settlementPlacedOnHarbor(Player & player, const Harbor & harbor);
 
 } // namespace reactions
 } // namespace player

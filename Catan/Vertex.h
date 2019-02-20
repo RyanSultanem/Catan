@@ -4,8 +4,9 @@
 #include <vector>
 #include <optional>
 #include "Vertex.fwd.h"
-#include "Edge.fwd.h"
 #include "Building.fwd.hpp"
+#include "Edge.fwd.h"
+#include "Harbor.hpp"
 #include "Serializable.hpp"
 
 namespace board {
@@ -17,19 +18,26 @@ public:
 	void addEdge(Edge& edge);
 	int getId() const;
 	bool hasEdge(int id) const;
+
 	void setBuilding(token::building::Building& building);
 	const std::optional<token::building::Building*>& getBuilding() const;
 
-   std::string serialize() const override;
+	void setHarbor(const Harbor & harbor);
+	const std::optional<Harbor> & getHarbor() const;
 
-   bool hasAdjencentBuilding() const;
-   bool hasAtLeastOneAdjecentRoad(int playerReference) const;
-   std::vector<EdgeCRef> getOtherEdges(const Edge & edge) const;
+	std::string serialize() const override;
+
+	bool hasAdjencentBuilding() const;
+	bool hasAtLeastOneAdjecentRoad(int playerReference) const;
+	std::vector<EdgeCRef> getOtherEdges(const Edge & edge) const;
 
 private:
-	std::vector<EdgeRef> m_edges;
 	int m_id;
+	std::vector<EdgeRef> m_edges;
+
 	std::optional<token::building::Building*> m_building;
+
+	std::optional<Harbor> m_harbor;
 };
 
 } // namespace board

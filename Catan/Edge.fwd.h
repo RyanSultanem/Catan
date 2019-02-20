@@ -1,6 +1,8 @@
 #ifndef EDGE_FWD_H
 #define EDGE_FWD_H
 
+#include <functional>
+
 namespace board {
 
 class Edge;

@@ -21,6 +21,15 @@ void Board::createVertices()
 
 	for (int i = 0; i < 54; ++i)
 		m_vertices.push_back(Vertex(m_vertexId++));
+
+	setHarbors();
+}
+
+void Board::setHarbors()
+{
+	// TODO: Add all harbor at the correct places. below is just an exmaple (probably wrong)
+	m_vertices.at(2).setHarbor(Harbor(card::RessourceType::ORE));
+	m_vertices.at(10).setHarbor(Harbor(card::RessourceType::NO_RESSOURCE));
 }
 
 void Board::createEdges()
@@ -209,7 +218,7 @@ bool Board::placeCity(int position, token::building::City & city, const PlaceCit
 	return false;
 }
 
-std::vector<card::RessourceType> Board::getRessourcesFromVertexPosition(int position)
+std::vector<card::RessourceType> Board::getRessourcesFromVertexPosition(int position) const
 {
 	std::vector<card::RessourceType> ressources;
 	ressources.reserve(3);
@@ -229,6 +238,13 @@ std::vector<card::RessourceType> Board::getRessourcesFromVertexPosition(int posi
 	return ressources;
 }
 
+std::optional<HarborCRef> Board::getHarbor(int position) const
+{
+	if (position < 0 || position >= m_vertices.size())
+		return std::nullopt;
+
+	return m_vertices.at(position).getHarbor();
+}
 
 std::string Board::serialize() const
 {

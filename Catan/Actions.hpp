@@ -41,7 +41,7 @@ private:
 	int m_position;
 
 	bool preExecute() const;
-	void postExecute() const;
+	void postExecute(const board::Board & board) const;
 };
 
 class PlaceInitialSettlementRoadAction : public Action
@@ -59,7 +59,7 @@ private:
 	int m_roadPosition;
 	bool m_secondRun;
 
-	void postExecute(board::Board & board) const;
+	void postExecute(const board::Board & board) const;
 };
 
 class PlaceRoadAction : public Action

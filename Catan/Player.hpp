@@ -34,6 +34,9 @@ public:
    void removeRessource(card::RessourceType ressourceType, unsigned int count);
    int getRessourceCount(card::RessourceType ressourceType) const;
 
+   void setExchangeCost(card::RessourceType ressourceType, int cost);
+   int getExchangeCost(card::RessourceType ressourceType) const;
+
    std::string serialize() const override;
 
 private:
@@ -49,7 +52,8 @@ private:
    token::Road m_road;
    int m_roadCount;
 
-   std::unordered_map<card::Ressource, int> m_ressources;
+   std::unordered_map<card::RessourceType, int> m_ressources;
+   std::unordered_map<card::RessourceType, int> m_exchangeCosts;
 };
 
 } // namespace player

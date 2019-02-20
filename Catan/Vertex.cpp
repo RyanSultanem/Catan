@@ -42,6 +42,16 @@ const std::optional<token::building::Building*>& Vertex::getBuilding() const
 	return m_building;
 }
 
+void Vertex::setHarbor(const Harbor& harbor)
+{
+	m_harbor = harbor;
+}
+
+const std::optional<Harbor>& Vertex::getHarbor() const
+{
+	return m_harbor;
+}
+
 std::string Vertex::serialize() const
 {
    return std::to_string(m_id) + ',' +

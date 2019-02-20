@@ -24,7 +24,7 @@ bool PlaceSettlementAction::execute(board::Board & board) const
 		isSuccess = board.placeSettlement(m_position, *optSettlement, PlaceSettlementCondition(m_player.getId()));
 			
 		if(isSuccess)
-			postExecute();
+			postExecute(board);
 	}
 
 	return isSuccess;
@@ -40,10 +40,24 @@ bool PlaceSettlementAction::preExecute() const
 	return player::reactions::settlementRessourcesAvailable(m_player);
 }
 
-void PlaceSettlementAction::postExecute() const
+namespace {
+
+void updateHarborPlacement(player::Player & player, const board::Board & board, int settlementPosition)
 {
-	if(player::reactions::settlementPay(m_player))
+	const std::optional<HarborCRef> & optHarbor = board.getHarbor(settlementPosition);
+	if (optHarbor)
+		player::reactions::settlementPlacedOnHarbor(player, *optHarbor);
+}
+
+} // namesapce anonymous
+
+void PlaceSettlementAction::postExecute(const board::Board & board) const
+{
+	if (player::reactions::settlementPay(m_player))
+	{
 		player::reactions::settlmentPlaced(m_player);
+		updateHarborPlacement(m_player, board, m_position);
+	}
 }
 
 PlaceInitialSettlementRoadAction::PlaceInitialSettlementRoadAction(player::Player & player, int settlementPosition, int roadPosition, bool secondRun)
@@ -63,6 +77,7 @@ bool PlaceInitialSettlementRoadAction::execute(board::Board & board) const
 
 	if (optSettlement && optRoad)
 	{
+		// TODO: fix issue if place settlmenet is succcessful bit road isnt. preExecute with conditions?
 		isSuccess = board.placeSettlement(m_settlementPosition, *optSettlement, PlaceInitialSettlementCondition(m_player.getId()));
 		isSuccess = isSuccess && board.placeRoad(m_roadPosition, *optRoad, PlaceInitialRoadCondition(m_player.getId(), m_settlementPosition));
 
@@ -78,11 +93,13 @@ ActionType PlaceInitialSettlementRoadAction::getType() const
 	return ActionType::PlaceInitialSettlementRoad;
 }
 
-void PlaceInitialSettlementRoadAction::postExecute(board::Board & board) const
+void PlaceInitialSettlementRoadAction::postExecute(const board::Board & board) const
 {
 	player::reactions::settlmentPlaced(m_player);
 	player::reactions::roadPlaced(m_player);
 	
+	updateHarborPlacement(m_player, board, m_settlementPosition);
+
 	if (m_secondRun)
 	{
 		const std::vector<card::RessourceType> ressources = board.getRessourcesFromVertexPosition(m_settlementPosition);
@@ -237,9 +254,7 @@ ExchangeCardsAction::ExchangeCardsAction(player::Player & player, int typeResult
 
 bool ExchangeCardsAction::execute(board::Board & /*board*/) const
 {
-	int typeRateChange = player::reactions::getExchangeTypeRate(m_player, m_typeToTrade);
-
-	return player::reactions::performExchangeCards(m_player, m_typeResult, m_typeToTrade, typeRateChange);
+	return player::reactions::performExchangeCards(m_player, m_typeResult, m_typeToTrade);
 }
 
 ActionType ExchangeCardsAction::getType() const

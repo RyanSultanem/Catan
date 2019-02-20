@@ -114,6 +114,12 @@
     <ClInclude Include="Conditions.fwd.hpp">
       <Filter>Header Files\fwd</Filter>
     </ClInclude>
+    <ClInclude Include="Harbor.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Harbor.fwd.hpp">
+      <Filter>Header Files\fwd</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Card.cpp">
@@ -159,6 +165,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Conditions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Harbor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -2,6 +2,7 @@
 
 #include "Player.hpp"
 #include "Building.hpp"
+#include "Harbor.hpp"
 
 namespace player {
 namespace reactions {
@@ -106,16 +107,13 @@ void cityPlaced(Player & player)
 	player.receivePoints(token::building::City::getCityPoints() - token::building::Settlement::getSettlementPoints());
 }
 
-int getExchangeTypeRate(const Player & /*player*/, int /*typeToTrade*/)
+bool performExchangeCards(Player & player, int typeResult, int typeToTrade)
 {
-	// TODO: Add effect of harbor when done.
-	return 4;
-}
-
-bool performExchangeCards(Player & player, int typeResult, int typeToTrade, int typeRateChange)
-{
+	// TODO: remove static_cast by replacing the int with the correct type higher in the stack.
 	card::RessourceType ressourceToTrade(static_cast<card::RessourceType>(typeToTrade));
 	card::RessourceType ressourceResult(static_cast<card::RessourceType>(typeResult));
+
+	int typeRateChange = player.getExchangeCost(ressourceToTrade);
 
 	if (player.getRessourceCount(ressourceToTrade) < typeRateChange)
 		return false;
@@ -123,6 +121,11 @@ bool performExchangeCards(Player & player, int typeResult, int typeToTrade, int 
 	player.removeRessource(ressourceToTrade, typeRateChange);
 	player.addRessource(ressourceResult, 1);
 	return true;
+}
+
+void settlementPlacedOnHarbor(Player & player, const Harbor & harbor)
+{
+	player.setExchangeCost(harbor.getRessourceType(), harbor.getNewTradeCost());
 }
 
 } // namespace reactions

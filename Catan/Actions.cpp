@@ -227,3 +227,22 @@ ActionType Done::getType() const
 {
 	return ActionType::Done;
 }
+
+ExchangeCardsAction::ExchangeCardsAction(player::Player & player, int typeResult, int typeToTrade)
+	: m_player(player)
+	, m_typeResult(typeResult)
+	, m_typeToTrade(typeToTrade)
+{
+}
+
+bool ExchangeCardsAction::execute(board::Board & /*board*/) const
+{
+	int typeRateChange = player::reactions::getExchangeTypeRate(m_player, m_typeToTrade);
+
+	return player::reactions::performExchangeCards(m_player, m_typeResult, m_typeToTrade, typeRateChange);
+}
+
+ActionType ExchangeCardsAction::getType() const
+{
+	return ActionType::ExchangeCards;
+}

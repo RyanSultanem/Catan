@@ -61,6 +61,13 @@ bool Game::placeCity(int position)
 	return processAction(action);
 }
 
+bool Game::exchangeCards(int resultType, int typeToTrade)
+{
+	ExchangeCardsAction action(m_players.at(m_activePlayer), resultType, typeToTrade);
+
+	return processAction(action);
+}
+
 bool Game::rollDice()
 {
 	RollDice action(m_players);

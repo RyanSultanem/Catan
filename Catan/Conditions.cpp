@@ -52,7 +52,7 @@ PlaceCityCondition::PlaceCityCondition(int playerReference)
 {
 }
 
-bool PlaceCityCondition::checkConditon(const board::Vertex & vertex) const
+bool PlaceCityCondition::checkCondition(const board::Vertex & vertex) const
 {
 	std::optional<token::building::Building *> optBuilding = vertex.getBuilding();
 	if (optBuilding)

@@ -200,7 +200,7 @@ bool Board::placeCity(int position, token::building::City & city, const PlaceCit
 
 	Vertex & vertex = m_vertices.at(position);
 
-	if(condition.checkConditon(vertex))
+	if(condition.checkCondition(vertex))
 	{
 		vertex.setBuilding(city);
 		return true;

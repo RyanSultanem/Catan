@@ -42,7 +42,7 @@ bool settlementRessourcesAvailable(const Player & player)
 
 bool settlementPay(Player & player)
 {
-	if (!settlementRessourcesAvailable(player)) // TODO: check if really needed
+	if (!settlementRessourcesAvailable(player)) // TODO: check if really needed; Actions already makes sure order is correct, or force the order to be here only, and dont expose the "needed" function(like exchange cards example)
 		return false;
 	
 	const auto & settlmentCost = token::building::Settlement::getSettlementCost();
@@ -104,6 +104,25 @@ void cityPlaced(Player & player)
 	player.decreaseCityCount();
 	player.increaseSettlmentCount();
 	player.receivePoints(token::building::City::getCityPoints() - token::building::Settlement::getSettlementPoints());
+}
+
+int getExchangeTypeRate(const Player & /*player*/, int /*typeToTrade*/)
+{
+	// TODO: Add effect of harbor when done.
+	return 4;
+}
+
+bool performExchangeCards(Player & player, int typeResult, int typeToTrade, int typeRateChange)
+{
+	card::RessourceType ressourceToTrade(static_cast<card::RessourceType>(typeToTrade));
+	card::RessourceType ressourceResult(static_cast<card::RessourceType>(typeResult));
+
+	if (player.getRessourceCount(ressourceToTrade) < typeRateChange)
+		return false;
+
+	player.removeRessource(ressourceToTrade, typeRateChange);
+	player.addRessource(ressourceResult, 1);
+	return true;
 }
 
 } // namespace reactions

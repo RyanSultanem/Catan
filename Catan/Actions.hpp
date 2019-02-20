@@ -17,7 +17,8 @@ enum class ActionType
 	PlaceRoad,
 	RollDice,
 	Done,
-	PlaceCity
+	PlaceCity,
+	ExchangeCards
 };
 
 class Action
@@ -117,6 +118,21 @@ public:
 
 private:
 	Game & m_game;
+};
+
+
+class ExchangeCardsAction : public Action
+{
+public:
+	ExchangeCardsAction(player::Player & player, int typeResult, int typeToTrade);
+
+	bool execute(board::Board& board) const override;
+	ActionType getType() const override;
+
+private:
+	player::Player & m_player;
+	int m_typeResult;
+	int m_typeToTrade;
 };
 
 #endif // !ACTIONS_HPP

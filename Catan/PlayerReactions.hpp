@@ -19,6 +19,9 @@ bool cityRessourcesAvailable(const Player & player);
 bool cityPay(Player & player);
 void cityPlaced(Player & player);
 
+int getExchangeTypeRate(const Player & player, const int typeToTrade);
+bool performExchangeCards(Player & player, int typeResult, int typeToTrade, int typeRateChange);
+
 } // namespace reactions
 } // namespace player
 

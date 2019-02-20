@@ -4,11 +4,19 @@
 #include "Vertex.fwd.h"
 #include "Edge.fwd.h"
 
-class PlaceSettlementCondition
+// Not sure if useful
+template<typename Location>
+class PlaceTokenCondition
+{
+public:
+	virtual bool checkCondition(const Location & location) const = 0;
+};
+
+class PlaceSettlementCondition : public PlaceTokenCondition<board::Vertex>
 {
 public:
 	explicit PlaceSettlementCondition(int playerReference);
-	virtual bool checkCondition(const board::Vertex & vertex) const;
+	bool checkCondition(const board::Vertex & vertex) const;
 
 private:
 	int m_playerReference;
@@ -21,7 +29,7 @@ public:
 	bool checkCondition(const board::Vertex & vertex) const override;
 };
 
-class PlaceRoadCondition
+class PlaceRoadCondition : public PlaceTokenCondition<board::Edge>
 {
 public:
 	explicit PlaceRoadCondition(int playerReference);
@@ -41,11 +49,11 @@ private:
 	int m_initialSettlementPosition;
 };
 
-class PlaceCityCondition
+class PlaceCityCondition : public PlaceTokenCondition<board::Vertex>
 {
 public:
 	explicit PlaceCityCondition(int playerReference);
-	bool checkConditon(const board::Vertex & vertex) const;
+	bool checkCondition(const board::Vertex & vertex) const;
 
 private:
 	int m_playerReference;

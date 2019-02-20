@@ -8,6 +8,7 @@ public:
 	virtual bool placeSettlement(int position) = 0;
 	virtual bool placeRoad(int position) = 0;
 	virtual bool placeCity(int position) = 0;
+	virtual bool exchangeCards(int resultType, int typeToTrade) = 0; // TODO: use enum instead for allignemnt.
 
 	virtual bool rollDice() = 0;
 	virtual bool done() = 0;

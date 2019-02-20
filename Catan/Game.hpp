@@ -25,6 +25,7 @@ public:
 	bool placeSettlement(int position) override;
 	bool placeRoad(int position) override;
 	bool placeCity(int position) override;
+	bool exchangeCards(int resultType, int typeToTrade) override;
 
 	bool rollDice() override;
 	bool done() override;

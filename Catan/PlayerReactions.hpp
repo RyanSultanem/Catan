@@ -4,6 +4,8 @@
 #include "Player.fwd.hpp"
 #include "Harbor.fwd.hpp"
 #include <optional>
+#include "Card.fwd.h"
+#include <functional>
 
 namespace player {
 namespace reactions {
@@ -23,8 +25,11 @@ void cityPlaced(Player & player);
 // -------
 
 bool performExchangeCards(Player & player, int typeResult, int typeToTrade);
-
 void settlementPlacedOnHarbor(Player & player, const Harbor & harbor);
+
+void stealPlayerCard(Player & receiver, Player & giver);
+
+bool burnCards(Player & player, const std::unordered_map<card::RessourceType, int> & ressourcesToBurn);
 
 } // namespace reactions
 } // namespace player

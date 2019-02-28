@@ -31,8 +31,10 @@ public:
    void decreaseCityCount();
 
    void addRessource(card::RessourceType ressourceType, unsigned int count);
-   void removeRessource(card::RessourceType ressourceType, unsigned int count);
+   bool removeRessource(card::RessourceType ressourceType, unsigned int count);
    int getRessourceCount(card::RessourceType ressourceType) const;
+   int getNumberOfRessources() const;
+   card::RessourceType removeRandomRessource();
 
    void setExchangeCost(card::RessourceType ressourceType, int cost);
    int getExchangeCost(card::RessourceType ressourceType) const;

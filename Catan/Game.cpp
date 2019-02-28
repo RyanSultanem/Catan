@@ -70,7 +70,7 @@ bool Game::exchangeCards(int resultType, int typeToTrade)
 
 bool Game::rollDice()
 {
-	RollDice action(m_players);
+	RollDice action(m_players, m_activePlayer);
 
 	return processAction(action);
 }
@@ -125,9 +125,9 @@ void Game::setupPlayers(int numberOfPlayers)
       m_players.push_back(player::Player(i));
 }
 
-bool Game::processAction(const Action & action)
+bool Game::processAction(Action & action)
 {
-	// TODO: This whole code could be in State to assure allignement in calls.
+	// TODO: This whole code could be in State to assure allignement in calls. Board in construcotr of action
 
 	if (!m_state->isValid(action))
 		return false;

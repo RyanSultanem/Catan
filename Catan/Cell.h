@@ -8,7 +8,6 @@
 #include "Land.h"
 #include "Vertex.fwd.h"
 #include "Serializable.hpp"
-#include "Board.h"
 
 #include "Building.fwd.hpp"
 
@@ -23,8 +22,9 @@ public:
 
 	bool hasVertex(int vertexId) const;
 
-   std::string serialize() const override;
+	std::string serialize() const override;
 	int getNumber() const;
+	void setNumber(int number); // TODO: THis was done for the robber, check if wreally needed or can totally replace the cell by the robber for effect.
 	const std::vector<token::building::Building*> getActiveBuildings() const;
 	land::Land getLand() const;
 

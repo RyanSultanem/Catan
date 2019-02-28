@@ -13,6 +13,7 @@ Board::Board()
 	createVertices();
 	createEdges();
 	initializeCells();
+	initializeRobber();
 }
 
 void Board::createVertices()
@@ -104,6 +105,18 @@ void Board::initializeCells()
 	m_cells.push_back(cell::Cell(card::RessourceType::BRICK, 3, createVerticesVector({ 35,30,36,41,45,40 }), m_cellId++));
 	m_cells.push_back(cell::Cell(card::RessourceType::LUMBER, 8, createVerticesVector({ 34,29,35,40,44,39 }), m_cellId++));
 	m_cells.push_back(cell::Cell(card::RessourceType::NO_RESSOURCE, 0, createVerticesVector({ 23,18,24,30,35,30 }), m_cellId++));
+}
+
+void Board::initializeRobber()
+{
+	auto desertIt = std::find_if(m_cells.begin(), m_cells.end(), 
+		[](const cell::Cell & cell)
+	{
+		return (cell.getLand().getRessourceType() == card::RessourceType::NO_RESSOURCE);
+	});
+
+	if(desertIt != m_cells.end())
+		m_robber.initializeRobberCell(*desertIt);
 }
 
 std::vector<VertexRef> Board::createVerticesVector(const std::vector<int>& indices)
@@ -218,6 +231,15 @@ bool Board::placeCity(int position, token::building::City & city, const PlaceCit
 	return false;
 }
 
+bool Board::moveRobber(int position)
+{
+	if (position < 0 || position >= m_cells.size())
+		return false;
+
+	m_robber.applyTo(m_cells.at(position));
+	return true;
+}
+
 std::vector<card::RessourceType> Board::getRessourcesFromVertexPosition(int position) const
 {
 	std::vector<card::RessourceType> ressources;
@@ -273,6 +295,20 @@ std::vector<cell::CellCRef> Board::getCellsWithNumber(int value) const
 	});
 
 	return cellsWithNumber;
+}
+
+std::optional<int> Board::getVertexPlayerRef(int position) const
+{
+	if (position < 0 || position >= m_vertices.size())
+		return std::nullopt;
+
+	const std::optional<token::building::Building*> & building = m_vertices.at(position).getBuilding();
+	
+	//return building ? building.value()->getReference() : std::nullopt; // TODO: ???
+	if (building)
+		return building.value()->getReference();
+	else
+		return std::nullopt;
 }
 
 } // namespace board

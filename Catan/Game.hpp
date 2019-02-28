@@ -35,7 +35,7 @@ public:
 	void setNextActivePlayer();
 	void setNextActivePlayer(int playerId);
 
-	void setSecondInitialPlacementRun();
+	void setSecondInitialPlacementRun(); 
 	bool isSecondInitialPlacementRun() const;
 
 	void setState(std::unique_ptr<State> && state);
@@ -46,13 +46,13 @@ private:
 
 	std::vector<player::Player> m_players;
 	int m_activePlayer;
-	bool m_secondInitialPlacementRun; // TODO: maybe find a better solution for second run.. State?
+	bool m_secondInitialPlacementRun; // TODO: maybe find a better solution for second run.. State? Yes put in corresponding state
    
 	//Interface & m_interface;
 
 	void setupPlayers(int numberOfPlayers);
 
-	bool processAction(const Action & action);
+	bool processAction(Action & action);
 
 	//void showStatus();
 

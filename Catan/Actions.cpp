@@ -6,6 +6,8 @@
 #include "Player.hpp"
 #include "PlayerReactions.hpp"
 #include "Conditions.hpp"
+#include "Utility.hpp"
+#include <iterator>
 
 PlaceSettlementAction::PlaceSettlementAction(player::Player & player, int position)
 	: m_player(player)
@@ -13,7 +15,7 @@ PlaceSettlementAction::PlaceSettlementAction(player::Player & player, int positi
 {
 }
 
-bool PlaceSettlementAction::execute(board::Board & board) const
+bool PlaceSettlementAction::execute(board::Board & board)
 {
 	bool isSuccess = preExecute();
 
@@ -68,7 +70,7 @@ PlaceInitialSettlementRoadAction::PlaceInitialSettlementRoadAction(player::Playe
 {
 }
 
-bool PlaceInitialSettlementRoadAction::execute(board::Board & board) const
+bool PlaceInitialSettlementRoadAction::execute(board::Board & board)
 {
 	bool isSuccess = false;
 
@@ -117,7 +119,7 @@ PlaceRoadAction::PlaceRoadAction(player::Player & player, int position)
 {
 }
 
-bool PlaceRoadAction::execute(board::Board & board) const
+bool PlaceRoadAction::execute(board::Board & board)
 {
 	bool isSuccess = preExecute();
 
@@ -156,7 +158,7 @@ PlaceCityAction::PlaceCityAction(player::Player & player, int position)
 {
 }
 
-bool PlaceCityAction::execute(board::Board & board) const
+bool PlaceCityAction::execute(board::Board & board)
 {
 	bool isSuceess = preExecute();
 
@@ -189,17 +191,26 @@ void PlaceCityAction::postExecute() const
 		player::reactions::cityPlaced(m_player);
 }
 
-RollDice::RollDice(std::vector<player::Player> & players)
+RollDice::RollDice(std::vector<player::Player> & players, int activePlayer)
 	: m_players(players)
+	, m_activePlayer(activePlayer)
+	, m_shouldChangeRobber(false)
+	, m_shouldBurn(false)
 {
 }
 
-bool RollDice::execute(board::Board & board) const
+bool RollDice::execute(board::Board & board)
 {
 	board::Dice dice;
-	int diceNumber = dice.roll().getValue();
+	int diceValue = dice.roll().getValue();
 
-	giveRessources(board, diceNumber);
+	if (diceValue == 7)
+	{
+		m_shouldChangeRobber = true;
+		checkCardBurn();
+	}
+
+	giveRessources(board, diceValue);
 
 	return true;
 }
@@ -207,6 +218,21 @@ bool RollDice::execute(board::Board & board) const
 ActionType RollDice::getType() const
 {
 	return ActionType::RollDice;
+}
+
+bool RollDice::shouldChangeRobber() const
+{
+	return m_shouldChangeRobber;
+}
+
+bool RollDice::shouldBurn() const
+{
+	return m_shouldBurn;
+}
+
+const std::queue<int>& RollDice::getPlayerBurnQueue() const
+{
+	return m_playerBurn;
 }
 
 void RollDice::giveRessources(const board::Board & board, int diceValue) const
@@ -228,12 +254,30 @@ void RollDice::giveRessources(const board::Board & board, int diceValue) const
 	});
 }
 
+void RollDice::checkCardBurn()
+{
+	int numberOfPlayers = m_players.size();
+	int playerIndex = m_activePlayer; 
+	
+	// TODO: kind of weird way to do the check.. but might be okay
+	// TODO: should CERTAINLY NOT be here and expose the queue.
+	do
+	{
+		playerIndex = (playerIndex + 1) % numberOfPlayers; // Start with next player
+		if (m_players.at(playerIndex).getNumberOfRessources() >= 8) // TODO: Magic Number
+		{
+			m_playerBurn.push(playerIndex);
+			m_shouldBurn = true;
+		}
+	} while (playerIndex != m_activePlayer);
+}
+
 Done::Done(Game & game)
 	: m_game(game)
 {		
 }
 
-bool Done::execute(board::Board & /*board*/) const
+bool Done::execute(board::Board & /*board*/)
 {
 	m_game.setNextActivePlayer();
 
@@ -252,7 +296,7 @@ ExchangeCardsAction::ExchangeCardsAction(player::Player & player, int typeResult
 {
 }
 
-bool ExchangeCardsAction::execute(board::Board & /*board*/) const
+bool ExchangeCardsAction::execute(board::Board & /*board*/)
 {
 	return player::reactions::performExchangeCards(m_player, m_typeResult, m_typeToTrade);
 }
@@ -260,4 +304,66 @@ bool ExchangeCardsAction::execute(board::Board & /*board*/) const
 ActionType ExchangeCardsAction::getType() const
 {
 	return ActionType::ExchangeCards;
+}
+
+MoveRobberAction::MoveRobberAction(player::Player & player, int cellPosition, int vertexPosition, std::vector<player::Player> & players)
+	: m_player(player)
+	, m_cellPosition(cellPosition)
+	, m_vertexPosition(vertexPosition)
+	, m_players(players)
+{
+}
+
+bool MoveRobberAction::execute(board::Board & board)
+{
+	bool isSucess = board.moveRobber(m_cellPosition);
+
+	if (isSucess)
+	{
+		std::optional<int> playerRef = board.getVertexPlayerRef(m_vertexPosition);
+		if(playerRef)
+		{
+			player::Player & fromPlayer = m_players.at(playerRef.value());
+			player::reactions::stealPlayerCard(m_player, fromPlayer);
+		}
+	}
+
+	return isSucess;
+}
+
+ActionType MoveRobberAction::getType() const
+{
+	return ActionType::MoveRobber;
+}
+
+CardBurnAction::CardBurnAction(player::Player & player, const std::unordered_map<int, int> & ressourcesToBurn)
+	: m_player(player)
+	, m_ressourcesToBurn(ressourcesToBurn)
+{
+}
+
+bool CardBurnAction::execute(board::Board & /*board*/)
+{
+	if (!preExecute())
+		return false;
+
+	std::unordered_map<card::RessourceType, int> realRessources(m_ressourcesToBurn.size());
+
+	std::transform(m_ressourcesToBurn.begin(), m_ressourcesToBurn.end(), std::inserter(realRessources, realRessources.begin()),
+		[](const std::pair<int, int> & element)
+	{
+		return std::pair<card::RessourceType, int>(static_cast<card::RessourceType>(element.first), element.second);
+	});
+
+	return player::reactions::burnCards(m_player, realRessources);
+}
+
+ActionType CardBurnAction::getType() const
+{
+	return ActionType::CardBurn;
+}
+
+bool CardBurnAction::preExecute() const
+{
+	return m_player.getNumberOfRessources() / 2 == utility::getCount(m_ressourcesToBurn);
 }

@@ -1,6 +1,9 @@
 #include "Player.hpp"
 
+#include "Utility.hpp"
+
 #include <algorithm>
+#include <numeric>
 
 namespace player {
 
@@ -110,15 +113,43 @@ void Player::addRessource(card::RessourceType ressourceType, unsigned int count)
 	m_ressources[ressourceType] += count;
 }
 
-void Player::removeRessource(card::RessourceType ressourceType, unsigned int count)
+bool Player::removeRessource(card::RessourceType ressourceType, unsigned int count)
 {
 	if (m_ressources[ressourceType] >= count)
+	{
 		m_ressources[ressourceType] = m_ressources[ressourceType] - count;
+		return true;
+	}
+
+	return false;
 }
 
 int Player::getRessourceCount(card::RessourceType ressourceType) const
 {
 	return m_ressources.at(ressourceType);
+}
+
+int Player::getNumberOfRessources() const
+{
+	return utility::getCount(m_ressources);
+}
+
+card::RessourceType Player::removeRandomRessource()
+{
+	int randomRessourceIndex = rand() % getNumberOfRessources();
+
+	auto it = std::find_if(m_ressources.begin(), m_ressources.end(),
+		[&randomRessourceIndex](const std::pair<card::RessourceType, int> & element)
+	{
+		if (randomRessourceIndex - element.second <= 0)
+			return true;
+
+		randomRessourceIndex -= element.second;
+		return true;
+	});
+
+	removeRessource(it->first, 1);
+	return it->first;
 }
 
 void Player::setExchangeCost(card::RessourceType ressourceType, int cost)
@@ -133,6 +164,7 @@ int Player::getExchangeCost(card::RessourceType ressourceType) const
 
 std::string Player::serialize() const
 {
+	// TODO: std::accumulate
 	std::string ressourcesCounts =
 		std::to_string(m_ressources.at(card::RessourceType::LUMBER)) + "|" +
 		std::to_string(m_ressources.at(card::RessourceType::BRICK)) + "|" +

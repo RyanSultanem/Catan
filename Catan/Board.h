@@ -12,6 +12,7 @@
 #include "Serializable.hpp"
 #include "Conditions.fwd.hpp"
 #include "Harbor.fwd.hpp"
+#include "Robber.hpp"
 
 namespace board {
 
@@ -35,10 +36,13 @@ public:
 	bool placeRoad(int position, token::Road & road, const PlaceRoadCondition & condition);
 	bool placeCity(int position, token::building::City & city, const PlaceCityCondition & condition);
 
+	bool moveRobber(int position);
+
 	std::vector<card::RessourceType> getRessourcesFromVertexPosition(int position) const;
 	// TODO: check if harbor check should really be done through Board, or can find a better solution; could be done through vertex if cost is not directly in player maybe, but in player also makes sense..
 	std::optional<HarborCRef> getHarbor(int position) const;
 	std::vector<cell::CellCRef> getCellsWithNumber(int value) const;
+	std::optional<int> getVertexPlayerRef(int position) const;
 
 	std::string serialize() const override;
 
@@ -52,6 +56,7 @@ private:
 	int m_edgeId = 0;
 	std::vector<Edge> m_edges;
 
+	Robber m_robber;
 
 	// Building the board
 	void createVertices();
@@ -60,6 +65,7 @@ private:
 	void connectVerticesWithTwoEdges(int start, int size, int direction);
 	void connectVerticesWithSingleEdge(int start, int size, int direction);
 	void initializeCells();
+	void initializeRobber();
 	std::vector<VertexRef> createVerticesVector(const std::vector<int>& indices);
 };
 

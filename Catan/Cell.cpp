@@ -41,6 +41,11 @@ int Cell::getNumber() const
 	return m_number;
 }
 
+void Cell::setNumber(int number)
+{
+	m_number = number;
+}
+
 const std::vector<token::building::Building*> Cell::getActiveBuildings() const
 {
 	std::vector<token::building::Building*> activeBuildings;

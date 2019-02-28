@@ -143,9 +143,11 @@
     <ClInclude Include="Player.hpp" />
     <ClInclude Include="Road.fwd.hpp" />
     <ClInclude Include="Road.hpp" />
+    <ClInclude Include="Robber.hpp" />
     <ClInclude Include="Serializable.hpp" />
     <ClInclude Include="State.hpp" />
     <ClInclude Include="Token.hpp" />
+    <ClInclude Include="Utility.hpp" />
     <ClInclude Include="Vertex.fwd.h" />
     <ClInclude Include="Vertex.h" />
   </ItemGroup>
@@ -164,6 +166,7 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerReactions.cpp" />
     <ClCompile Include="Road.cpp" />
+    <ClCompile Include="Robber.cpp" />
     <ClCompile Include="State.cpp" />
     <ClCompile Include="Vertex.cpp" />
   </ItemGroup>

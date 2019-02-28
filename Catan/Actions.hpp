@@ -6,7 +6,10 @@
 #include "Player.fwd.hpp"
 
 #include <vector>
+#include <stack>
+#include <queue>
 #include <memory>
+#include <unordered_map>
 
 // TODO: can be replaced by doubledispatch with State. worth it?
 // For now it makes more sense to only have a type.
@@ -18,13 +21,15 @@ enum class ActionType
 	RollDice,
 	Done,
 	PlaceCity,
-	ExchangeCards
+	ExchangeCards,
+	MoveRobber,
+	CardBurn
 };
 
 class Action
 {
 public:
-	virtual bool execute(board::Board & board) const = 0; // TODO: check if board should really be passed here or for each needed construcotr.
+	virtual bool execute(board::Board & board) = 0; // TODO: check if board should really be passed here or for each needed construcotr.
 	virtual ActionType getType() const = 0;
 };
 
@@ -33,7 +38,7 @@ class PlaceSettlementAction : public Action // TODO: mutualise code between all 
 public:
 	PlaceSettlementAction(player::Player & player, int position);
 
-	bool execute(board::Board & board) const override;
+	bool execute(board::Board & board) override;
 	ActionType getType() const override;
 
 private:
@@ -49,7 +54,7 @@ class PlaceInitialSettlementRoadAction : public Action
 public:
 	PlaceInitialSettlementRoadAction(player::Player & player, int settlementPosition, int roadPosition, bool secondRun);
 
-	bool execute(board::Board & board) const override;
+	bool execute(board::Board & board) override;
 
 	ActionType getType() const override;
 
@@ -67,7 +72,7 @@ class PlaceRoadAction : public Action
 public:
 	PlaceRoadAction(player::Player & player, int position);
 
-	bool execute(board::Board & board) const override;
+	bool execute(board::Board & board) override;
 	ActionType getType() const override;
 
 private:
@@ -83,7 +88,7 @@ class PlaceCityAction : public Action
 public:
 	PlaceCityAction(player::Player & player, int position);
 
-	bool execute(board::Board & board) const override;
+	bool execute(board::Board & board) override;
 	ActionType getType() const override;
 
 private:
@@ -97,15 +102,25 @@ private:
 class RollDice : public Action
 {
 public:
-	explicit RollDice(std::vector<player::Player> & players);
+	explicit RollDice(std::vector<player::Player> & players, int activePlayerRef);
 
-	bool execute(board::Board & board) const override;
+	bool execute(board::Board & board) override;
 	ActionType getType() const override;
+
+	bool shouldChangeRobber() const;
+	bool shouldBurn() const;
+	const std::queue<int> & getPlayerBurnQueue() const;
 
 private:
 	std::vector<player::Player> & m_players;
+	int m_activePlayer;
+
+	bool m_shouldChangeRobber;
+	bool m_shouldBurn;
+	std::queue<int> m_playerBurn;
 
 	void giveRessources(const board::Board & board, int diceValue) const;
+	void checkCardBurn();
 };
 
 class Done : public Action
@@ -113,7 +128,7 @@ class Done : public Action
 public:
 	explicit Done(Game & game); // TODO: Create an ActivePlayer class to be handled here instead of Game. Also could contain changing player logic.
 
-	bool execute(board::Board & board) const override;
+	bool execute(board::Board & board) override;
 	ActionType getType() const override;
 
 private:
@@ -126,13 +141,43 @@ class ExchangeCardsAction : public Action
 public:
 	ExchangeCardsAction(player::Player & player, int typeResult, int typeToTrade);
 
-	bool execute(board::Board& board) const override;
+	bool execute(board::Board& board) override;
 	ActionType getType() const override;
 
 private:
 	player::Player & m_player;
 	int m_typeResult;
 	int m_typeToTrade;
+};
+
+class MoveRobberAction : public Action
+{
+public:
+	MoveRobberAction(player::Player & player, int cellPosition, int vertexPosition, std::vector<player::Player> & players);
+
+	bool execute(board::Board & board) override;
+	ActionType getType() const override;
+
+private:
+	player::Player & m_player;
+	std::vector<player::Player> & m_players;
+	int m_cellPosition;
+	int m_vertexPosition;
+};
+
+class CardBurnAction : public Action
+{
+public:
+	CardBurnAction(player::Player & player, const std::unordered_map<int, int> & ressourcesToBurn);
+
+	bool execute(board::Board & board) override;
+	ActionType getType() const override;
+
+private:
+	player::Player & m_player;
+	std::unordered_map<int, int> m_ressourcesToBurn;
+
+	bool preExecute() const;
 };
 
 #endif // !ACTIONS_HPP

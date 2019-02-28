@@ -1,6 +1,8 @@
 #ifndef CELL_FWD_H
 #define CELL_FWD_H
 
+#include <functional>
+
 namespace cell {
 
 class Cell;

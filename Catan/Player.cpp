@@ -152,6 +152,10 @@ card::RessourceType Player::removeRandomRessource()
 	return it->first;
 }
 
+void Player::receiveDevelopment(std::unique_ptr<card::Development> && development)
+{
+}
+
 void Player::setExchangeCost(card::RessourceType ressourceType, int cost)
 {
 	m_exchangeCosts[ressourceType] = cost;

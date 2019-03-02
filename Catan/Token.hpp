@@ -12,7 +12,7 @@ class Token : public serialize::Serializable
 public:
    explicit Token(int reference) : m_reference(reference) {}
 
-	virtual const std::unordered_map<card::Ressource, int>& getCost() const = 0;
+	virtual const std::unordered_map<card::RessourceType, int>& getCost() const = 0;
 
    int getReference() const { return m_reference; }
 

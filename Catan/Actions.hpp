@@ -4,6 +4,7 @@
 #include "Board.fwd.h"
 #include "Game.fwd.hpp"
 #include "Player.fwd.hpp"
+#include "DevelopmentStock.fwd.hpp"
 
 #include <vector>
 #include <stack>
@@ -23,7 +24,8 @@ enum class ActionType
 	PlaceCity,
 	ExchangeCards,
 	MoveRobber,
-	CardBurn
+	CardBurn,
+	BuyDevelopment
 };
 
 class Action
@@ -178,6 +180,21 @@ private:
 	std::unordered_map<int, int> m_ressourcesToBurn;
 
 	bool preExecute() const;
+};
+
+class BuyDevelopmentAction : public Action
+{
+public:
+	explicit BuyDevelopmentAction(player::Player & player, DevelopmentStock & developmentStock);
+
+	bool execute(board::Board & board) override;
+	ActionType getType() const override;
+
+private:
+	player::Player & m_player;
+	DevelopmentStock & m_developmentStock;
+
+	bool preExecute();
 };
 
 #endif // !ACTIONS_HPP

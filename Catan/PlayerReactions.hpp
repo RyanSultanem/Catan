@@ -31,6 +31,9 @@ void stealPlayerCard(Player & receiver, Player & giver);
 
 bool burnCards(Player & player, const std::unordered_map<card::RessourceType, int> & ressourcesToBurn);
 
+bool developmentRessourceAvailable(const Player & player);
+bool developmentPay(Player & player);
+
 } // namespace reactions
 } // namespace player
 

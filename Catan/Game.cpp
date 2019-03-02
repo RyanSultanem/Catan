@@ -9,10 +9,10 @@
 #include <algorithm>
 #include <ctime>
 
-Game::Game(Interface & interface, int numberOfPlayers)
-	: /*m_interface(interface)
-	,*/ m_activePlayer(0)
+Game::Game(int numberOfPlayers)
+	:  m_activePlayer(0)
 	, m_secondInitialPlacementRun(false)
+	, m_state(std::make_unique<InitialSettlementState>())
 {
 	srand(time(NULL)); // TODO: In Dice? Chose to be here because on initialization of the game.
 	setupPlayers(numberOfPlayers);
@@ -21,17 +21,6 @@ Game::Game(Interface & interface, int numberOfPlayers)
 Game::~Game()
 {
 }
-
-//void Game::play()
-//{
-//	//showStatus();
-//
-//	//initialSettlmentPlacement();
-//
-//	//showStatus();
-//
-//	playTurns();
-//}
 
 bool Game::placeInitialSetlementRoad(int settlementPosition, int roadPosition)
 {
@@ -66,6 +55,27 @@ bool Game::exchangeCards(int resultType, int typeToTrade)
 	ExchangeCardsAction action(m_players.at(m_activePlayer), resultType, typeToTrade);
 
 	return processAction(action);
+}
+
+bool Game::moveRobber(int cellPosition, int vertexPosition)
+{
+	MoveRobberAction moveRobberAction(m_players.at(m_activePlayer), cellPosition, vertexPosition, m_players);
+
+	return processAction(moveRobberAction);
+}
+
+bool Game::burnCards(const std::unordered_map<int, int> & ressourcesToBurn)
+{
+	CardBurnAction cardBurnAction(m_players.at(m_activePlayer), ressourcesToBurn);
+
+	return processAction(cardBurnAction);
+}
+
+bool Game::buyDevelopmentCard()
+{
+	BuyDevelopmentAction buyDevelopmentAction(m_players.at(m_activePlayer), m_developmentStock);
+
+	return processAction(buyDevelopmentAction);
 }
 
 bool Game::rollDice()
@@ -181,3 +191,12 @@ bool Game::processAction(Action & action)
 //		++turnCount;
 //	}
 //}
+
+namespace builder {
+
+std::unique_ptr<GameInterface> buildGame(int numberOfPlayer)
+{
+	return std::make_unique<Game>(numberOfPlayer);
+}
+
+}

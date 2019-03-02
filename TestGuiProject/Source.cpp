@@ -1,26 +1,13 @@
-#include "../Catan/Interface.hpp"
+#include "../Catan/GameInterface.hpp"
 
 #include <iostream>
 
-class InterfaceStub : public Interface
-{
-public:
-   void printBoard() override
-   {
-      std::cout << "showBoard" << std::endl;
-   }
-   void updateBoard() override
-   {
-
-   }
-};
-
 int main()
 {
-   Interface * interface = new InterfaceStub();
-   interface->printBoard();
+	std::unique_ptr<GameInterface> gamePtr = builder::buildGame(3);
+	GameInterface & game = *gamePtr;
 
-   system("PAUSE");
+	system("PAUSE");
 
-   return 0;
+	return 0;
 }

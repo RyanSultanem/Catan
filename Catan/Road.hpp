@@ -12,8 +12,8 @@ class Road : public Token
 public:
    explicit Road(int reference);
 
-	const std::unordered_map<card::Ressource, int>& getCost() const override;
-	static const std::unordered_map<card::Ressource, int>& getRoadCost();
+	const std::unordered_map<card::RessourceType, int>& getCost() const override;
+	static const std::unordered_map<card::RessourceType, int>& getRoadCost();
 
 	bool operator==(const Road& other) const;
 

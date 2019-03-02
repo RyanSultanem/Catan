@@ -22,7 +22,7 @@ Board* BoardTest::board = nullptr;
 
 TEST_F(BoardTest, creationTest)
 {
-	EXPECT_EQ(19, board->getCellsSize());
+	EXPECT_EQ(19, board->getNumberOfCells());
 	EXPECT_EQ(54, board->getNumberOfVertices());
 	EXPECT_EQ(72, board->getNumberOfEdges());
 }

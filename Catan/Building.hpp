@@ -22,8 +22,8 @@ class Settlement : public Building
 public:
    explicit Settlement(int reference);
 
-	const std::unordered_map<card::Ressource, int>& getCost() const override;
-	static const std::unordered_map<card::Ressource, int>& getSettlementCost();
+	const std::unordered_map<card::RessourceType, int>& getCost() const override;
+	static const std::unordered_map<card::RessourceType, int>& getSettlementCost();
 
 	std::string serialize() const override;
 	
@@ -36,8 +36,8 @@ class City : public Building
 public:
    explicit City(int reference);
 
-	const std::unordered_map<card::Ressource, int>& getCost() const override;
-	static const std::unordered_map<card::Ressource, int>& getCityCost();
+	const std::unordered_map<card::RessourceType, int>& getCost() const override;
+	static const std::unordered_map<card::RessourceType, int>& getCityCost();
 
 	std::string serialize() const override;
 	

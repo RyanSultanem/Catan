@@ -135,7 +135,7 @@ std::vector<VertexRef> Board::createVerticesVector(const std::vector<int>& indic
 	return cellVertices;
 }
 
-int Board::getCellsSize() const
+int Board::getNumberOfCells() const
 {
 	return m_cells.size();
 }

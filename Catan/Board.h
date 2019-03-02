@@ -24,7 +24,7 @@ class Board : public serialize::Serializable
 {
 public:
 	Board();
-	int getCellsSize() const;
+	int getNumberOfCells() const;
 	int getNumberOfLand(const card::RessourceType& ressource) const;
 	int getNumberOfVertices() const;
 	int getNumberOfEdges() const;

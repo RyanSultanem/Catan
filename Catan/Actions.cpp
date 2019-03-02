@@ -80,6 +80,7 @@ bool PlaceInitialSettlementRoadAction::execute(board::Board & board)
 	if (optSettlement && optRoad)
 	{
 		// TODO: fix issue if place settlmenet is succcessful bit road isnt. preExecute with conditions?
+		// TODO: check road and settlement are adjencebt before placing
 		isSuccess = board.placeSettlement(m_settlementPosition, *optSettlement, PlaceInitialSettlementCondition(m_player.getId()));
 		isSuccess = isSuccess && board.placeRoad(m_roadPosition, *optRoad, PlaceInitialRoadCondition(m_player.getId(), m_settlementPosition));
 
@@ -366,4 +367,33 @@ ActionType CardBurnAction::getType() const
 bool CardBurnAction::preExecute() const
 {
 	return m_player.getNumberOfRessources() / 2 == utility::getCount(m_ressourcesToBurn);
+}
+
+BuyDevelopmentAction::BuyDevelopmentAction(player::Player & player, DevelopmentStock & developmentStock)
+	: m_player(player)
+	, m_developmentStock(developmentStock)
+{
+}
+
+bool BuyDevelopmentAction::execute(board::Board & board)
+{
+	bool isSuccess = preExecute();
+
+	if (isSuccess)
+	{
+		if(player::reactions::developmentPay(m_player))
+			m_player.receiveDevelopment(std::move(m_developmentStock.drawCard()));
+	}
+
+	return isSuccess;
+}
+
+ActionType BuyDevelopmentAction::getType() const
+{
+	return ActionType::BuyDevelopment;
+}
+
+bool BuyDevelopmentAction::preExecute()
+{
+	return player::reactions::developmentRessourceAvailable(m_player) && !m_developmentStock.empty();
 }

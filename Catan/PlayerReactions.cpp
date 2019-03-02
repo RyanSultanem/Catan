@@ -1,34 +1,38 @@
 #include "PlayerReactions.hpp"
 
+#include "Development.hpp"
+
 #include "Player.hpp"
 #include "Building.hpp"
 #include "Harbor.hpp"
+
+//TODO: rename file and namespace
 
 namespace player {
 namespace reactions {
 
 namespace {
 	
-bool playerRessourcesAvailable(const Player & player, const std::unordered_map<card::Ressource,int> & costs)
+bool playerRessourcesAvailable(const Player & player, const std::unordered_map<card::RessourceType,int> & costs)
 {
 	bool hasRessources = true;
 
 	std::for_each(costs.begin(), costs.end(),
-		[&player, &hasRessources](const std::unordered_map<card::Ressource, unsigned int>::value_type& ressourceInt)
+		[&player, &hasRessources](const std::unordered_map<card::RessourceType, unsigned int>::value_type& ressourceInt)
 	{
-		if (player.getRessourceCount(ressourceInt.first.getType()) < ressourceInt.second)
+		if (player.getRessourceCount(ressourceInt.first) < ressourceInt.second)
 			hasRessources = false;
 	});
 
 	return hasRessources;
 }
 
-void playerPayRessources(Player & player, const std::unordered_map<card::Ressource, int> & costs)
+void playerPayRessources(Player & player, const std::unordered_map<card::RessourceType, int> & costs)
 {
 	std::for_each(costs.begin(), costs.end(),
-		[&player](const std::unordered_map<card::Ressource, unsigned int>::value_type& ressourceInt)
+		[&player](const std::unordered_map<card::RessourceType, unsigned int>::value_type& ressourceInt)
 	{
-		player.removeRessource(ressourceInt.first.getType(), ressourceInt.second);
+		player.removeRessource(ressourceInt.first, ressourceInt.second);
 	});
 }
 
@@ -144,10 +148,24 @@ bool burnCards(Player & player, const std::unordered_map<card::RessourceType, in
 	std::for_each(ressourcesToBurn.begin(), ressourcesToBurn.end(),
 		[&player, &success](auto & element)
 	{
-		player.removeRessource(element.first, element.second);
+		success = success && player.removeRessource(element.first, element.second);
 	});
 
 	return success;
+}
+
+bool developmentRessourceAvailable(const Player & player)
+{
+	return playerRessourcesAvailable(player, card::getDevelopmentCost());
+}
+
+bool developmentPay(Player & player)
+{
+	if (!developmentRessourceAvailable(player))
+		return false;
+
+	playerPayRessources(player, card::getDevelopmentCost());
+	return true;
 }
 
 } // namespace reactions

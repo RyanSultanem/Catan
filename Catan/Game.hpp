@@ -10,22 +10,24 @@
 
 #include "Actions.fwd.hpp"
 #include "State.hpp"
+#include "DevelopmentStock.hpp"
 
 #include <vector>
 
 class Game : public GameInterface
 {
 public:
-	Game(Interface & interface, int numberOfPlayers);
+	Game(int numberOfPlayers);
 	~Game();
-
-	//void play();
 
 	bool placeInitialSetlementRoad(int settlementPosition, int roadPosition) override;
 	bool placeSettlement(int position) override;
 	bool placeRoad(int position) override;
 	bool placeCity(int position) override;
 	bool exchangeCards(int resultType, int typeToTrade) override;
+	bool moveRobber(int cellPosition, int vertexPosition) override;
+	bool burnCards(const std::unordered_map<int, int> & ressourcesToBurn) override;
+	bool buyDevelopmentCard() override;
 
 	bool rollDice() override;
 	bool done() override;
@@ -43,21 +45,15 @@ public:
 private:
 	std::unique_ptr<State> m_state;
 	board::Board m_board;
+	DevelopmentStock m_developmentStock;
 
 	std::vector<player::Player> m_players;
 	int m_activePlayer;
 	bool m_secondInitialPlacementRun; // TODO: maybe find a better solution for second run.. State? Yes put in corresponding state
    
-	//Interface & m_interface;
-
 	void setupPlayers(int numberOfPlayers);
 
 	bool processAction(Action & action);
-
-	//void showStatus();
-
-	/*void giveRessources(int value);
-	void playTurns();*/
 };
 
 #endif // GAME_HPP

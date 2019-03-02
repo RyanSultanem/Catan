@@ -8,6 +8,7 @@
 
 #include <vector>
 #include <optional>
+#include "Development.hpp"
 
 namespace player {
    
@@ -36,6 +37,8 @@ public:
    int getNumberOfRessources() const;
    card::RessourceType removeRandomRessource();
 
+   void receiveDevelopment(std::unique_ptr<card::Development> && development);
+   
    void setExchangeCost(card::RessourceType ressourceType, int cost);
    int getExchangeCost(card::RessourceType ressourceType) const;
 

@@ -5,6 +5,7 @@
 #include "Game.fwd.hpp"
 #include "Player.fwd.hpp"
 #include "DevelopmentStock.fwd.hpp"
+#include "Development.fwd.hpp"
 
 #include <vector>
 #include <stack>
@@ -25,7 +26,8 @@ enum class ActionType
 	ExchangeCards,
 	MoveRobber,
 	CardBurn,
-	BuyDevelopment
+	BuyDevelopment,
+   UseDevelopment
 };
 
 class Action
@@ -195,6 +197,23 @@ private:
 	DevelopmentStock & m_developmentStock;
 
 	bool preExecute();
+};
+
+class UseDevelopmentAction : public Action
+{
+public:
+   UseDevelopmentAction(player::Player & player, const DevelopmentType & developmentType, const DevelopmentData & developmentData, DevelopmentStock & developmentStock);
+
+   bool execute(board::Board & board) override;
+   ActionType getType() const override;
+
+private:
+   player::Player & m_player;
+   const DevelopmentType & m_developmentType;
+   const DevelopmentData & m_developmentData;
+   DevelopmentStock & m_developmentStock;
+
+   bool preExecute() const;
 };
 
 #endif // !ACTIONS_HPP

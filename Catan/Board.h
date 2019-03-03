@@ -30,7 +30,7 @@ public:
 	int getNumberOfEdges() const;
 	int getCellId(int index) const;
 
-	bool isConnectedEdges(std::vector<int> edgeIds) const;
+	bool isConnectedEdges(const std::vector<int> & edgeIds) const;
 	
 	bool placeSettlement(int position, token::building::Settlement & settlement, const PlaceSettlementCondition & condition);
 	bool placeRoad(int position, token::Road & road, const PlaceRoadCondition & condition);

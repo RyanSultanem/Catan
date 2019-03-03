@@ -162,7 +162,7 @@ int Board::getCellId(int index) const
 	return m_cells[index].getId();
 }
 
-bool Board::isConnectedEdges(std::vector<int> edgeIds) const
+bool Board::isConnectedEdges(const std::vector<int> & edgeIds) const
 {
 	for (auto id : edgeIds)
 	{

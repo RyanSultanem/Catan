@@ -78,6 +78,13 @@ bool Game::buyDevelopmentCard()
 	return processAction(buyDevelopmentAction);
 }
 
+bool Game::useDevelopmentCard(const DevelopmentType & developmentType, const DevelopmentData & developmentData)
+{
+   UseDevelopmentAction useDevelopmentAction(m_players.at(m_activePlayer), developmentType, developmentData, m_developmentStock);
+
+   return processAction(useDevelopmentAction);
+}
+
 bool Game::rollDice()
 {
 	RollDice action(m_players, m_activePlayer);

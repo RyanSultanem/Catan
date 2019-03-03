@@ -28,6 +28,7 @@ public:
 	bool moveRobber(int cellPosition, int vertexPosition) override;
 	bool burnCards(const std::unordered_map<int, int> & ressourcesToBurn) override;
 	bool buyDevelopmentCard() override;
+   bool useDevelopmentCard(const DevelopmentType & developmentType, const DevelopmentData & developmentData) override;
 
 	bool rollDice() override;
 	bool done() override;

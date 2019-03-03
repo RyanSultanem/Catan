@@ -10,11 +10,13 @@ class DevelopmentStock
 {
 public:
 	DevelopmentStock();
-	std::unique_ptr<card::Development> drawCard();
+	card::DevelopmentType drawCardType();
+   const card::Development & getCard(card::DevelopmentType developmentType) const;
 	bool empty() const;
 
 private:
-	std::unordered_map<std::unique_ptr<card::Development>, int> m_developmentCards;
+	std::unordered_map<card::DevelopmentType, int> m_developmentCardCount;
+   std::unordered_map<card::DevelopmentType, card::Development> m_developmentCards;
 };
 
 #endif // !DEVELOPMENT_STOCK_HPP

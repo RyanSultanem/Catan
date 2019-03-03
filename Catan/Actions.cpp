@@ -7,6 +7,7 @@
 #include "PlayerReactions.hpp"
 #include "Conditions.hpp"
 #include "Utility.hpp"
+#include "Development.hpp"
 #include <iterator>
 
 PlaceSettlementAction::PlaceSettlementAction(player::Player & player, int position)
@@ -151,6 +152,7 @@ void PlaceRoadAction::postExecute() const
 {
 	if(player::reactions::roadPay(m_player))
 		player::reactions::roadPlaced(m_player);
+   // check for longest here
 }
 
 PlaceCityAction::PlaceCityAction(player::Player & player, int position)
@@ -382,7 +384,7 @@ bool BuyDevelopmentAction::execute(board::Board & board)
 	if (isSuccess)
 	{
 		if(player::reactions::developmentPay(m_player))
-			m_player.receiveDevelopment(std::move(m_developmentStock.drawCard()));
+			m_player.receiveDevelopment(m_developmentStock.drawCardType());
 	}
 
 	return isSuccess;
@@ -396,4 +398,39 @@ ActionType BuyDevelopmentAction::getType() const
 bool BuyDevelopmentAction::preExecute()
 {
 	return player::reactions::developmentRessourceAvailable(m_player) && !m_developmentStock.empty();
+}
+
+UseDevelopmentAction::UseDevelopmentAction(player::Player & player, const DevelopmentType & developmentType, const DevelopmentData & developmentData, DevelopmentStock & developmentStock)
+   : m_player(player)
+   , m_developmentType(developmentType)
+   , m_developmentData(developmentData)
+   , m_developmentStock(developmentStock)
+{
+}
+
+bool UseDevelopmentAction::execute(board::Board & board)
+{
+   bool success = preExecute();
+
+   if (success)
+   {
+      const Development & developmentCard = m_developmentStock.getCard(m_developmentType);
+      success = developmentCard.execute(m_player, m_developmentData);
+      if (success)
+         m_player.setUsedDevelopment(m_developmentType);
+
+      // check for longest and strongest here
+   }
+
+   return success;
+}
+
+ActionType UseDevelopmentAction::getType() const
+{
+   return ActionType::UseDevelopment;
+}
+
+bool UseDevelopmentAction::preExecute() const
+{
+   return m_player.hasDevelopment(m_developmentType);
 }

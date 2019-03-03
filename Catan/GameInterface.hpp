@@ -1,6 +1,8 @@
 #ifndef GAME_INTERFACE_HPP
 #define GAME_INTERFACE_HPP
 
+#include "Development.fwd.hpp"
+
 #include <memory>
 
 class GameInterface // TODO: should change to contain game
@@ -14,6 +16,7 @@ public:
 	virtual bool moveRobber(int cellPosition, int vertexPosition) = 0;
 	virtual bool burnCards(const std::unordered_map<int, int> & ressourcesToBurn) = 0;
 	virtual bool buyDevelopmentCard() = 0;
+   virtual bool useDevelopmentCard(const DevelopmentType & developmentType, const DevelopmentData & developmentData) = 0;
 
 	virtual bool rollDice() = 0;
 	virtual bool done() = 0;

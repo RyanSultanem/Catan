@@ -141,6 +141,16 @@ void stealPlayerCard(Player & receiver, Player & giver)
 	receiver.addRessource(randomRessource, 1);
 }
 
+void stealAllRessources(Player & receiver, Player & sender, card::RessourceType ressource)
+{
+   if (receiver.getId() == sender.getId())
+      return;
+
+   int ressourceCount = sender.getRessourceCount(ressource);
+   sender.removeRessource(ressource, ressourceCount);
+   receiver.addRessource(ressource, ressourceCount);
+}
+
 bool burnCards(Player & player, const std::unordered_map<card::RessourceType, int> & ressourcesToBurn)
 {
 	bool success = true;

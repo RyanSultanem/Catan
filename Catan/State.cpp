@@ -67,10 +67,12 @@ void PrePlayerDecision::nextState(Game & game, const Action & action)
 bool PlayerDecision::isValid(const Action & action) const
 {
 	// Any action that the player can take.
-	return action.getType() == ActionType::PlaceSettlement
-		|| action.getType() == ActionType::PlaceRoad
-		|| action.getType() == ActionType::PlaceCity
-		|| action.getType() == ActionType::ExchangeCards;
+   return action.getType() == ActionType::PlaceSettlement
+      || action.getType() == ActionType::PlaceRoad
+      || action.getType() == ActionType::PlaceCity
+      || action.getType() == ActionType::ExchangeCards
+      || action.getType() == ActionType::BuyDevelopment
+      || action.getType() == ActionType::UseDevelopment;
 }
 
 void PlayerDecision::nextState(Game & game, const Action & action)

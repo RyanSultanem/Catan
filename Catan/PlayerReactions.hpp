@@ -28,6 +28,7 @@ bool performExchangeCards(Player & player, int typeResult, int typeToTrade);
 void settlementPlacedOnHarbor(Player & player, const Harbor & harbor);
 
 void stealPlayerCard(Player & receiver, Player & giver);
+void stealAllRessources(Player & receiver, Player & sender, card::RessourceType ressource);
 
 bool burnCards(Player & player, const std::unordered_map<card::RessourceType, int> & ressourcesToBurn);
 

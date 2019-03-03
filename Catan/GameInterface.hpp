@@ -16,7 +16,7 @@ public:
 	virtual bool moveRobber(int cellPosition, int vertexPosition) = 0;
 	virtual bool burnCards(const std::unordered_map<int, int> & ressourcesToBurn) = 0;
 	virtual bool buyDevelopmentCard() = 0;
-   virtual bool useDevelopmentCard(const DevelopmentType & developmentType, const DevelopmentData & developmentData) = 0;
+	virtual bool useDevelopmentCard(const card::DevelopmentType & developmentType, const card::DevelopmentData & developmentData) = 0;
 
 	virtual bool rollDice() = 0;
 	virtual bool done() = 0;

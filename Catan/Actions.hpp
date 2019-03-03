@@ -202,18 +202,15 @@ private:
 class UseDevelopmentAction : public Action
 {
 public:
-   UseDevelopmentAction(player::Player & player, const DevelopmentType & developmentType, const DevelopmentData & developmentData, DevelopmentStock & developmentStock);
+   UseDevelopmentAction(player::Player & player, const card::DevelopmentType & developmentType, const card::DevelopmentData & developmentData);
 
    bool execute(board::Board & board) override;
    ActionType getType() const override;
 
 private:
    player::Player & m_player;
-   const DevelopmentType & m_developmentType;
-   const DevelopmentData & m_developmentData;
-   DevelopmentStock & m_developmentStock;
-
-   bool preExecute() const;
+   const card::DevelopmentType & m_developmentType;
+   const card::DevelopmentData & m_developmentData;
 };
 
 #endif // !ACTIONS_HPP

@@ -384,7 +384,7 @@ bool BuyDevelopmentAction::execute(board::Board & board)
 	if (isSuccess)
 	{
 		if(player::reactions::developmentPay(m_player))
-			m_player.receiveDevelopment(m_developmentStock.drawCardType());
+			m_player.receiveDevelopment(*m_developmentStock.drawCard());
 	}
 
 	return isSuccess;
@@ -400,29 +400,23 @@ bool BuyDevelopmentAction::preExecute()
 	return player::reactions::developmentRessourceAvailable(m_player) && !m_developmentStock.empty();
 }
 
-UseDevelopmentAction::UseDevelopmentAction(player::Player & player, const DevelopmentType & developmentType, const DevelopmentData & developmentData, DevelopmentStock & developmentStock)
+UseDevelopmentAction::UseDevelopmentAction(player::Player & player, const card::DevelopmentType & developmentType, const card::DevelopmentData & developmentData)
    : m_player(player)
    , m_developmentType(developmentType)
    , m_developmentData(developmentData)
-   , m_developmentStock(developmentStock)
 {
 }
 
 bool UseDevelopmentAction::execute(board::Board & board)
 {
-   bool success = preExecute();
+    std::optional<card::DevelopmentRef> optDevelopmentCard = m_player.getUnusedDevelopment(m_developmentType);
+	if (!optDevelopmentCard)
+		return false;
 
-   if (success)
-   {
-      const Development & developmentCard = m_developmentStock.getCard(m_developmentType);
-      success = developmentCard.execute(m_player, m_developmentData);
-      if (success)
-         m_player.setUsedDevelopment(m_developmentType);
+	card::Development & developmentCard = *optDevelopmentCard;
+    return developmentCard.executeAction(m_player, m_developmentData);
 
-      // check for longest and strongest here
-   }
-
-   return success;
+    // check for longest and strongest here
 }
 
 ActionType UseDevelopmentAction::getType() const
@@ -430,7 +424,3 @@ ActionType UseDevelopmentAction::getType() const
    return ActionType::UseDevelopment;
 }
 
-bool UseDevelopmentAction::preExecute() const
-{
-   return m_player.hasDevelopment(m_developmentType);
-}

@@ -16,6 +16,7 @@ Game::Game(int numberOfPlayers)
 {
 	srand(time(NULL)); // TODO: In Dice? Chose to be here because on initialization of the game.
 	setupPlayers(numberOfPlayers);
+	initalizeDevelopmentStock();
 }
 
 Game::~Game()
@@ -78,11 +79,11 @@ bool Game::buyDevelopmentCard()
 	return processAction(buyDevelopmentAction);
 }
 
-bool Game::useDevelopmentCard(const DevelopmentType & developmentType, const DevelopmentData & developmentData)
+bool Game::useDevelopmentCard(const card::DevelopmentType & developmentType, const card::DevelopmentData & developmentData)
 {
-   UseDevelopmentAction useDevelopmentAction(m_players.at(m_activePlayer), developmentType, developmentData, m_developmentStock);
+	UseDevelopmentAction useDevelopmentAction(m_players.at(m_activePlayer), developmentType, developmentData);
 
-   return processAction(useDevelopmentAction);
+	return processAction(useDevelopmentAction);
 }
 
 bool Game::rollDice()
@@ -140,6 +141,11 @@ void Game::setupPlayers(int numberOfPlayers)
    m_players.reserve(numberOfPlayers);
    for(int i = 0; i < numberOfPlayers; ++i)
       m_players.push_back(player::Player(i));
+}
+
+void Game::initalizeDevelopmentStock()
+{
+	m_developmentStock.initialize(m_players, m_board);
 }
 
 bool Game::processAction(Action & action)

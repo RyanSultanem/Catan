@@ -20,6 +20,29 @@ const std::unordered_map<card::RessourceType, int> DEVELOPMENT_COST =
 
 namespace card {
 
+Development::Development(const DevelopmentAction & action)
+	: m_action(action)
+	, m_used(false)
+{
+}
+
+bool Development::isUsed() const
+{
+	return m_used;
+}
+
+bool Development::executeAction(player::Player & player, const DevelopmentData & data)
+{
+	bool result = m_action.execute(player, data);
+	m_used = result;
+	return result;
+}
+
+card::DevelopmentType Development::getType()
+{
+	return m_action.getType();
+}
+
 DevelopmentData::DevelopmentData(int playerId)
    : m_cellVertexPosition(std::nullopt)
    , m_monopolyRessource(std::nullopt)
@@ -28,7 +51,7 @@ DevelopmentData::DevelopmentData(int playerId)
 {
 }
 
-bool Development::execute(player::Player & player, const DevelopmentData & data) const
+bool DevelopmentAction::execute(player::Player & player, const DevelopmentData & data) const
 {
    bool success = validData(data);
 
@@ -43,30 +66,40 @@ const std::unordered_map<card::RessourceType, int> & getDevelopmentCost()
 	return DEVELOPMENT_COST;
 }
 
-KnightDevelopment::KnightDevelopment(std::vector<player::Player> & players, board::Board & board)
+KnightAction::KnightAction(std::vector<player::Player> & players, board::Board & board)
    : m_players(players)
    , m_board(board)
 {
 }
 
-bool KnightDevelopment::validData(const DevelopmentData & data) const
+DevelopmentType KnightAction::getType() const
+{
+	return DevelopmentType::Knight;
+}
+
+bool KnightAction::validData(const DevelopmentData & data) const
 {
    return data.getCellVertexPosition().has_value();
 }
 
-bool KnightDevelopment::apply(player::Player & player, const DevelopmentData & data) const
+bool KnightAction::apply(player::Player & player, const DevelopmentData & data) const
 {
    std::pair<int,int> cellVertexPositions = data.getCellVertexPosition().value();
    MoveRobberAction moveRobberAction(player, cellVertexPositions.first, cellVertexPositions.second, m_players);
    return moveRobberAction.execute(m_board);
 }
 
-bool FreeRessourcesDevelopment::validData(const DevelopmentData & data) const
+DevelopmentType FreeRessourcesAction::getType() const
+{
+	return DevelopmentType::FreeRessources;
+}
+
+bool FreeRessourcesAction::validData(const DevelopmentData & data) const
 {
    return data.getFreeRessources().has_value();
 }
 
-bool FreeRessourcesDevelopment::apply(player::Player & player, const DevelopmentData & data) const
+bool FreeRessourcesAction::apply(player::Player & player, const DevelopmentData & data) const
 {
    std::pair<card::RessourceType, card::RessourceType> ressources = data.getFreeRessources().value();
    player.addRessource(ressources.first, 1);
@@ -75,17 +108,22 @@ bool FreeRessourcesDevelopment::apply(player::Player & player, const Development
    return true;
 }
 
-BuildTwoFreeRoads::BuildTwoFreeRoads(board::Board & board)
+BuildTwoFreeRoadsAction::BuildTwoFreeRoadsAction(board::Board & board)
    : m_board(board)
 {
 }
 
-bool BuildTwoFreeRoads::validData(const DevelopmentData & data) const
+DevelopmentType BuildTwoFreeRoadsAction::getType() const
+{
+	return DevelopmentType::BuildTwoFreeRoads;
+}
+
+bool BuildTwoFreeRoadsAction::validData(const DevelopmentData & data) const
 {
    return data.getRoadPositions().has_value();
 }
 
-bool BuildTwoFreeRoads::apply(player::Player & player, const DevelopmentData & data) const
+bool BuildTwoFreeRoadsAction::apply(player::Player & player, const DevelopmentData & data) const
 {
    // TODO: To rewrite/refactor URGENT, i think its correct though..
 
@@ -132,17 +170,22 @@ bool BuildTwoFreeRoads::apply(player::Player & player, const DevelopmentData & d
    return true;
 }
 
-MonopolyDevelopment::MonopolyDevelopment(std::vector<player::Player> & players)
+MonopolyAction::MonopolyAction(std::vector<player::Player> & players)
    : m_players(players)
 {
 }
 
-bool MonopolyDevelopment::validData(const DevelopmentData & data) const
+DevelopmentType MonopolyAction::getType() const
+{
+	return DevelopmentType::Monopoly;
+}
+
+bool MonopolyAction::validData(const DevelopmentData & data) const
 {
    return data.getMonopolyRessource().has_value();
 }
 
-bool MonopolyDevelopment::apply(player::Player & player, const DevelopmentData & data) const
+bool MonopolyAction::apply(player::Player & player, const DevelopmentData & data) const
 {
    std::for_each(m_players.begin(), m_players.end(),
       [&player, &data](player::Player & sender)
@@ -154,12 +197,17 @@ bool MonopolyDevelopment::apply(player::Player & player, const DevelopmentData &
    return true;
 }
 
-bool VictoryPointDevelopment::validData(const DevelopmentData & /*data*/) const
+DevelopmentType VictoryPointAction::getType() const
+{
+	return DevelopmentType::VictoryPoint;
+}
+
+bool VictoryPointAction::validData(const DevelopmentData & /*data*/) const
 {
    return true;
 }
 
-bool VictoryPointDevelopment::apply(player::Player & player, const DevelopmentData & /*data*/) const
+bool VictoryPointAction::apply(player::Player & player, const DevelopmentData & /*data*/) const
 {
    player.receivePoints(1);
    return true;

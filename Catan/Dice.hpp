@@ -16,7 +16,7 @@ private:
 	int m_die2;
 };
 
-}
+} // namespace board
 
 
 #endif // !DICE_HPP

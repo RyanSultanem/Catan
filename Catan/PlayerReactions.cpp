@@ -134,11 +134,12 @@ void settlementPlacedOnHarbor(Player & player, const Harbor & harbor)
 
 void stealPlayerCard(Player & receiver, Player & giver)
 {
-	if (receiver.getId() == giver.getId() || giver.getNumberOfRessources() == 0)
+	if (receiver.getId() == giver.getId())
 		return; 
 
-	card::RessourceType randomRessource = giver.removeRandomRessource();
-	receiver.addRessource(randomRessource, 1);
+	std::optional<card::RessourceType> randomRessource = giver.removeRandomRessource();
+	if(randomRessource)
+		receiver.addRessource(*randomRessource, 1);
 }
 
 void stealAllRessources(Player & receiver, Player & sender, card::RessourceType ressource)

@@ -4,19 +4,35 @@
 #include "Card.h"
 #include "Player.fwd.hpp"
 #include "Board.fwd.h"
+#include "Development.fwd.hpp"
 #include <unordered_map>
 
 #include <optional>
 
 namespace card {
 
-enum DevelopmentType
+enum DevelopmentType // TODO: Check if can have a better solution
 {
    Knight,
    FreeRessources,
    BuildTwoFreeRoads,
    Monopoly,
    VictoryPoint
+};
+
+class Development
+{
+public:
+	explicit Development(const DevelopmentAction & action);
+
+	bool isUsed() const;
+
+	bool executeAction(player::Player & player, const DevelopmentData & data);
+	card::DevelopmentType getType();
+
+private:
+	const DevelopmentAction & m_action;
+	bool m_used;
 };
 
 class DevelopmentData
@@ -41,66 +57,81 @@ private:
    std::optional<std::pair<int,int>> m_roadPositions;
 };
 
-class Development // should be a Token?
+class DevelopmentAction // should be a Token?
 {
 public:
 	bool execute(player::Player & player, const DevelopmentData & data) const;
+	
+	virtual DevelopmentType getType() const = 0;
 
 private:
-   virtual bool validData(const DevelopmentData & data) const = 0;
-   virtual bool apply(player::Player & player, const DevelopmentData & data) const = 0;
+	virtual bool validData(const DevelopmentData & data) const = 0;
+	virtual bool apply(player::Player & player, const DevelopmentData & data) const = 0;
 };
 
 const std::unordered_map<card::RessourceType,int> & getDevelopmentCost();
 
-class KnightDevelopment : public Development
+class KnightAction : public DevelopmentAction
 {
 public:
-   explicit KnightDevelopment(std::vector<player::Player> & players, board::Board & board);
-private:
-   std::vector<player::Player> & m_players;
-   board::Board & m_board;
+	explicit KnightAction(std::vector<player::Player> & players, board::Board & board);
 
-   bool validData(const DevelopmentData & data) const override;
-   bool apply(player::Player & player, const DevelopmentData & data) const override;
+	DevelopmentType getType() const override;
+
+private:
+	std::vector<player::Player> & m_players;
+	board::Board & m_board;
+
+	bool validData(const DevelopmentData & data) const override;
+	bool apply(player::Player & player, const DevelopmentData & data) const override;
 };
 
-class FreeRessourcesDevelopment : public Development
-{
-private:
-   bool validData(const DevelopmentData & data) const override;
-   bool apply(player::Player & player, const DevelopmentData & data) const override;
-};
-
-class BuildTwoFreeRoads : public Development
+class FreeRessourcesAction : public DevelopmentAction
 {
 public:
-   explicit BuildTwoFreeRoads(board::Board & board);
+	DevelopmentType getType() const override;
 
 private:
-   board::Board & m_board;
-
-   bool validData(const DevelopmentData & data) const override;
-   bool apply(player::Player & player, const DevelopmentData & data) const override;
+	bool validData(const DevelopmentData & data) const override;
+	bool apply(player::Player & player, const DevelopmentData & data) const override;
 };
 
-class MonopolyDevelopment : public Development
+class BuildTwoFreeRoadsAction : public DevelopmentAction
 {
 public:
-   explicit MonopolyDevelopment(std::vector<player::Player> & players);
+	explicit BuildTwoFreeRoadsAction(board::Board & board);
+
+	DevelopmentType getType() const override;
 
 private:
-   std::vector<player::Player> & m_players;
+	board::Board & m_board;
 
-   bool validData(const DevelopmentData & data) const override;
-   bool apply(player::Player & player, const DevelopmentData & data) const override;
+	bool validData(const DevelopmentData & data) const override;
+	bool apply(player::Player & player, const DevelopmentData & data) const override;
 };
 
-class VictoryPointDevelopment : public Development
+class MonopolyAction : public DevelopmentAction
 {
+public:
+	explicit MonopolyAction(std::vector<player::Player> & players);
+
+	DevelopmentType getType() const override;
+
 private:
-   bool validData(const DevelopmentData & data) const override;
-   bool apply(player::Player & player, const DevelopmentData & data) const override;
+	std::vector<player::Player> & m_players;
+
+	bool validData(const DevelopmentData & data) const override;
+	bool apply(player::Player & player, const DevelopmentData & data) const override;
+};
+
+class VictoryPointAction : public DevelopmentAction
+{
+public:
+	DevelopmentType getType() const override;
+
+private:
+	bool validData(const DevelopmentData & data) const override;
+	bool apply(player::Player & player, const DevelopmentData & data) const override;
 };
 
 } // namespace card

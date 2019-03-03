@@ -5,7 +5,6 @@
 
 #include "Board.h"
 #include "Player.hpp"
-#include "Interface.hpp"
 #include "GameInterface.hpp"
 
 #include "Actions.fwd.hpp"
@@ -28,7 +27,7 @@ public:
 	bool moveRobber(int cellPosition, int vertexPosition) override;
 	bool burnCards(const std::unordered_map<int, int> & ressourcesToBurn) override;
 	bool buyDevelopmentCard() override;
-   bool useDevelopmentCard(const DevelopmentType & developmentType, const DevelopmentData & developmentData) override;
+	bool useDevelopmentCard(const card::DevelopmentType & developmentType, const card::DevelopmentData & developmentData) override;
 
 	bool rollDice() override;
 	bool done() override;
@@ -53,6 +52,7 @@ private:
 	bool m_secondInitialPlacementRun; // TODO: maybe find a better solution for second run.. State? Yes put in corresponding state
    
 	void setupPlayers(int numberOfPlayers);
+	void initalizeDevelopmentStock();
 
 	bool processAction(Action & action);
 };

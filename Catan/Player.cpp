@@ -3,7 +3,6 @@
 #include "Utility.hpp"
 
 #include <algorithm>
-#include <numeric>
 
 namespace player {
 
@@ -18,6 +17,7 @@ Player::Player(int id)
 	, m_roadCount(15)
 	, m_ressources(5)
 	, m_exchangeCosts(5)
+	, m_developmentCards()
 {
 	m_ressources.emplace(card::RessourceType::LUMBER,	0);
 	m_ressources.emplace(card::RessourceType::BRICK,	0);
@@ -30,6 +30,8 @@ Player::Player(int id)
 	m_exchangeCosts.emplace(card::RessourceType::GRAIN,		4);
 	m_exchangeCosts.emplace(card::RessourceType::WOOL,		4);
 	m_exchangeCosts.emplace(card::RessourceType::ORE,		4);
+
+	m_developmentCards.reserve(5); // Not necessarily 5. Just to avoid reconstruction everytime.
 }
 
 Player::Player(const Player & player) 
@@ -43,6 +45,7 @@ Player::Player(const Player & player)
 	, m_roadCount(player.m_roadCount)
 	, m_ressources(player.m_ressources)
 	, m_exchangeCosts(player.m_exchangeCosts)
+	, m_developmentCards(player.m_developmentCards)
 {
 }
 
@@ -134,26 +137,34 @@ int Player::getNumberOfRessources() const
 	return utility::getCount(m_ressources);
 }
 
-card::RessourceType Player::removeRandomRessource()
+std::optional<card::RessourceType> Player::removeRandomRessource()
 {
-	int randomRessourceIndex = rand() % getNumberOfRessources();
+	const auto ressourceIterator = utility::getRandomIterator(m_ressources);
 
-	auto it = std::find_if(m_ressources.begin(), m_ressources.end(),
-		[&randomRessourceIndex](const std::pair<card::RessourceType, int> & element)
-	{
-		if (randomRessourceIndex - element.second <= 0)
-			return true;
+	if (ressourceIterator == m_ressources.end())
+		return std::nullopt;
 
-		randomRessourceIndex -= element.second;
-		return true;
-	});
-
-	removeRessource(it->first, 1);
-	return it->first;
+	removeRessource(ressourceIterator->first, 1);
+	return ressourceIterator->first;
 }
 
-void Player::receiveDevelopment(std::unique_ptr<card::Development> && development)
+void Player::receiveDevelopment(const card::Development & development)
 {
+	m_developmentCards.push_back(development);
+}
+
+std::optional<card::DevelopmentRef> Player::getUnusedDevelopment(card::DevelopmentType developmentType)
+{
+	std::optional<card::DevelopmentRef> optDevCard(std::nullopt);
+
+	std::for_each(m_developmentCards.begin(), m_developmentCards.end(), 
+		[&optDevCard, developmentType](card::Development & development)
+	{
+		if (!development.isUsed() && development.getType() == developmentType)
+			optDevCard = development;
+	});
+
+	return optDevCard;
 }
 
 void Player::setExchangeCost(card::RessourceType ressourceType, int cost)

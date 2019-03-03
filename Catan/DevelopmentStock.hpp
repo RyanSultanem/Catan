@@ -3,20 +3,24 @@
 
 #include "Development.hpp"
 
+#include "Board.fwd.h"
+#include "Player.fwd.hpp"
+
 #include <memory>
+#include <optional>
 #include <unordered_map>
 
 class DevelopmentStock
 {
 public:
 	DevelopmentStock();
-	card::DevelopmentType drawCardType();
-   const card::Development & getCard(card::DevelopmentType developmentType) const;
+	std::optional<card::Development> drawCard();
 	bool empty() const;
+	void initialize(std::vector<player::Player> & players, board::Board & board);
 
 private:
-	std::unordered_map<card::DevelopmentType, int> m_developmentCardCount;
-   std::unordered_map<card::DevelopmentType, card::Development> m_developmentCards;
+	std::unordered_map<card::DevelopmentType, int> m_developmentCardCount; // TODO: two maps could be combined as 1 with pair on second element
+	std::unordered_map<card::DevelopmentType, std::unique_ptr<card::DevelopmentAction>> m_developmentActions; // TODO: check if can get rid of unique_ptr (used for late initialization mainly..)
 };
 
 #endif // !DEVELOPMENT_STOCK_HPP

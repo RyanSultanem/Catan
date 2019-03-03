@@ -126,6 +126,10 @@
     <ClInclude Include="Cell.h" />
     <ClInclude Include="Conditions.fwd.hpp" />
     <ClInclude Include="Conditions.hpp" />
+    <ClInclude Include="Development.fwd.hpp" />
+    <ClInclude Include="Development.hpp" />
+    <ClInclude Include="DevelopmentStock.fwd.hpp" />
+    <ClInclude Include="DevelopmentStock.hpp" />
     <ClInclude Include="Dice.hpp" />
     <ClInclude Include="Edge.fwd.h" />
     <ClInclude Include="Edge.h" />
@@ -158,6 +162,8 @@
     <ClCompile Include="Card.cpp" />
     <ClCompile Include="Cell.cpp" />
     <ClCompile Include="Conditions.cpp" />
+    <ClCompile Include="Development.cpp" />
+    <ClCompile Include="DevelopmentStock.cpp" />
     <ClCompile Include="Dice.cpp" />
     <ClCompile Include="Edge.cpp" />
     <ClCompile Include="Game.cpp" />

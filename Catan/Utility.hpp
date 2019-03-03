@@ -1,6 +1,8 @@
 #ifndef UTILITY_HPP
 #define UTILITY_HPP
 
+#include <numeric>
+#include <algorithm>
 #include <unordered_map>
 
 namespace utility {
@@ -12,6 +14,24 @@ int getCount(const std::unordered_map<Item, int> & unorderedMap)
 		[](int sum, const auto & element) {
 		return sum + element.second;
 	});
+}
+
+template<typename Item>
+typename std::unordered_map<Item, int>::iterator getRandomIterator(std::unordered_map<Item, int> & unorderedMap)
+{
+	int randomIndex = rand() % getCount(unorderedMap);
+
+	auto it = std::find_if(unorderedMap.begin(), unorderedMap.end(),
+		[&randomIndex](const std::pair<Item, int> & element)
+	{
+		if (randomIndex - element.second <= 0)
+			return true;
+
+		randomIndex -= element.second;
+		return false;
+	});
+
+	return it;
 }
 
 } // namespace utiliy

@@ -9,7 +9,7 @@ class DevelopmentData;
 class Development;
 typedef std::reference_wrapper<Development> DevelopmentRef;
 class DevelopmentAction;
-enum DevelopmentType;
+enum class DevelopmentType;
 
 } // namespace card
 

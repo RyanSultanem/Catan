@@ -2,7 +2,10 @@
 #define GAME_INTERFACE_HPP
 
 #include "Development.fwd.hpp"
+#include "Actions.fwd.hpp"
 
+#include <vector>
+#include <unordered_map>
 #include <memory>
 
 class GameInterface // TODO: should change to contain game
@@ -20,6 +23,9 @@ public:
 
 	virtual bool rollDice() = 0;
 	virtual bool done() = 0;
+
+	virtual bool gameEnded() = 0;
+	virtual std::vector<ActionType> getPossibleActions() = 0;
 };
 
 namespace builder {

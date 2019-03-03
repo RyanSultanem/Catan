@@ -27,7 +27,7 @@ enum class ActionType
 	MoveRobber,
 	CardBurn,
 	BuyDevelopment,
-   UseDevelopment
+	UseDevelopment
 };
 
 class Action

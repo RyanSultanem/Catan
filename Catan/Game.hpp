@@ -32,6 +32,9 @@ public:
 	bool rollDice() override;
 	bool done() override;
 
+	bool gameEnded() override;
+	std::vector<ActionType> getPossibleActions() override;
+
 	int getPlayerCount() const;
 	int getActivePlayerId() const;
 	void setNextActivePlayer();
@@ -51,6 +54,8 @@ private:
 	int m_activePlayer;
 	bool m_secondInitialPlacementRun; // TODO: maybe find a better solution for second run.. State? Yes put in corresponding state
    
+	bool m_gameEnded; // TODO: should be removed or changed
+
 	void setupPlayers(int numberOfPlayers);
 	void initalizeDevelopmentStock();
 

@@ -319,6 +319,7 @@ MoveRobberAction::MoveRobberAction(player::Player & player, int cellPosition, in
 
 bool MoveRobberAction::execute(board::Board & board)
 {
+	// IMPLEMENT: check cellPosition and VertexPosition are adjacent..
 	bool isSucess = board.moveRobber(m_cellPosition);
 
 	if (isSucess)

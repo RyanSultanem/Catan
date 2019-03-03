@@ -11,7 +11,7 @@
 
 namespace card {
 
-enum DevelopmentType // TODO: Check if can have a better solution
+enum class DevelopmentType // TODO: Check if can have a better solution
 {
    Knight,
    FreeRessources,
@@ -41,7 +41,7 @@ public:
    explicit DevelopmentData(int playerId);
 
    void setCellVertexPosition(const std::pair<int,int> & cellVertexPosition);
-   void setMonopolyRessource(int monopolyRessource);
+   void setMonopolyRessource(RessourceType monopolyRessource);
    void setFreeRessources(const std::pair<RessourceType,RessourceType> & freeRessources);
    void setRoadPosition(const std::pair<int,int> & roadPositions);
 

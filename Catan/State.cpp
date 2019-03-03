@@ -29,6 +29,11 @@ void InitialSettlementState::nextState(Game & game, const Action & action)
 		game.setNextActivePlayer(game.getActivePlayerId() - 1); 
 }
 
+std::vector<ActionType> InitialSettlementState::getPossibleActions()
+{
+	return { ActionType::PlaceInitialSettlementRoad };
+}
+
 void InitialSettlementState::updateGameSecondRun(Game & game) const
 {
 	if (!game.isSecondInitialPlacementRun())
@@ -42,7 +47,10 @@ void InitialSettlementState::updateGameSecondRun(Game & game) const
 
 bool PrePlayerDecision::isValid(const Action & action) const
 {
-	return action.getType() == ActionType::RollDice; // TODO: Add choosing a development card as valid.
+	// TODO: check if a development wasnt already used; also pass to PlayerDecisionState
+
+	return action.getType() == ActionType::RollDice
+		|| action.getType() == ActionType::UseDevelopment; // TODO: Maybe force to Knight only ? Check if needed.
 }
 
 void PrePlayerDecision::nextState(Game & game, const Action & action)
@@ -64,6 +72,11 @@ void PrePlayerDecision::nextState(Game & game, const Action & action)
 	}
 }
 
+std::vector<ActionType> PrePlayerDecision::getPossibleActions()
+{
+	return { ActionType::RollDice , ActionType::UseDevelopment };
+}
+
 bool PlayerDecision::isValid(const Action & action) const
 {
 	// Any action that the player can take.
@@ -72,7 +85,8 @@ bool PlayerDecision::isValid(const Action & action) const
       || action.getType() == ActionType::PlaceCity
       || action.getType() == ActionType::ExchangeCards
       || action.getType() == ActionType::BuyDevelopment
-      || action.getType() == ActionType::UseDevelopment;
+      || action.getType() == ActionType::UseDevelopment
+	  || action.getType() == ActionType::Done; // TODO: check if not already used
 }
 
 void PlayerDecision::nextState(Game & game, const Action & action)
@@ -83,6 +97,16 @@ void PlayerDecision::nextState(Game & game, const Action & action)
 		game.setState(std::make_unique<PrePlayerDecision>());
 		return;
 	}
+}
+
+std::vector<ActionType> PlayerDecision::getPossibleActions()
+{
+	return 
+	{
+		ActionType::PlaceSettlement, ActionType::PlaceRoad, ActionType::PlaceCity,
+		ActionType::ExchangeCards, ActionType::BuyDevelopment, ActionType::UseDevelopment,
+		ActionType::Done
+	};
 }
 
 CardBurnState::CardBurnState(int currentPlayer, const std::queue<int> & playersBurn)
@@ -111,6 +135,11 @@ void CardBurnState::nextState(Game & game, const Action & action)
 	}
 }
 
+std::vector<ActionType> CardBurnState::getPossibleActions()
+{
+	return { ActionType::CardBurn };
+}
+
 bool MovingRobberState::isValid(const Action & action) const
 {
 	return action.getType() == ActionType::MoveRobber;
@@ -119,4 +148,9 @@ bool MovingRobberState::isValid(const Action & action) const
 void MovingRobberState::nextState(Game & game, const Action & /*action*/)
 {
 	game.setState(std::make_unique<PlayerDecision>());
+}
+
+std::vector<ActionType> MovingRobberState::getPossibleActions()
+{
+	return { ActionType::MoveRobber };
 }

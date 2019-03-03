@@ -10,9 +10,10 @@
 #include <ctime>
 
 Game::Game(int numberOfPlayers)
-	:  m_activePlayer(0)
+	: m_activePlayer(0)
 	, m_secondInitialPlacementRun(false)
 	, m_state(std::make_unique<InitialSettlementState>())
+	, m_gameEnded(false)
 {
 	srand(time(NULL)); // TODO: In Dice? Chose to be here because on initialization of the game.
 	setupPlayers(numberOfPlayers);
@@ -98,6 +99,16 @@ bool Game::done()
 	Done action(*this);
 
 	return processAction(action);
+}
+
+bool Game::gameEnded()
+{
+	return m_gameEnded;
+}
+
+std::vector<ActionType> Game::getPossibleActions()
+{
+	return m_state.get()->getPossibleActions();
 }
 
 int Game::getPlayerCount() const

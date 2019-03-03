@@ -51,6 +51,46 @@ DevelopmentData::DevelopmentData(int playerId)
 {
 }
 
+void DevelopmentData::setCellVertexPosition(const std::pair<int, int> & cellVertexPosition)
+{
+	m_cellVertexPosition = cellVertexPosition;
+}
+
+void DevelopmentData::setMonopolyRessource(RessourceType monopolyRessource)
+{
+	m_monopolyRessource = monopolyRessource;
+}
+
+void DevelopmentData::setFreeRessources(const std::pair<RessourceType, RessourceType>& freeRessources)
+{
+	m_freeRessources = freeRessources;
+}
+
+void DevelopmentData::setRoadPosition(const std::pair<int, int> & roadPositions)
+{
+	m_roadPositions = roadPositions;
+}
+
+std::optional<std::pair<int, int>> DevelopmentData::getCellVertexPosition() const
+{
+	return m_cellVertexPosition;
+}
+
+std::optional<RessourceType> DevelopmentData::getMonopolyRessource() const
+{
+	return m_monopolyRessource;
+}
+
+std::optional<std::pair<RessourceType, RessourceType>> DevelopmentData::getFreeRessources() const
+{
+	return m_freeRessources;
+}
+
+std::optional<std::pair<int, int>> DevelopmentData::getRoadPositions() const
+{
+	return m_roadPositions;
+}
+
 bool DevelopmentAction::execute(player::Player & player, const DevelopmentData & data) const
 {
    bool success = validData(data);

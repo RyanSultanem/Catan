@@ -33,6 +33,7 @@ public:
 	bool done() override;
 
 	bool gameEnded() override;
+   int getActivePlayer() override;
 	std::vector<ActionType> getPossibleActions() override;
 
 	int getPlayerCount() const;

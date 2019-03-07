@@ -62,9 +62,18 @@ bool reactionPlaceCity(GameInterface & game)
 	return game.placeCity(cityPosition);
 }
 
-bool reactionExchangeCard(GameInterface & /*game*/)
+bool reactionExchangeCard(GameInterface & game)
 {
-	return false;
+   int changeType = -1;
+   int resultType = -1;
+
+   std::cout << "Change Type: ";
+   std::cin >> changeType;
+
+   std::cout << "Result Type: ";
+   std::cin >> resultType;
+
+	return game.exchangeCards(resultType, changeType);
 }
 
 bool reactionMoveRobber(GameInterface & game)
@@ -81,9 +90,27 @@ bool reactionMoveRobber(GameInterface & game)
 	return game.moveRobber(newRobberPosition, vertexSteal);
 }
 
-bool reactionCardBurn(GameInterface & /*game*/)
+bool reactionCardBurn(GameInterface & game)
 {
-	return false;
+   int choice = 0;
+   std::unordered_map<int, int> ressources(5);
+
+   while (true)
+   {
+      std::cout << "Choose Ressource to Burn (-1 to stop): ";
+      std::cin >> choice;
+
+      if (choice == -1)
+         break;
+
+      int value = 1;
+      if (ressources.find(choice) != ressources.end())
+         value += ressources.at(choice);
+
+      ressources.insert_or_assign(choice, value);
+   }
+
+	return game.burnCards(ressources);
 }
 
 bool reactionBuyDevelopment(GameInterface & game)
@@ -100,15 +127,15 @@ std::unordered_map<ActionType, std::function<bool(GameInterface&)>> actionReacti
 {
 	{ ActionType::PlaceInitialSettlementRoad,	reactionInitialSettlementRoad },
 	{ ActionType::PlaceSettlement,				reactionPlaceSettlement },
-	{ ActionType::PlaceRoad,					reactionPlaceRoad },
-	{ ActionType::RollDice,						reactionRollDice },
-	{ ActionType::Done,							reactionDone },
-	{ ActionType::PlaceCity,					reactionPlaceCity },
-	{ ActionType::ExchangeCards,				reactionExchangeCard },
-	{ ActionType::MoveRobber,					reactionMoveRobber },
-	{ ActionType::CardBurn,						reactionCardBurn },
-	{ ActionType::BuyDevelopment,				reactionBuyDevelopment },
-	{ ActionType::UseDevelopment,				reactionUseDevelopment }
+	{ ActionType::PlaceRoad,					   reactionPlaceRoad },
+	{ ActionType::RollDice,						   reactionRollDice },
+	{ ActionType::Done,							   reactionDone },
+	{ ActionType::PlaceCity,					   reactionPlaceCity },
+	{ ActionType::ExchangeCards,				   reactionExchangeCard },
+	{ ActionType::MoveRobber,					   reactionMoveRobber },
+	{ ActionType::CardBurn,						   reactionCardBurn },
+	{ ActionType::BuyDevelopment,				   reactionBuyDevelopment },
+	{ ActionType::UseDevelopment,				   reactionUseDevelopment }
 };
 
 
@@ -143,9 +170,17 @@ void displayOptions(const std::vector<ActionType> & possibleActions)
 int getActionChoice()
 {
 	int chosenNumber = -1;
+
+   std::cout << "Choose an Action: ";
 	std::cin >> chosenNumber;
 
 	return chosenNumber;
+}
+
+void displayActivePlayer(GameInterface & game)
+{
+   std::cout << std::endl;
+   std::cout << "Active Player: " << game.getActivePlayer() << std::endl;
 }
 
 void update(GameInterface & game)
@@ -156,6 +191,7 @@ void update(GameInterface & game)
 	while (chosenNumber < 0 || chosenNumber >= possibleActions.size())
 	{
 		displayOptions(possibleActions);
+      displayActivePlayer(game);
 		chosenNumber = getActionChoice();
 	}
 

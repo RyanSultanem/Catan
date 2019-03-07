@@ -97,7 +97,7 @@ void Board::initializeCells()
 	m_cells.push_back(cell::Cell(card::RessourceType::LUMBER, 5, createVerticesVector({ 45,41,46,50,53,49 }), m_cellId++));
 	m_cells.push_back(cell::Cell(card::RessourceType::BRICK, 4, createVerticesVector({ 44,40,45,49,52,48 }), m_cellId++));
 	m_cells.push_back(cell::Cell(card::RessourceType::WOOL, 10, createVerticesVector({ 43,39,44,48,51,47 }), m_cellId++));
-	m_cells.push_back(cell::Cell(card::RessourceType::GRAIN, 3, createVerticesVector({ 33,28,34,39,43,38 }), m_cellId++));
+	m_cells.push_back(cell::Cell(card::RessourceType::GRAIN, 2, createVerticesVector({ 33,28,34,39,43,38 }), m_cellId++));
 	m_cells.push_back(cell::Cell(card::RessourceType::WOOL, 9, createVerticesVector({ 22,17,23,29,34,28 }), m_cellId++));
 	m_cells.push_back(cell::Cell(card::RessourceType::LUMBER, 3, createVerticesVector({ 12,8,13,18,23,17 }), m_cellId++));
 	m_cells.push_back(cell::Cell(card::RessourceType::ORE, 12, createVerticesVector({ 13,9,14,19,24,18 }), m_cellId++));

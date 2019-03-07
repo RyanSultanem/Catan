@@ -126,16 +126,13 @@
     <ClInclude Include="Utility.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Development.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="DevelopmentStock.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Development.fwd.hpp">
-      <Filter>Header Files\fwd</Filter>
+    <ClInclude Include="Development.hpp">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DevelopmentStock.fwd.hpp">
+    <ClInclude Include="Development.fwd.hpp">
       <Filter>Header Files\fwd</Filter>
     </ClInclude>
   </ItemGroup>

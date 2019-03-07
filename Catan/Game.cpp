@@ -106,6 +106,11 @@ bool Game::gameEnded()
 	return m_gameEnded;
 }
 
+int Game::getActivePlayer()
+{
+   return m_activePlayer;
+}
+
 std::vector<ActionType> Game::getPossibleActions()
 {
 	return m_state.get()->getPossibleActions();

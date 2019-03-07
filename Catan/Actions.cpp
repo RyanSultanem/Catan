@@ -282,7 +282,8 @@ Done::Done(Game & game)
 
 bool Done::execute(board::Board & /*board*/)
 {
-	m_game.setNextActivePlayer();
+   // TODO: chcek if this should be here: for now it is also in state change. so removed below
+	//m_game.setNextActivePlayer();
 
 	return true;
 }

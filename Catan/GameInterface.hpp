@@ -25,6 +25,7 @@ public:
 	virtual bool done() = 0;
 
 	virtual bool gameEnded() = 0;
+   virtual int getActivePlayer() = 0;
 	virtual std::vector<ActionType> getPossibleActions() = 0;
 };
 

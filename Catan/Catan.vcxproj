@@ -128,7 +128,6 @@
     <ClInclude Include="Conditions.hpp" />
     <ClInclude Include="Development.fwd.hpp" />
     <ClInclude Include="Development.hpp" />
-    <ClInclude Include="DevelopmentStock.fwd.hpp" />
     <ClInclude Include="DevelopmentStock.hpp" />
     <ClInclude Include="Dice.hpp" />
     <ClInclude Include="Edge.fwd.h" />

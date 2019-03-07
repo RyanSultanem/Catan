@@ -117,6 +117,9 @@ bool performExchangeCards(Player & player, int typeResult, int typeToTrade)
 	card::RessourceType ressourceToTrade(static_cast<card::RessourceType>(typeToTrade));
 	card::RessourceType ressourceResult(static_cast<card::RessourceType>(typeResult));
 
+   if (ressourceToTrade == ressourceResult)
+      return false;
+
 	int typeRateChange = player.getExchangeCost(ressourceToTrade);
 
 	if (player.getRessourceCount(ressourceToTrade) < typeRateChange)

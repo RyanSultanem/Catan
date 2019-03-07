@@ -22,6 +22,8 @@ void InitialSettlementState::nextState(Game & game, const Action & action)
 		game.setState(std::make_unique<PrePlayerDecision>()); // TODO: Dangerous.. deletes itself can use bool returned to know if should change state instaed.
 		return;
 	}
+
+   // TODO: fix last player to place twice (for now only place once). URGENT
 	
 	if (!game.isSecondInitialPlacementRun()) // TODO: can create anothe state to take care of that.. not really a state thing
 		game.setNextActivePlayer();

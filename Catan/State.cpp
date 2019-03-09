@@ -5,6 +5,11 @@
 
 #include <memory>
 
+InitialSettlementState::InitialSettlementState()
+	: m_secondRun(false)
+{
+}
+
 bool InitialSettlementState::isValid(const Action & action) const
 {
 	return action.getType() == ActionType::PlaceInitialSettlementRoad;
@@ -15,20 +20,20 @@ void InitialSettlementState::nextState(Game & game, const Action & action)
 	if (!isValid(action)) // TODO: needed?
 		return;
 
-	updateGameSecondRun(game);
+	// TODO: check if can do something more understandable: currently works but not very clear
+	bool shouldUpdateActivePlayer = updateGameSecondRun(game);
 	
-	if (game.isSecondInitialPlacementRun() && game.getActivePlayerId() == 0)
+	if (m_secondRun && game.getActivePlayerId() == 0)
 	{
 		game.setState(std::make_unique<PrePlayerDecision>()); // TODO: Dangerous.. deletes itself can use bool returned to know if should change state instaed.
 		return;
 	}
 
-   // TODO: fix last player to place twice (for now only place once). URGENT
-	
-	if (!game.isSecondInitialPlacementRun()) // TODO: can create anothe state to take care of that.. not really a state thing
-		game.setNextActivePlayer();
-	else
-		game.setNextActivePlayer(game.getActivePlayerId() - 1); 
+	if (shouldUpdateActivePlayer)
+	{
+		int currentActivePlayer = game.getActivePlayerId();
+		game.setNextActivePlayer(m_secondRun ? --currentActivePlayer : ++currentActivePlayer);
+	}
 }
 
 std::vector<ActionType> InitialSettlementState::getPossibleActions()
@@ -36,15 +41,25 @@ std::vector<ActionType> InitialSettlementState::getPossibleActions()
 	return { ActionType::PlaceInitialSettlementRoad };
 }
 
-void InitialSettlementState::updateGameSecondRun(Game & game) const
+void InitialSettlementState::preProcessAction(PlaceInitialSettlementRoadAction& action)
 {
-	if (!game.isSecondInitialPlacementRun())
+	action.setSecondRun(m_secondRun);
+}
+
+bool InitialSettlementState::updateGameSecondRun(Game & game)
+{
+	bool shouldUpdateNextPlayer = true;
+
+	if (!m_secondRun)
 	{
 		if (game.getActivePlayerId() == game.getPlayerCount() - 1)
 		{
-			game.setSecondInitialPlacementRun();
+			m_secondRun = true;
+			shouldUpdateNextPlayer = false;
 		}
 	}
+
+	return shouldUpdateNextPlayer;
 }
 
 bool PrePlayerDecision::isValid(const Action & action) const
@@ -63,7 +78,7 @@ void PrePlayerDecision::nextState(Game & game, const Action & action)
 		
 		const RollDice * rollDiceAction = dynamic_cast<const RollDice *>(&action);
 		if (rollDiceAction && rollDiceAction->shouldBurn()) //TODO: check if rollDiceAction shoudl really be checked for validity.
-			nextState = std::make_unique<CardBurnState>(game.getActivePlayerId(), rollDiceAction->getPlayerBurnQueue());
+			nextState = std::make_unique<CardBurnState>(game, game.getActivePlayerId(), rollDiceAction->getPlayerBurnQueue());
 		else if (rollDiceAction && rollDiceAction->shouldChangeRobber())
 			nextState = std::make_unique<MovingRobberState>();
 		else
@@ -87,8 +102,8 @@ bool PlayerDecision::isValid(const Action & action) const
       || action.getType() == ActionType::PlaceCity
       || action.getType() == ActionType::ExchangeCards
       || action.getType() == ActionType::BuyDevelopment
-      || action.getType() == ActionType::UseDevelopment
-	  || action.getType() == ActionType::Done; // TODO: check if not already used
+      || action.getType() == ActionType::UseDevelopment // TODO: check if not already used
+	  || action.getType() == ActionType::Done; 
 }
 
 void PlayerDecision::nextState(Game & game, const Action & action)
@@ -111,10 +126,11 @@ std::vector<ActionType> PlayerDecision::getPossibleActions()
 	};
 }
 
-CardBurnState::CardBurnState(int currentPlayer, const std::queue<int> & playersBurn)
+CardBurnState::CardBurnState(Game & game, int currentPlayer, const std::queue<int> & playersBurn)
 	: m_currentPlayer(currentPlayer)
 	, m_playersBurn(playersBurn)
 {
+	setBurnActivePlayer(game);
 }
 
 bool CardBurnState::isValid(const Action & action) const
@@ -132,14 +148,19 @@ void CardBurnState::nextState(Game & game, const Action & action)
 	}
 	else
 	{
-		game.setNextActivePlayer(m_playersBurn.front());
-		m_playersBurn.pop();
+		setBurnActivePlayer(game);
 	}
 }
 
 std::vector<ActionType> CardBurnState::getPossibleActions()
 {
 	return { ActionType::CardBurn };
+}
+
+void CardBurnState::setBurnActivePlayer(Game & game)
+{
+	game.setNextActivePlayer(m_playersBurn.front());
+	m_playersBurn.pop();
 }
 
 bool MovingRobberState::isValid(const Action & action) const

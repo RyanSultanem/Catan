@@ -8,7 +8,7 @@
 #include "GameInterface.hpp"
 
 #include "Actions.fwd.hpp"
-#include "State.hpp"
+#include "State.fwd.hpp"
 #include "DevelopmentStock.hpp"
 
 #include <vector>
@@ -33,16 +33,12 @@ public:
 	bool done() override;
 
 	bool gameEnded() override;
-   int getActivePlayer() override;
 	std::vector<ActionType> getPossibleActions() override;
+	int getActivePlayerId() const override;
 
 	int getPlayerCount() const;
-	int getActivePlayerId() const;
 	void setNextActivePlayer();
 	void setNextActivePlayer(int playerId);
-
-	void setSecondInitialPlacementRun(); 
-	bool isSecondInitialPlacementRun() const;
 
 	void setState(std::unique_ptr<State> && state);
 
@@ -53,7 +49,6 @@ private:
 
 	std::vector<player::Player> m_players;
 	int m_activePlayer;
-	bool m_secondInitialPlacementRun; // TODO: maybe find a better solution for second run.. State? Yes put in corresponding state
    
 	bool m_gameEnded; // TODO: should be removed or changed
 

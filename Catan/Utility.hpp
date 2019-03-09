@@ -19,7 +19,7 @@ int getCount(const std::unordered_map<Item, int> & unorderedMap)
 template<typename Item>
 typename std::unordered_map<Item, int>::iterator getRandomIterator(std::unordered_map<Item, int> & unorderedMap)
 {
-	int randomIndex = rand() % getCount(unorderedMap);
+	int randomIndex = (rand() % getCount(unorderedMap)) + 1;
 
 	auto it = std::find_if(unorderedMap.begin(), unorderedMap.end(),
 		[&randomIndex](const std::pair<Item, int> & element)

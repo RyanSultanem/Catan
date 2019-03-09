@@ -135,6 +135,9 @@
     <ClInclude Include="Development.fwd.hpp">
       <Filter>Header Files\fwd</Filter>
     </ClInclude>
+    <ClInclude Include="State.fwd.hpp">
+      <Filter>Header Files\fwd</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Card.cpp">

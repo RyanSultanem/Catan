@@ -148,6 +148,7 @@
     <ClInclude Include="Road.hpp" />
     <ClInclude Include="Robber.hpp" />
     <ClInclude Include="Serializable.hpp" />
+    <ClInclude Include="State.fwd.hpp" />
     <ClInclude Include="State.hpp" />
     <ClInclude Include="Token.hpp" />
     <ClInclude Include="Utility.hpp" />

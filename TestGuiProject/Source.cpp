@@ -180,7 +180,7 @@ int getActionChoice()
 void displayActivePlayer(GameInterface & game)
 {
    std::cout << std::endl;
-   std::cout << "Active Player: " << game.getActivePlayer() << std::endl;
+   std::cout << "Active Player: " << game.getActivePlayerId() << std::endl;
 }
 
 void update(GameInterface & game)

@@ -56,11 +56,12 @@ private:
 class PlaceInitialSettlementRoadAction : public Action
 {
 public:
-	PlaceInitialSettlementRoadAction(player::Player & player, int settlementPosition, int roadPosition, bool secondRun);
+	PlaceInitialSettlementRoadAction(player::Player & player, int settlementPosition, int roadPosition);
 
 	bool execute(board::Board & board) override;
 
 	ActionType getType() const override;
+	void setSecondRun(bool secondRun);
 
 private:
 	player::Player & m_player;

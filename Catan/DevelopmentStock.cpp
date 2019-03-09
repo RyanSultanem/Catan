@@ -21,7 +21,7 @@ std::optional<card::Development> DevelopmentStock::drawCard()
 
 bool DevelopmentStock::empty() const
 {
-	return utility::getCount(m_developmentCardCount) != 0;
+	return utility::getCount(m_developmentCardCount) == 0;
 }
 
 void DevelopmentStock::initialize(std::vector<player::Player> & players, board::Board & board)

@@ -3,6 +3,7 @@
 #include "Actions.hpp"
 #include "Dice.hpp"
 #include "PlayerReactions.hpp"
+#include "State.hpp"
 
 #include "Building.hpp"
 
@@ -11,7 +12,6 @@
 
 Game::Game(int numberOfPlayers)
 	: m_activePlayer(0)
-	, m_secondInitialPlacementRun(false)
 	, m_state(std::make_unique<InitialSettlementState>())
 	, m_gameEnded(false)
 {
@@ -26,9 +26,14 @@ Game::~Game()
 
 bool Game::placeInitialSetlementRoad(int settlementPosition, int roadPosition)
 {
-	PlaceInitialSettlementRoadAction action(m_players.at(m_activePlayer), settlementPosition, roadPosition, m_secondInitialPlacementRun);
+	InitialSettlementState * initialSettlementState = dynamic_cast<InitialSettlementState *>(m_state.get());
+	if (!initialSettlementState)
+		return false;
 
-	return processAction(action);
+	PlaceInitialSettlementRoadAction intialSettlementRoadAction(m_players.at(m_activePlayer), settlementPosition, roadPosition);
+	initialSettlementState->preProcessAction(intialSettlementRoadAction); // TODO: check if can do better; "dyanmic_cast"..
+
+	return processAction(intialSettlementRoadAction);
 }
 
 bool Game::placeSettlement(int position)
@@ -106,11 +111,6 @@ bool Game::gameEnded()
 	return m_gameEnded;
 }
 
-int Game::getActivePlayer()
-{
-   return m_activePlayer;
-}
-
 std::vector<ActionType> Game::getPossibleActions()
 {
 	return m_state.get()->getPossibleActions();
@@ -135,16 +135,6 @@ void Game::setNextActivePlayer(int playerId)
 {
 	if (playerId < m_players.size() && playerId >= 0)
 		m_activePlayer = playerId;
-}
-
-void Game::setSecondInitialPlacementRun()
-{
-	m_secondInitialPlacementRun = true;
-}
-
-bool Game::isSecondInitialPlacementRun() const
-{
-	return m_secondInitialPlacementRun;
 }
 
 void Game::setState(std::unique_ptr<State> && state)

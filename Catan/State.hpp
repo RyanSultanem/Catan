@@ -6,6 +6,7 @@
 
 #include <vector>
 #include <queue>
+#include "Actions.hpp"
 
 class State
 {
@@ -19,13 +20,18 @@ public:
 class InitialSettlementState : public State // TODO: Fix name
 {
 public:
+	InitialSettlementState();
+
 	bool isValid(const Action & action) const override;
 	void nextState(Game & game, const Action & action) override;
 
 	std::vector<ActionType> getPossibleActions() override;
+	void preProcessAction(PlaceInitialSettlementRoadAction & action);
 
 private:
-	void updateGameSecondRun(Game & game) const;
+	bool m_secondRun;
+
+	bool updateGameSecondRun(Game & game);
 };
 
 class PrePlayerDecision : public State
@@ -49,7 +55,7 @@ public:
 class CardBurnState : public State
 {
 public:
-	explicit CardBurnState(int currentPlayer, const std::queue<int> & playersBurn);
+	explicit CardBurnState(Game & game, int currentPlayer, const std::queue<int> & playersBurn);
 
 	bool isValid(const Action & action) const override;
 	void nextState(Game & game, const Action & action) override;
@@ -59,6 +65,8 @@ public:
 private:
 	int m_currentPlayer;
 	std::queue<int> m_playersBurn;
+
+	void setBurnActivePlayer(Game & game);
 };
 
 class MovingRobberState : public State

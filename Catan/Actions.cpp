@@ -63,11 +63,11 @@ void PlaceSettlementAction::postExecute(const board::Board & board) const
 	}
 }
 
-PlaceInitialSettlementRoadAction::PlaceInitialSettlementRoadAction(player::Player & player, int settlementPosition, int roadPosition, bool secondRun)
+PlaceInitialSettlementRoadAction::PlaceInitialSettlementRoadAction(player::Player & player, int settlementPosition, int roadPosition)
 	: m_player(player)
 	, m_settlementPosition(settlementPosition)
 	, m_roadPosition(roadPosition)
-	, m_secondRun(secondRun)
+	, m_secondRun(false)
 {
 }
 
@@ -95,6 +95,11 @@ bool PlaceInitialSettlementRoadAction::execute(board::Board & board)
 ActionType PlaceInitialSettlementRoadAction::getType() const
 {
 	return ActionType::PlaceInitialSettlementRoad;
+}
+
+void PlaceInitialSettlementRoadAction::setSecondRun(bool secondRun)
+{
+	m_secondRun = secondRun;
 }
 
 void PlaceInitialSettlementRoadAction::postExecute(const board::Board & board) const

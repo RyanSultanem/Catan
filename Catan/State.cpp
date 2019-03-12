@@ -21,7 +21,7 @@ void InitialSettlementState::nextState(Game & game, const Action & action)
 		return;
 
 	// TODO: check if can do something more understandable: currently works but not very clear
-	bool shouldUpdateActivePlayer = updateGameSecondRun(game);
+	bool updated = updateGameSecondRun(game);
 	
 	if (m_secondRun && game.getActivePlayerId() == 0)
 	{
@@ -29,7 +29,7 @@ void InitialSettlementState::nextState(Game & game, const Action & action)
 		return;
 	}
 
-	if (shouldUpdateActivePlayer)
+	if (!updated)
 	{
 		int currentActivePlayer = game.getActivePlayerId();
 		game.setNextActivePlayer(m_secondRun ? --currentActivePlayer : ++currentActivePlayer);
@@ -41,25 +41,25 @@ std::vector<ActionType> InitialSettlementState::getPossibleActions()
 	return { ActionType::PlaceInitialSettlementRoad };
 }
 
-void InitialSettlementState::preProcessAction(PlaceInitialSettlementRoadAction& action)
+void InitialSettlementState::preProcessAction(PlaceInitialSettlementRoadAction & action)
 {
 	action.setSecondRun(m_secondRun);
 }
 
 bool InitialSettlementState::updateGameSecondRun(Game & game)
 {
-	bool shouldUpdateNextPlayer = true;
+	bool updated = false;
 
 	if (!m_secondRun)
 	{
 		if (game.getActivePlayerId() == game.getPlayerCount() - 1)
 		{
 			m_secondRun = true;
-			shouldUpdateNextPlayer = false;
+			updated = true;
 		}
 	}
 
-	return shouldUpdateNextPlayer;
+	return updated;
 }
 
 bool PrePlayerDecision::isValid(const Action & action) const

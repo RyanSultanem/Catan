@@ -35,7 +35,7 @@ public:
 	bool removeRessource(card::RessourceType ressourceType, unsigned int count);
 	int getRessourceCount(card::RessourceType ressourceType) const;
 	int getNumberOfRessources() const;
-	std::optional<card::RessourceType> removeRandomRessource();
+	std::optional<card::RessourceType> removeRandomRessource(int index);
 
 	void receiveDevelopment(const card::Development & development);
 	std::optional<card::DevelopmentRef> getUnusedDevelopment(card::DevelopmentType developmentType);

@@ -129,6 +129,7 @@
     <ClInclude Include="Development.fwd.hpp" />
     <ClInclude Include="Development.hpp" />
     <ClInclude Include="DevelopmentStock.hpp" />
+    <ClInclude Include="Dice.fwd.hpp" />
     <ClInclude Include="Dice.hpp" />
     <ClInclude Include="Edge.fwd.h" />
     <ClInclude Include="Edge.h" />
@@ -140,6 +141,8 @@
     <ClInclude Include="Interface.hpp" />
     <ClInclude Include="Land.fwd.h" />
     <ClInclude Include="Land.h" />
+    <ClInclude Include="NumberGenerator.fwd.hpp" />
+    <ClInclude Include="NumberGenerator.hpp" />
     <ClInclude Include="Player.fwd.hpp" />
     <ClInclude Include="PlayerReactions.hpp" />
     <ClInclude Include="PlayerInterface.hpp" />
@@ -169,6 +172,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Harbor.cpp" />
     <ClCompile Include="Land.cpp" />
+    <ClCompile Include="NumberGenerator.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerReactions.cpp" />
     <ClCompile Include="Road.cpp" />

@@ -17,21 +17,20 @@ int getCount(const std::unordered_map<Item, int> & unorderedMap)
 }
 
 template<typename Item>
-typename std::unordered_map<Item, int>::iterator getRandomIterator(std::unordered_map<Item, int> & unorderedMap)
+typename std::unordered_map<Item, int>::iterator getIndexIterator(std::unordered_map<Item, int> & unorderedMap, int index)
 {
-	int randomIndex = (rand() % getCount(unorderedMap)) + 1;
+	if (index > getCount(unorderedMap))
+		return unorderedMap.end();
 
-	auto it = std::find_if(unorderedMap.begin(), unorderedMap.end(),
-		[&randomIndex](const std::pair<Item, int> & element)
+	return std::find_if(unorderedMap.begin(), unorderedMap.end(),
+		[&index](const std::pair<Item, int> & element)
 	{
-		if (randomIndex - element.second <= 0)
+		if (index - element.second <= 0)
 			return true;
 
-		randomIndex -= element.second;
+		index -= element.second;
 		return false;
 	});
-
-	return it;
 }
 
 } // namespace utiliy

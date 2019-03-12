@@ -6,6 +6,8 @@
 #include "Player.fwd.hpp"
 #include "DevelopmentStock.fwd.hpp"
 #include "Development.fwd.hpp"
+#include "NumberGenerator.fwd.hpp"
+#include "Dice.fwd.hpp"
 
 #include <vector>
 #include <stack>
@@ -107,7 +109,7 @@ private:
 class RollDice : public Action
 {
 public:
-	explicit RollDice(std::vector<player::Player> & players, int activePlayerRef);
+	RollDice(board::Dice & dice, std::vector<player::Player> & players, int activePlayerRef);
 
 	bool execute(board::Board & board) override;
 	ActionType getType() const override;
@@ -117,6 +119,7 @@ public:
 	const std::queue<int> & getPlayerBurnQueue() const;
 
 private:
+	board::Dice & m_dice;
 	std::vector<player::Player> & m_players;
 	int m_activePlayer;
 
@@ -158,7 +161,7 @@ private:
 class MoveRobberAction : public Action
 {
 public:
-	MoveRobberAction(player::Player & player, int cellPosition, int vertexPosition, std::vector<player::Player> & players);
+	MoveRobberAction(player::Player & player, int cellPosition, int vertexPosition, std::vector<player::Player> & players, const NumberGenerator & numberGenerator);
 
 	bool execute(board::Board & board) override;
 	ActionType getType() const override;
@@ -168,6 +171,7 @@ private:
 	std::vector<player::Player> & m_players;
 	int m_cellPosition;
 	int m_vertexPosition;
+	const NumberGenerator & m_numberGenerator;
 };
 
 class CardBurnAction : public Action

@@ -8,6 +8,7 @@
 #include "Conditions.hpp"
 #include "Utility.hpp"
 #include "Development.hpp"
+#include "NumberGenerator.hpp"
 #include <iterator>
 
 PlaceSettlementAction::PlaceSettlementAction(player::Player & player, int position)
@@ -199,18 +200,19 @@ void PlaceCityAction::postExecute() const
 		player::reactions::cityPlaced(m_player);
 }
 
-RollDice::RollDice(std::vector<player::Player> & players, int activePlayer)
-	: m_players(players)
+RollDice::RollDice(board::Dice & dice, std::vector<player::Player> & players, int activePlayer)
+ 	: m_dice(dice)
+	, m_players(players)
 	, m_activePlayer(activePlayer)
 	, m_shouldChangeRobber(false)
 	, m_shouldBurn(false)
+	, m_playerBurn()
 {
 }
 
 bool RollDice::execute(board::Board & board)
 {
-	board::Dice dice;
-	int diceValue = dice.roll().getValue();
+	int diceValue = m_dice.roll().getValue();
 
 	if (diceValue == 7)
 	{
@@ -315,11 +317,12 @@ ActionType ExchangeCardsAction::getType() const
 	return ActionType::ExchangeCards;
 }
 
-MoveRobberAction::MoveRobberAction(player::Player & player, int cellPosition, int vertexPosition, std::vector<player::Player> & players)
+MoveRobberAction::MoveRobberAction(player::Player & player, int cellPosition, int vertexPosition, std::vector<player::Player> & players, const NumberGenerator & numberGenerator)
 	: m_player(player)
 	, m_cellPosition(cellPosition)
 	, m_vertexPosition(vertexPosition)
 	, m_players(players)
+	, m_numberGenerator(numberGenerator)
 {
 }
 
@@ -334,7 +337,8 @@ bool MoveRobberAction::execute(board::Board & board)
 		if(playerRef)
 		{
 			player::Player & fromPlayer = m_players.at(playerRef.value());
-			player::reactions::stealPlayerCard(m_player, fromPlayer);
+			int ressourceIndex = m_numberGenerator.generateNumber(1, fromPlayer.getNumberOfRessources());
+			player::reactions::stealPlayerCard(m_player, fromPlayer, ressourceIndex);
 		}
 	}
 

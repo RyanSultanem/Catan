@@ -1,0 +1,6 @@
+#ifndef NUMBERGENERATOR_FWD_HPP
+#define NUMBERGENERATOR_FWD_HPP
+
+class NumberGenerator;
+
+#endif // !NUMBERGENERATOR_FWD_HPP

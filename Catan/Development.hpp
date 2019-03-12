@@ -5,9 +5,11 @@
 #include "Player.fwd.hpp"
 #include "Board.fwd.h"
 #include "Development.fwd.hpp"
-#include <unordered_map>
+#include "Serializable.hpp"
 
+#include <unordered_map>
 #include <optional>
+#include "NumberGenerator.hpp"
 
 namespace card {
 
@@ -20,18 +22,20 @@ enum class DevelopmentType // TODO: Check if can have a better solution
    VictoryPoint
 };
 
-class Development
+class Development : public serialize::Serializable
 {
 public:
-	explicit Development(const DevelopmentAction & action);
+	explicit Development(const DevelopmentAction & devAction);
 
 	bool isUsed() const;
 
 	bool executeAction(player::Player & player, const DevelopmentData & data);
 	card::DevelopmentType getType();
 
+	std::string serialize() const override;
+
 private:
-	const DevelopmentAction & m_action;
+	const DevelopmentAction & m_developmentAction;
 	bool m_used;
 };
 
@@ -74,13 +78,14 @@ const std::unordered_map<card::RessourceType,int> & getDevelopmentCost();
 class KnightAction : public DevelopmentAction
 {
 public:
-	explicit KnightAction(std::vector<player::Player> & players, board::Board & board);
+	explicit KnightAction(std::vector<player::Player> & players, board::Board & board, const NumberGenerator & numberGenerator);
 
 	DevelopmentType getType() const override;
 
 private:
 	std::vector<player::Player> & m_players;
 	board::Board & m_board;
+	const NumberGenerator & m_numberGenerator;
 
 	bool validData(const DevelopmentData & data) const override;
 	bool apply(player::Player & player, const DevelopmentData & data) const override;

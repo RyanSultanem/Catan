@@ -24,9 +24,13 @@ public:
 	virtual bool rollDice() = 0;
 	virtual bool done() = 0;
 
-	virtual bool gameEnded() = 0;
+	// Info for display
+	virtual bool gameEnded() const = 0;
 	virtual int getActivePlayerId() const = 0;
-	virtual std::vector<ActionType> getPossibleActions() = 0;
+	virtual std::vector<ActionType> getPossibleActions() const = 0;
+	virtual std::string getBoardInfo() const = 0;
+	virtual std::string getPlayersInfo() const = 0;
+	virtual int getDiceValue() const = 0;
 };
 
 namespace builder {

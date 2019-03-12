@@ -191,7 +191,7 @@ void update(GameInterface & game)
 	while (chosenNumber < 0 || chosenNumber >= possibleActions.size())
 	{
 		displayOptions(possibleActions);
-      displayActivePlayer(game);
+		displayActivePlayer(game);
 		chosenNumber = getActionChoice();
 	}
 
@@ -200,10 +200,16 @@ void update(GameInterface & game)
 	bool actionSuccess = actionReactions[chosenAction](game);
 
 	std::cout << std::string(actionSuccess ? "Succss" : "Failed") << std::endl;
+	std::cout << std::endl << std::endl;
 }
 
-void displayGameInfo(GameInterface & /*game*/)
+void displayGameInfo(const GameInterface & game)
 {
+	std::cout << game.getBoardInfo() << std::endl;
+	std::cout << std::endl;
+	std::cout << game.getPlayersInfo() << std::endl;
+	std::cout << std::endl;
+	std::cout << "Dice Value: " << game.getDiceValue() << std::endl;
 	std::cout << std::endl;
 }
 
@@ -214,8 +220,8 @@ int main()
 
 	while(!game.gameEnded())
 	{
-		update(game);
 		displayGameInfo(game);
+		update(game);
 	}
 
 	system("PAUSE");

@@ -1,23 +1,28 @@
 #include "Game.hpp"
 
 #include "Actions.hpp"
-#include "Dice.hpp"
-#include "PlayerReactions.hpp"
 #include "State.hpp"
-
 #include "Building.hpp"
+#include "NumberGenerator.hpp"
 
 #include <algorithm>
-#include <ctime>
 
-Game::Game(int numberOfPlayers)
-	: m_activePlayer(0)
+Game::Game(int numberOfPlayers, std::unique_ptr<NumberGenerator> && numberGenerator)
+	: m_numberGenerator(std::move(numberGenerator))
 	, m_state(std::make_unique<InitialSettlementState>())
+	, m_board()
+	, m_dice(*m_numberGenerator)
+	, m_developmentStock(*m_numberGenerator)
+	, m_activePlayer(0)
 	, m_gameEnded(false)
 {
-	srand(time(NULL)); // TODO: In Dice? Chose to be here because on initialization of the game.
 	setupPlayers(numberOfPlayers);
 	initalizeDevelopmentStock();
+}
+
+Game::Game(int numberOfPlayers)
+	: Game(numberOfPlayers, std::make_unique<RandomNumberGenerator>())
+{
 }
 
 Game::~Game()
@@ -66,7 +71,7 @@ bool Game::exchangeCards(int resultType, int typeToTrade)
 
 bool Game::moveRobber(int cellPosition, int vertexPosition)
 {
-	MoveRobberAction moveRobberAction(m_players.at(m_activePlayer), cellPosition, vertexPosition, m_players);
+	MoveRobberAction moveRobberAction(m_players.at(m_activePlayer), cellPosition, vertexPosition, m_players, *m_numberGenerator);
 
 	return processAction(moveRobberAction);
 }
@@ -94,7 +99,7 @@ bool Game::useDevelopmentCard(const card::DevelopmentType & developmentType, con
 
 bool Game::rollDice()
 {
-	RollDice action(m_players, m_activePlayer);
+	RollDice action(m_dice, m_players, m_activePlayer);
 
 	return processAction(action);
 }
@@ -106,12 +111,12 @@ bool Game::done()
 	return processAction(action);
 }
 
-bool Game::gameEnded()
+bool Game::gameEnded() const
 {
 	return m_gameEnded;
 }
 
-std::vector<ActionType> Game::getPossibleActions()
+std::vector<ActionType> Game::getPossibleActions() const
 {
 	return m_state.get()->getPossibleActions();
 }
@@ -124,6 +129,21 @@ int Game::getPlayerCount() const
 int Game::getActivePlayerId() const
 {
 	return m_activePlayer;
+}
+
+std::string Game::getBoardInfo() const
+{
+	return m_board.serialize();
+}
+
+std::string Game::getPlayersInfo() const
+{
+	return serialize::containerSerialize(m_players, std::string(), std::string("Players: \n"), std::string("\n"));
+}
+
+int Game::getDiceValue() const
+{
+	return m_dice.getValue();
 }
 
 void Game::setNextActivePlayer()

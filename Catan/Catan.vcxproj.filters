@@ -138,6 +138,15 @@
     <ClInclude Include="State.fwd.hpp">
       <Filter>Header Files\fwd</Filter>
     </ClInclude>
+    <ClInclude Include="NumberGenerator.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NumberGenerator.fwd.hpp">
+      <Filter>Header Files\fwd</Filter>
+    </ClInclude>
+    <ClInclude Include="Dice.fwd.hpp">
+      <Filter>Header Files\fwd</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Card.cpp">
@@ -195,6 +204,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DevelopmentStock.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="NumberGenerator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

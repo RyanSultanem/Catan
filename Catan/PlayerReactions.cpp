@@ -135,12 +135,12 @@ void settlementPlacedOnHarbor(Player & player, const Harbor & harbor)
 	player.setExchangeCost(harbor.getRessourceType(), harbor.getNewTradeCost());
 }
 
-void stealPlayerCard(Player & receiver, Player & giver)
+void stealPlayerCard(Player & receiver, Player & giver, int index)
 {
 	if (receiver.getId() == giver.getId())
 		return; 
 
-	std::optional<card::RessourceType> randomRessource = giver.removeRandomRessource();
+	std::optional<card::RessourceType> randomRessource = giver.removeRandomRessource(index);
 	if(randomRessource)
 		receiver.addRessource(*randomRessource, 1);
 }

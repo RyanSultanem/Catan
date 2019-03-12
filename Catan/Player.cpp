@@ -137,9 +137,9 @@ int Player::getNumberOfRessources() const
 	return utility::getCount(m_ressources);
 }
 
-std::optional<card::RessourceType> Player::removeRandomRessource()
+std::optional<card::RessourceType> Player::removeRandomRessource(int index)
 {
-	const auto ressourceIterator = utility::getRandomIterator(m_ressources);
+	const auto ressourceIterator = utility::getIndexIterator(m_ressources, index);
 
 	if (ressourceIterator == m_ressources.end())
 		return std::nullopt;
@@ -181,15 +181,19 @@ std::string Player::serialize() const
 {
 	// TODO: std::accumulate
 	std::string ressourcesCounts =
-		std::to_string(m_ressources.at(card::RessourceType::LUMBER)) + "|" +
-		std::to_string(m_ressources.at(card::RessourceType::BRICK)) + "|" +
-		std::to_string(m_ressources.at(card::RessourceType::WOOL)) + "|" +
-		std::to_string(m_ressources.at(card::RessourceType::GRAIN)) + "|" +
-		std::to_string(m_ressources.at(card::RessourceType::ORE));
+		"L: " + std::to_string(m_ressources.at(card::RessourceType::LUMBER)) + " | " +
+		"B: " + std::to_string(m_ressources.at(card::RessourceType::BRICK)) + " | " +
+		"W: " + std::to_string(m_ressources.at(card::RessourceType::WOOL)) + " | " +
+		"G: " + std::to_string(m_ressources.at(card::RessourceType::GRAIN)) + " | " +
+		"O: " + std::to_string(m_ressources.at(card::RessourceType::ORE));
 	
-	return std::to_string(m_id) + "," +
-		std::to_string(m_points) + ","+
-		ressourcesCounts;
+	std::string devCards = serialize::containerSerialize(m_developmentCards, std::string(), std::string());
+
+	return 
+		"ID: " + std::to_string(m_id) + ", " +
+		"Points: " + std::to_string(m_points) + ", "+
+		"Res: (" + ressourcesCounts + "), " + 
+		"Dev: (" + devCards + ")";
 }
 
 void Player::decreaseCityCount()

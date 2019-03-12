@@ -20,8 +20,8 @@ const std::unordered_map<card::RessourceType, int> DEVELOPMENT_COST =
 
 namespace card {
 
-Development::Development(const DevelopmentAction & action)
-	: m_action(action)
+Development::Development(const DevelopmentAction & devAction)
+	: m_developmentAction(devAction)
 	, m_used(false)
 {
 }
@@ -33,14 +33,33 @@ bool Development::isUsed() const
 
 bool Development::executeAction(player::Player & player, const DevelopmentData & data)
 {
-	bool result = m_action.execute(player, data);
+	bool result = m_developmentAction.execute(player, data);
 	m_used = result;
 	return result;
 }
 
 card::DevelopmentType Development::getType()
 {
-	return m_action.getType();
+	return m_developmentAction.getType();
+}
+
+std::string getDevelopmentTypeString(DevelopmentType developmentType)
+{
+	switch (developmentType)
+	{
+	case DevelopmentType::Knight:				return "K";
+	case DevelopmentType::FreeRessources:		return "F";
+	case DevelopmentType::BuildTwoFreeRoads:	return "B";
+	case DevelopmentType::Monopoly:				return "M";
+	case DevelopmentType::VictoryPoint:			return "V";
+	}
+}
+
+std::string Development::serialize() const
+{
+	std::string devType(getDevelopmentTypeString(m_developmentAction.getType()));
+	std::string isUsed(m_used ? "U" : "A");
+	return std::string(devType + ":" + isUsed);
 }
 
 DevelopmentData::DevelopmentData(int playerId)
@@ -106,9 +125,10 @@ const std::unordered_map<card::RessourceType, int> & getDevelopmentCost()
 	return DEVELOPMENT_COST;
 }
 
-KnightAction::KnightAction(std::vector<player::Player> & players, board::Board & board)
-   : m_players(players)
-   , m_board(board)
+KnightAction::KnightAction(std::vector<player::Player> & players, board::Board & board, const NumberGenerator & numberGenerator)
+	: m_players(players)
+	, m_board(board)
+	, m_numberGenerator(numberGenerator)
 {
 }
 
@@ -125,7 +145,7 @@ bool KnightAction::validData(const DevelopmentData & data) const
 bool KnightAction::apply(player::Player & player, const DevelopmentData & data) const
 {
    std::pair<int,int> cellVertexPositions = data.getCellVertexPosition().value();
-   MoveRobberAction moveRobberAction(player, cellVertexPositions.first, cellVertexPositions.second, m_players);
+   MoveRobberAction moveRobberAction(player, cellVertexPositions.first, cellVertexPositions.second, m_players, m_numberGenerator);
    return moveRobberAction.execute(m_board);
 }
 
@@ -165,7 +185,8 @@ bool BuildTwoFreeRoadsAction::validData(const DevelopmentData & data) const
 
 bool BuildTwoFreeRoadsAction::apply(player::Player & player, const DevelopmentData & data) const
 {
-   // TODO: To rewrite/refactor URGENT, i think its correct though..
+	// TODO: To rewrite/refactor URGENT, i think its correct though..
+	// TODO: Use PlaceRoadAction!!!
 
    int position1 = data.getRoadPositions().value().first;
    int position2 = data.getRoadPositions().value().second;

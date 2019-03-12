@@ -270,7 +270,7 @@ std::optional<HarborCRef> Board::getHarbor(int position) const
 
 std::string Board::serialize() const
 {
-   std::string board;
+   std::string board("Board: \n");
 
    board = serialize::containerSerialize(m_cells, board, "Cells: ");
    board = serialize::containerSerialize(m_vertices, board, "Vertices: ");

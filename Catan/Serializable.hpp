@@ -16,18 +16,25 @@ public:
 
 
 template<class SerializableItem>
-std::string containerSerialize(const std::vector<SerializableItem> & input, const std::string & initalValue, const std::string & tag)
+std::string containerSerialize(const std::vector<SerializableItem> & input, const std::string & initalValue, const std::string & tag, const std::string & separator = " - ")
 {  
-   std::vector<std::string> vecResult;
-   std::transform(input.begin(), input.end(), std::back_inserter(vecResult), [](const Serializable & item) {
-      return item.serialize();
-   });
+	if (input.empty())
+		return std::string();
 
-   std::string result = std::accumulate(std::next(vecResult.begin()), vecResult.end(), initalValue + tag + vecResult[0], [](const std::string & res, const std::string & element) {
-      return res + " - " + element;
-   });
+	std::vector<std::string> serializedResults;
+	std::transform(input.begin(), input.end(), std::back_inserter(serializedResults),
+		[](const Serializable & item) 
+	{
+		return item.serialize();
+	});
 
-   return std::move(result + '\n');
+	std::string result = std::accumulate(std::next(serializedResults.begin()), serializedResults.end(), initalValue + tag + serializedResults[0],
+		[&separator](const std::string & res, const std::string & element)
+	{
+		return res + separator + element;
+	});
+
+	return std::move(result + '\n');
 }
 
 }

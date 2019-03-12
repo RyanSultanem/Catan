@@ -4,18 +4,21 @@
 #include "Game.fwd.hpp"
 
 #include "Board.h"
+#include "Dice.hpp"
 #include "Player.hpp"
 #include "GameInterface.hpp"
 
 #include "Actions.fwd.hpp"
 #include "State.fwd.hpp"
 #include "DevelopmentStock.hpp"
+#include "NumberGenerator.fwd.hpp"
 
 #include <vector>
 
 class Game : public GameInterface
 {
 public:
+	Game(int numberOfPlayers, std::unique_ptr<NumberGenerator> && numberGenerator);
 	Game(int numberOfPlayers);
 	~Game();
 
@@ -32,9 +35,12 @@ public:
 	bool rollDice() override;
 	bool done() override;
 
-	bool gameEnded() override;
-	std::vector<ActionType> getPossibleActions() override;
+	bool gameEnded() const override;
+	std::vector<ActionType> getPossibleActions() const override;
 	int getActivePlayerId() const override;
+	std::string getBoardInfo() const override;
+	std::string getPlayersInfo() const override;
+	int getDiceValue() const override;
 
 	int getPlayerCount() const;
 	void setNextActivePlayer();
@@ -43,14 +49,17 @@ public:
 	void setState(std::unique_ptr<State> && state);
 
 private:
+	std::unique_ptr<NumberGenerator> m_numberGenerator;
 	std::unique_ptr<State> m_state;
 	board::Board m_board;
+	board::Dice m_dice;
 	DevelopmentStock m_developmentStock;
 
 	std::vector<player::Player> m_players;
 	int m_activePlayer;
    
 	bool m_gameEnded; // TODO: should be removed or changed
+
 
 	void setupPlayers(int numberOfPlayers);
 	void initalizeDevelopmentStock();

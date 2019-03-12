@@ -53,7 +53,7 @@ int Settlement::getSettlementPoints()
 
 std::string Settlement::serialize() const
 {
-   return "S/" + Token::serialize();
+   return "S|" + Token::serialize();
 }	
 
 City::City(int reference) 
@@ -83,7 +83,7 @@ int City::getCityPoints()
 
 std::string City::serialize() const
 {
-   return "C/" + Token::serialize();
+   return "C|" + Token::serialize();
 }
 
 } // namespace building

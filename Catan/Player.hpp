@@ -4,11 +4,11 @@
 #include "PlayerInterface.hpp"
 
 #include "Building.hpp"
+#include "Development.fwd.hpp"
 #include "Road.hpp"
 
 #include <vector>
 #include <optional>
-#include "Development.hpp"
 
 namespace player {
    

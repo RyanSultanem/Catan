@@ -92,6 +92,11 @@ std::optional<VertexCRef> Edge::getOtherVertex(const Vertex& vertex) const
 	return m_v1;
 }
 
+std::vector<VertexCRef> Edge::getVertices() const
+{
+	return { m_v1, m_v2 };
+}
+
 std::string Edge::serialize() const
 {
    return std::to_string(m_id) + ',' +

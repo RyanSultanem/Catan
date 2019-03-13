@@ -114,6 +114,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Achievement.fwd.hpp" />
+    <ClInclude Include="Achievement.hpp" />
     <ClInclude Include="Actions.fwd.hpp" />
     <ClInclude Include="Actions.hpp" />
     <ClInclude Include="Board.fwd.h" />
@@ -159,6 +161,7 @@
     <ClInclude Include="Vertex.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Achievement.cpp" />
     <ClCompile Include="Actions.cpp" />
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="Building.cpp" />

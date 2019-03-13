@@ -147,6 +147,12 @@
     <ClInclude Include="Dice.fwd.hpp">
       <Filter>Header Files\fwd</Filter>
     </ClInclude>
+    <ClInclude Include="Achievement.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Achievement.fwd.hpp">
+      <Filter>Header Files\fwd</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Card.cpp">
@@ -207,6 +213,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="NumberGenerator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Achievement.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

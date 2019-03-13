@@ -38,7 +38,7 @@ bool Development::executeAction(player::Player & player, const DevelopmentData &
 	return result;
 }
 
-card::DevelopmentType Development::getType()
+card::DevelopmentType Development::getType() const
 {
 	return m_developmentAction.getType();
 }

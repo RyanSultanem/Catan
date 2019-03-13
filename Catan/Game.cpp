@@ -2,7 +2,6 @@
 
 #include "Actions.hpp"
 #include "State.hpp"
-#include "Building.hpp"
 #include "NumberGenerator.hpp"
 
 #include <algorithm>

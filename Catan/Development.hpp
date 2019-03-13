@@ -5,11 +5,12 @@
 #include "Player.fwd.hpp"
 #include "Board.fwd.h"
 #include "Development.fwd.hpp"
+#include "NumberGenerator.fwd.hpp"
+
 #include "Serializable.hpp"
 
 #include <unordered_map>
 #include <optional>
-#include "NumberGenerator.hpp"
 
 namespace card {
 
@@ -22,15 +23,15 @@ enum class DevelopmentType // TODO: Check if can have a better solution
    VictoryPoint
 };
 
-class Development : public serialize::Serializable
+class Development : public serialize::Serializable // should be a Token?
 {
 public:
 	explicit Development(const DevelopmentAction & devAction);
 
 	bool isUsed() const;
+	card::DevelopmentType getType() const;
 
 	bool executeAction(player::Player & player, const DevelopmentData & data);
-	card::DevelopmentType getType();
 
 	std::string serialize() const override;
 
@@ -61,7 +62,7 @@ private:
    std::optional<std::pair<int,int>> m_roadPositions;
 };
 
-class DevelopmentAction // should be a Token?
+class DevelopmentAction 
 {
 public:
 	bool execute(player::Player & player, const DevelopmentData & data) const;

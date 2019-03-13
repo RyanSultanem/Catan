@@ -25,11 +25,11 @@ public:
 	void setHarbor(const Harbor & harbor);
 	const std::optional<Harbor> & getHarbor() const;
 
-	std::string serialize() const override;
-
 	bool hasAdjencentBuilding() const;
 	bool hasAtLeastOneAdjecentRoad(int playerReference) const;
 	std::vector<EdgeCRef> getOtherEdges(const Edge & edge) const;
+
+	std::string serialize() const override;
 
 private:
 	int m_id;

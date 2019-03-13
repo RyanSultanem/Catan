@@ -27,13 +27,14 @@ public:
 	bool hasPlayerNeighboorBuilding(int playerReference) const;
 	bool hasVertex(int vertexReference) const;
 	std::optional<VertexCRef> getOtherVertex(const Vertex & vertex) const;
+	std::vector<VertexCRef> getVertices() const;
 
 	std::string serialize() const override;
 
 private:
 	int m_id;
-	const Vertex& m_v1;
-	const Vertex& m_v2;
+	const Vertex & m_v1;
+	const Vertex & m_v2;
 
    std::optional<token::Road*> m_road;
 };

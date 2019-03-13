@@ -7,6 +7,7 @@
 #include "Dice.hpp"
 #include "Player.hpp"
 #include "GameInterface.hpp"
+#include "Achievement.hpp"
 
 #include "Actions.fwd.hpp"
 #include "State.fwd.hpp"

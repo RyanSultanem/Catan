@@ -39,6 +39,7 @@ public:
 
 	void receiveDevelopment(const card::Development & development);
 	std::optional<card::DevelopmentRef> getUnusedDevelopment(card::DevelopmentType developmentType);
+	std::vector<card::DevelopmentCRef> getUsedDevelopments() const;
    
 	void setExchangeCost(card::RessourceType ressourceType, int cost);
 	int getExchangeCost(card::RessourceType ressourceType) const;

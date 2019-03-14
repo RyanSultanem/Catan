@@ -31,7 +31,7 @@ public:
 	bool moveRobber(int cellPosition, int vertexPosition) override;
 	bool burnCards(const std::unordered_map<int, int> & ressourcesToBurn) override;
 	bool buyDevelopmentCard() override;
-	bool useDevelopmentCard(const card::DevelopmentType & developmentType, const card::DevelopmentData & developmentData) override;
+	bool useDevelopmentCard(const card::DevelopmentData & developmentData) override;
 
 	bool rollDice() override;
 	bool done() override;
@@ -55,6 +55,9 @@ private:
 	board::Board m_board;
 	board::Dice m_dice;
 	DevelopmentStock m_developmentStock;
+
+	Achievement m_longestRoad;
+	Achievement m_strongestArmy;
 
 	std::vector<player::Player> m_players;
 	int m_activePlayer;

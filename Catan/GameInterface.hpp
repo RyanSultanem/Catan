@@ -3,6 +3,7 @@
 
 #include "Development.fwd.hpp"
 #include "Actions.fwd.hpp"
+#include "NumberGenerator.fwd.hpp"
 
 #include <vector>
 #include <unordered_map>
@@ -19,7 +20,7 @@ public:
 	virtual bool moveRobber(int cellPosition, int vertexPosition) = 0;
 	virtual bool burnCards(const std::unordered_map<int, int> & ressourcesToBurn) = 0;
 	virtual bool buyDevelopmentCard() = 0;
-	virtual bool useDevelopmentCard(const card::DevelopmentType & developmentType, const card::DevelopmentData & developmentData) = 0;
+	virtual bool useDevelopmentCard(const card::DevelopmentData & developmentData) = 0;
 
 	virtual bool rollDice() = 0;
 	virtual bool done() = 0;
@@ -35,7 +36,7 @@ public:
 
 namespace builder {
 
-std::unique_ptr<GameInterface> buildGame(int numberOfPlayer);
+std::unique_ptr<GameInterface> buildGame(int numberOfPlayer, std::unique_ptr<NumberGenerator> && numberGenerator);
 
 }
 

@@ -1,6 +1,7 @@
 #ifndef ACTIONS_HPP
 #define ACTIONS_HPP
 
+#include "Achievement.fwd.hpp"
 #include "Board.fwd.h"
 #include "Game.fwd.hpp"
 #include "Player.fwd.hpp"
@@ -77,7 +78,7 @@ private:
 class PlaceRoadAction : public Action
 {
 public:
-	PlaceRoadAction(player::Player & player, int position);
+	PlaceRoadAction(player::Player & player, int position, Achievement & longestRoad);
 
 	bool execute(board::Board & board) override;
 	ActionType getType() const override;
@@ -85,9 +86,10 @@ public:
 private:
 	player::Player & m_player;
 	int m_position;
+	Achievement & m_longestRoad;
 
 	bool preExecute() const;
-	void postExecute() const;
+	void postExecute(board::Board & board) const;
 };
 
 class PlaceCityAction : public Action
@@ -207,15 +209,15 @@ private:
 class UseDevelopmentAction : public Action
 {
 public:
-   UseDevelopmentAction(player::Player & player, const card::DevelopmentType & developmentType, const card::DevelopmentData & developmentData);
+   UseDevelopmentAction(player::Player & player, const card::DevelopmentData & developmentData, Achievement & strongestArmy);
 
    bool execute(board::Board & board) override;
    ActionType getType() const override;
 
 private:
    player::Player & m_player;
-   const card::DevelopmentType & m_developmentType;
    const card::DevelopmentData & m_developmentData;
+   Achievement & m_strongestArmy;
 };
 
 #endif // !ACTIONS_HPP

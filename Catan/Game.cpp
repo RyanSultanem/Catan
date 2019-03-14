@@ -12,6 +12,8 @@ Game::Game(int numberOfPlayers, std::unique_ptr<NumberGenerator> && numberGenera
 	, m_board()
 	, m_dice(*m_numberGenerator)
 	, m_developmentStock(*m_numberGenerator)
+	, m_longestRoad(5)
+	, m_strongestArmy(3)
 	, m_activePlayer(0)
 	, m_gameEnded(false)
 {
@@ -49,7 +51,7 @@ bool Game::placeSettlement(int position)
 
 bool Game::placeRoad(int position)
 {
-	PlaceRoadAction action(m_players.at(m_activePlayer), position);
+	PlaceRoadAction action(m_players.at(m_activePlayer), position, m_longestRoad);
 
 	return processAction(action);
 }
@@ -89,9 +91,9 @@ bool Game::buyDevelopmentCard()
 	return processAction(buyDevelopmentAction);
 }
 
-bool Game::useDevelopmentCard(const card::DevelopmentType & developmentType, const card::DevelopmentData & developmentData)
+bool Game::useDevelopmentCard(const card::DevelopmentData & developmentData)
 {
-	UseDevelopmentAction useDevelopmentAction(m_players.at(m_activePlayer), developmentType, developmentData);
+	UseDevelopmentAction useDevelopmentAction(m_players.at(m_activePlayer), developmentData, m_strongestArmy);
 
 	return processAction(useDevelopmentAction);
 }
@@ -232,9 +234,9 @@ bool Game::processAction(Action & action)
 
 namespace builder {
 
-std::unique_ptr<GameInterface> buildGame(int numberOfPlayer)
+std::unique_ptr<GameInterface> buildGame(int numberOfPlayer, std::unique_ptr<NumberGenerator> && numberGenerator)
 {
-	return std::make_unique<Game>(numberOfPlayer);
+	return std::make_unique<Game>(numberOfPlayer, std::move(numberGenerator));
 }
 
 }

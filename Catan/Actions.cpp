@@ -1,5 +1,6 @@
 #include "Actions.hpp"
 
+#include "Achievement.hpp"
 #include "Board.h"
 #include "Dice.hpp"
 #include "Game.hpp"
@@ -121,9 +122,10 @@ void PlaceInitialSettlementRoadAction::postExecute(const board::Board & board) c
 	}
 }
 
-PlaceRoadAction::PlaceRoadAction(player::Player & player, int position)
+PlaceRoadAction::PlaceRoadAction(player::Player & player, int position, Achievement & longestRoad)
 	: m_player(player)
 	, m_position(position)
+	, m_longestRoad(longestRoad)
 {
 }
 
@@ -138,7 +140,7 @@ bool PlaceRoadAction::execute(board::Board & board)
 		isSuccess = board.placeRoad(m_position, *optRoad, PlaceRoadCondition(m_player.getId()));
 
 		if (isSuccess)
-			postExecute();
+			postExecute(board);
 	}
 
 	return isSuccess;
@@ -154,11 +156,13 @@ bool PlaceRoadAction::preExecute() const
 	return player::reactions::roadRessourcesAvailable(m_player);
 }
 
-void PlaceRoadAction::postExecute() const
+void PlaceRoadAction::postExecute(board::Board & board) const
 {
 	if(player::reactions::roadPay(m_player))
+	{
 		player::reactions::roadPlaced(m_player);
-   // check for longest here
+		m_longestRoad.update(m_player, LongestRoadChecker(*board.getEdgeAt(m_position)));
+	}
 }
 
 PlaceCityAction::PlaceCityAction(player::Player & player, int position)
@@ -395,7 +399,14 @@ bool BuyDevelopmentAction::execute(board::Board & board)
 	if (isSuccess)
 	{
 		if(player::reactions::developmentPay(m_player))
-			m_player.receiveDevelopment(*m_developmentStock.drawCard());
+		{	
+			std::optional<card::Development> optDevelopment = m_developmentStock.drawCard();
+			if (optDevelopment)
+			{
+				m_player.receiveDevelopment(*optDevelopment);
+				isSuccess = true;
+			}
+		}
 	}
 
 	return isSuccess;
@@ -411,23 +422,28 @@ bool BuyDevelopmentAction::preExecute()
 	return player::reactions::developmentRessourceAvailable(m_player) && !m_developmentStock.empty();
 }
 
-UseDevelopmentAction::UseDevelopmentAction(player::Player & player, const card::DevelopmentType & developmentType, const card::DevelopmentData & developmentData)
+UseDevelopmentAction::UseDevelopmentAction(player::Player & player, const card::DevelopmentData & developmentData, Achievement & strongestArmy)
    : m_player(player)
-   , m_developmentType(developmentType)
    , m_developmentData(developmentData)
+   , m_strongestArmy(strongestArmy)
 {
 }
 
 bool UseDevelopmentAction::execute(board::Board & board)
 {
-    std::optional<card::DevelopmentRef> optDevelopmentCard = m_player.getUnusedDevelopment(m_developmentType);
+    std::optional<card::DevelopmentRef> optDevelopmentCard = m_player.getUnusedDevelopment(m_developmentData.getDevelopmentType());
 	if (!optDevelopmentCard)
 		return false;
 
 	card::Development & developmentCard = *optDevelopmentCard;
-    return developmentCard.executeAction(m_player, m_developmentData);
+    bool success = developmentCard.executeAction(m_player, m_developmentData);
 
-    // check for longest and strongest here
+	if(m_developmentData.getDevelopmentType() == card::DevelopmentType::Knight)
+		m_strongestArmy.update(m_player, StrongestArmyChecker(m_player));
+		
+    // TODO: check for longest 
+
+	return success;
 }
 
 ActionType UseDevelopmentAction::getType() const

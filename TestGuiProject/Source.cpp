@@ -1,12 +1,36 @@
 #include "../Catan/GameInterface.hpp"
 
 #include "../Catan/Actions.hpp" // TODO: hack. should be removed. should only have access to ActionType
-
+#include "../Catan/Development.hpp"
+#include "../Catan/NumberGenerator.hpp"
 #include <vector>
 #include <iostream>
 #include <string>
 #include <unordered_map>
+#include <ctime>
+class InputNumberGenerator : public NumberGenerator
+{
+public:
+	InputNumberGenerator()
+	{
+		srand(time(0));
+	}
+	int generateNumber(int min, int max) const override
+	{
+		int number = 0;
+		do
+		{
+			std::cout << "Choose a number between " << min << " and " << max << ":";
+			std::cin >> number;
 
+		} while((number < min || number > max) && (number != 0));
+
+		if(number == 0)
+			number = rand()%max + min;
+
+		return number;
+	}
+};
 
 bool reactionInitialSettlementRoad(GameInterface & game)
 {
@@ -118,9 +142,137 @@ bool reactionBuyDevelopment(GameInterface & game)
 	return game.buyDevelopmentCard();
 }
 
-bool reactionUseDevelopment(GameInterface & /*game*/)
+void fillKnightInfo(card::DevelopmentData & data)
 {
-	return false;
+	// Factorise with moveRobber;
+
+	int newRobberPosition = -1;
+	int vertexSteal = -1;
+
+	std::cout << "Robber Position: ";
+	std::cin >> newRobberPosition;
+
+	std::cout << "Vertex Position: ";
+	std::cin >> vertexSteal;
+
+	data.setCellVertexPosition({ newRobberPosition , vertexSteal});
+	data.setDevelopmentType(card::DevelopmentType::Knight);
+}
+
+void fillMonopolyRessource(card::DevelopmentData & data)
+{
+	std::string ressource;
+	std::cout << "Choose a Ressource (Monopoly): L, B, W, G, O" << std::endl;
+	std::cin >> ressource;
+
+	card::RessourceType type;
+	if(ressource == "L")
+		type = card::RessourceType::LUMBER;
+	else if (ressource == "B")
+		type = card::RessourceType::BRICK;
+	else if (ressource == "W")
+		type = card::RessourceType::WOOL;
+	else if (ressource == "G")
+		type = card::RessourceType::GRAIN;
+	else if (ressource == "O")
+		type = card::RessourceType::ORE;
+	else
+		return;
+
+	data.setMonopolyRessource(type);
+	data.setDevelopmentType(card::DevelopmentType::Monopoly);
+}
+
+void fillFreeRoads(card::DevelopmentData & data)
+{
+	int roadPosition1 = -1;
+
+	std::cout << "Road Position 1: ";
+	std::cin >> roadPosition1;
+
+	int roadPosition2 = -1;
+
+	std::cout << "Road Position 2: ";
+	std::cin >> roadPosition2;
+
+	data.setRoadPosition({roadPosition1, roadPosition2});
+	data.setDevelopmentType(card::DevelopmentType::BuildTwoFreeRoads);
+}
+
+void fillFreeRessources(card::DevelopmentData & data)
+{
+	std::string ressource1;
+	std::cout << "Choose a Ressource (Monopoly): L, B, W, G, O" << std::endl;
+	std::cin >> ressource1;
+
+	card::RessourceType type;
+	if (ressource1 == "L")
+		type = card::RessourceType::LUMBER;
+	else if (ressource1 == "B")
+		type = card::RessourceType::BRICK;
+	else if (ressource1 == "W")
+		type = card::RessourceType::WOOL;
+	else if (ressource1 == "G")
+		type = card::RessourceType::GRAIN;
+	else if (ressource1 == "O")
+		type = card::RessourceType::ORE;
+	else
+		return;
+
+	std::string ressource2;
+	std::cout << "Choose a Ressource (Monopoly): L, B, W, G, O" << std::endl;
+	std::cin >> ressource2;
+
+	card::RessourceType type2;
+	if (ressource2 == "L")
+		type2 = card::RessourceType::LUMBER;
+	else if (ressource2 == "B")
+		type2 = card::RessourceType::BRICK;
+	else if (ressource2 == "W")
+		type2 = card::RessourceType::WOOL;
+	else if (ressource2 == "G")
+		type2 = card::RessourceType::GRAIN;
+	else if (ressource2 == "O")
+		type2 = card::RessourceType::ORE;
+	else
+		return;
+
+	data.setFreeRessources({type, type2});
+	data.setDevelopmentType(card::DevelopmentType::FreeRessources);
+}
+
+bool reactionUseDevelopment(GameInterface & game)
+{
+	std::string choice;
+	std::cout << "Choose Development Type: (Knight: K; FreeRessources: F; BuildRoads: B; Monopoly: M; Victory: V)" << std::endl;
+	std::cin >> choice;
+
+	card::DevelopmentData data;
+
+	if (choice == "K")
+	{
+		fillKnightInfo(data);
+	}
+	else if (choice == "F")
+	{
+		fillFreeRessources(data);
+	}
+	else if (choice == "B")
+	{
+		fillFreeRoads(data);
+	}
+	else if (choice == "M")
+	{
+		fillMonopolyRessource(data);
+	}
+	else if (choice == "V")
+	{
+		data.setDevelopmentType(card::DevelopmentType::VictoryPoint);
+	}
+	else
+		return false;
+
+	return game.useDevelopmentCard(data);
 }
 
 std::unordered_map<ActionType, std::function<bool(GameInterface&)>> actionReactions = 
@@ -215,7 +367,12 @@ void displayGameInfo(const GameInterface & game)
 
 int main()
 {
-	std::unique_ptr<GameInterface> gamePtr = builder::buildGame(3);
+	int numberOfPlayers = 0;
+	std::cout << "Number of Players: ";
+	std::cin >> numberOfPlayers;
+
+	std::unique_ptr<InputNumberGenerator> inputNumberGenerator = std::make_unique<InputNumberGenerator>();
+	std::unique_ptr<GameInterface> gamePtr = builder::buildGame(numberOfPlayers, std::move(inputNumberGenerator));
 	GameInterface & game = *gamePtr;
 
 	while(!game.gameEnded())

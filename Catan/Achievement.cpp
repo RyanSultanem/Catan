@@ -5,9 +5,10 @@
 #include "Edge.h"
 #include "Vertex.h"
 
-Achievement::Achievement(int initialCount)
-	: m_player(std::nullopt)
-	, m_count(initialCount)
+Achievement::Achievement(int minRequirement)
+	: m_minRequirement(minRequirement)
+	, m_player(std::nullopt)
+	, m_count(0)
 {
 }
 
@@ -68,14 +69,19 @@ int LongestRoadChecker::getAchievementCount(int playerId) const
 	return firstSideLongest + secondSideLonget - 1; // TODO: This is wrong when we have loops
 }
 
-StrongestArmyChecker::StrongestArmyChecker(const std::vector<card::Development> & developmentsCards)
-	: m_developmentsCards(developmentsCards)
+StrongestArmyChecker::StrongestArmyChecker(const player::Player & player)
+	: m_player(player)
 {
 }
 
-int StrongestArmyChecker::getAchievementCount(int /*playerId*/) const
+int StrongestArmyChecker::getAchievementCount(int playerId) const
 {
-	return std::count_if(m_developmentsCards.begin(), m_developmentsCards.end(),
+	if(playerId != m_player.getId())
+		return 0;
+
+	std::vector<card::DevelopmentCRef> usedDevelopment = m_player.getUsedDevelopments();
+
+	return std::count_if(usedDevelopment.begin(), usedDevelopment.end(),
 		[](const card::Development & devCard)
 	{
 		return devCard.isUsed() && devCard.getType() == card::DevelopmentType::Knight;

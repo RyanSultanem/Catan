@@ -62,12 +62,18 @@ std::string Development::serialize() const
 	return std::string(devType + ":" + isUsed);
 }
 
-DevelopmentData::DevelopmentData(int playerId)
-   : m_cellVertexPosition(std::nullopt)
-   , m_monopolyRessource(std::nullopt)
-   , m_freeRessources(std::nullopt)
-   , m_roadPositions(std::nullopt)
+DevelopmentData::DevelopmentData()
+	: m_developmentType(DevelopmentType::Knight)
+	, m_cellVertexPosition(std::nullopt)
+	, m_monopolyRessource(std::nullopt)
+	, m_freeRessources(std::nullopt)
+	, m_roadPositions(std::nullopt)
 {
+}
+
+void DevelopmentData::setDevelopmentType(DevelopmentType developmentType)
+{
+	m_developmentType = developmentType;
 }
 
 void DevelopmentData::setCellVertexPosition(const std::pair<int, int> & cellVertexPosition)
@@ -88,6 +94,11 @@ void DevelopmentData::setFreeRessources(const std::pair<RessourceType, Ressource
 void DevelopmentData::setRoadPosition(const std::pair<int, int> & roadPositions)
 {
 	m_roadPositions = roadPositions;
+}
+
+DevelopmentType DevelopmentData::getDevelopmentType() const
+{
+	return m_developmentType;
 }
 
 std::optional<std::pair<int, int>> DevelopmentData::getCellVertexPosition() const

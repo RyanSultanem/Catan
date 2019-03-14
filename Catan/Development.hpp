@@ -43,23 +43,26 @@ private:
 class DevelopmentData
 {
 public:
-   explicit DevelopmentData(int playerId);
+	DevelopmentData();
 
-   void setCellVertexPosition(const std::pair<int,int> & cellVertexPosition);
-   void setMonopolyRessource(RessourceType monopolyRessource);
-   void setFreeRessources(const std::pair<RessourceType,RessourceType> & freeRessources);
-   void setRoadPosition(const std::pair<int,int> & roadPositions);
+	void setDevelopmentType(DevelopmentType developmentType);
+	void setCellVertexPosition(const std::pair<int,int> & cellVertexPosition);
+	void setMonopolyRessource(RessourceType monopolyRessource);
+	void setFreeRessources(const std::pair<RessourceType,RessourceType> & freeRessources);
+	void setRoadPosition(const std::pair<int,int> & roadPositions);
 
-   std::optional<std::pair<int,int>> getCellVertexPosition() const;
-   std::optional<RessourceType> getMonopolyRessource() const;
-   std::optional<std::pair<RessourceType, RessourceType>> getFreeRessources() const;
-   std::optional<std::pair<int,int>> getRoadPositions() const;
+	DevelopmentType getDevelopmentType() const;
+	std::optional<std::pair<int,int>> getCellVertexPosition() const;
+	std::optional<RessourceType> getMonopolyRessource() const;
+	std::optional<std::pair<RessourceType, RessourceType>> getFreeRessources() const;
+	std::optional<std::pair<int,int>> getRoadPositions() const;
 
 private:
-   std::optional<std::pair<int,int>> m_cellVertexPosition;
-   std::optional<RessourceType> m_monopolyRessource;
-   std::optional<std::pair<RessourceType,RessourceType>> m_freeRessources;
-   std::optional<std::pair<int,int>> m_roadPositions;
+	DevelopmentType m_developmentType;
+	std::optional<std::pair<int,int>> m_cellVertexPosition;
+	std::optional<RessourceType> m_monopolyRessource;
+	std::optional<std::pair<RessourceType,RessourceType>> m_freeRessources;
+	std::optional<std::pair<int,int>> m_roadPositions;
 };
 
 class DevelopmentAction 

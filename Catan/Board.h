@@ -42,6 +42,7 @@ public:
 	// TODO: check if harbor check should really be done through Board, or can find a better solution; could be done through vertex if cost is not directly in player maybe, but in player also makes sense..
 	std::optional<HarborCRef> getHarbor(int position) const;
 	std::vector<cell::CellCRef> getCellsWithNumber(int value) const;
+	std::optional<EdgeCRef> getEdgeAt(int position) const;
 	std::optional<int> getVertexPlayerRef(int position) const;
 
 	std::string serialize() const override;

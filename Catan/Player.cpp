@@ -168,6 +168,21 @@ std::optional<card::DevelopmentRef> Player::getUnusedDevelopment(card::Developme
 	return optDevCard;
 }
 
+std::vector<card::DevelopmentCRef> Player::getUsedDevelopments() const
+{
+	std::vector<card::DevelopmentCRef> usedDevelopments;
+	usedDevelopments.reserve(m_developmentCards.size());
+
+	std::for_each(m_developmentCards.begin(), m_developmentCards.end(), 
+		[&usedDevelopments](const card::Development & development)
+	{
+		if(development.isUsed())
+			usedDevelopments.push_back(development);
+	});
+
+	return usedDevelopments;
+}
+
 void Player::setExchangeCost(card::RessourceType ressourceType, int cost)
 {
 	m_exchangeCosts[ressourceType] = cost;

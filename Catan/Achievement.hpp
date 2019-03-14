@@ -10,10 +10,12 @@
 class Achievement
 {
 public:
-	explicit Achievement(int initialCount);
+	explicit Achievement(int minRequirement);
 	bool update(player::Player & player, const AchievementChecker & checker);
 
 private:
+	const int m_minRequirement;
+
 	std::optional<player::PlayerRef> m_player; // TODO: Change to PointReceiver
 	int m_count;
 };
@@ -38,12 +40,12 @@ private:
 class StrongestArmyChecker : public AchievementChecker
 {
 public:
-	explicit StrongestArmyChecker(const std::vector<card::Development> & developmentsCards);
+	explicit StrongestArmyChecker(const player::Player & player);
 
 	int getAchievementCount(int playerId) const override;
 
 private:
-	const std::vector<card::Development> & m_developmentsCards;
+	const player::Player & m_player;
 };
 
 #endif // !ACHIEVEMENT_HPP

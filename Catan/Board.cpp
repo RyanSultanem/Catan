@@ -28,9 +28,32 @@ void Board::createVertices()
 
 void Board::setHarbors()
 {
-	// TODO: Add all harbor at the correct places. below is just an exmaple (probably wrong)
-	m_vertices.at(2).setHarbor(Harbor(card::RessourceType::ORE));
-	m_vertices.at(10).setHarbor(Harbor(card::RessourceType::NO_RESSOURCE));
+	m_vertices.at(0).setHarbor(Harbor(card::RessourceType::NO_RESSOURCE));
+	m_vertices.at(3).setHarbor(Harbor(card::RessourceType::NO_RESSOURCE));
+	
+	m_vertices.at(1).setHarbor(Harbor(card::RessourceType::GRAIN));
+	m_vertices.at(5).setHarbor(Harbor(card::RessourceType::GRAIN));
+	
+	m_vertices.at(10).setHarbor(Harbor(card::RessourceType::ORE));
+	m_vertices.at(15).setHarbor(Harbor(card::RessourceType::ORE));
+	
+	m_vertices.at(26).setHarbor(Harbor(card::RessourceType::NO_RESSOURCE));
+	m_vertices.at(32).setHarbor(Harbor(card::RessourceType::NO_RESSOURCE));
+
+	m_vertices.at(42).setHarbor(Harbor(card::RessourceType::WOOL));
+	m_vertices.at(46).setHarbor(Harbor(card::RessourceType::WOOL));
+
+	m_vertices.at(49).setHarbor(Harbor(card::RessourceType::NO_RESSOURCE));
+	m_vertices.at(52).setHarbor(Harbor(card::RessourceType::NO_RESSOURCE));
+
+	m_vertices.at(51).setHarbor(Harbor(card::RessourceType::NO_RESSOURCE));
+	m_vertices.at(47).setHarbor(Harbor(card::RessourceType::NO_RESSOURCE));
+
+	m_vertices.at(33).setHarbor(Harbor(card::RessourceType::BRICK));
+	m_vertices.at(38).setHarbor(Harbor(card::RessourceType::BRICK));
+
+	m_vertices.at(11).setHarbor(Harbor(card::RessourceType::LUMBER));
+	m_vertices.at(16).setHarbor(Harbor(card::RessourceType::LUMBER));
 }
 
 void Board::createEdges()
@@ -295,6 +318,14 @@ std::vector<cell::CellCRef> Board::getCellsWithNumber(int value) const
 	});
 
 	return cellsWithNumber;
+}
+
+std::optional<EdgeCRef> Board::getEdgeAt(int position) const
+{
+	if(position < 0 || position >= m_edges.size())
+		return std::nullopt;
+
+	return m_edges.at(position);
 }
 
 std::optional<int> Board::getVertexPlayerRef(int position) const

@@ -14,7 +14,7 @@ std::optional<card::Development> DevelopmentStock::drawCard()
 	int index = m_numberGenerator.generateNumber(1, utility::getCount(m_developmentCardCount));
 	auto iteratorType = utility::getIndexIterator(m_developmentCardCount, index);
 
-	if (iteratorType != m_developmentCardCount.end() && m_developmentActions.at(iteratorType->first))
+	if (iteratorType == m_developmentCardCount.end() || !m_developmentActions.at(iteratorType->first))
 		return std::nullopt;
 
 	iteratorType->second--;

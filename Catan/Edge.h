@@ -26,6 +26,7 @@ public:
 	bool hasPlayerNeighboorRoad(int playerReference) const;
 	bool hasPlayerNeighboorBuilding(int playerReference) const;
 	bool hasVertex(int vertexReference) const;
+	bool hasRoadOfPlayer(int playerReference) const;
 	std::optional<VertexCRef> getOtherVertex(const Vertex & vertex) const;
 	std::vector<VertexCRef> getVertices() const;
 

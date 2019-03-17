@@ -41,7 +41,8 @@ public:
 	std::optional<card::DevelopmentRef> getUnusedDevelopment(card::DevelopmentType developmentType);
 	std::vector<card::DevelopmentCRef> getUsedDevelopments() const;
    
-	void setExchangeCost(card::RessourceType ressourceType, int cost);
+	void setAllExchangeCosts(int newCost);
+	void setExchangeCost(card::RessourceType ressourceType, int newCost);
 	int getExchangeCost(card::RessourceType ressourceType) const;
 
 	std::string serialize() const override;

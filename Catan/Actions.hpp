@@ -186,7 +186,7 @@ public:
 
 private:
 	player::Player & m_player;
-	std::unordered_map<int, int> m_ressourcesToBurn;
+	std::unordered_map<card::RessourceType, int> m_ressourcesToBurn;
 
 	bool preExecute() const;
 };
@@ -209,15 +209,18 @@ private:
 class UseDevelopmentAction : public Action
 {
 public:
-   UseDevelopmentAction(player::Player & player, const card::DevelopmentData & developmentData, Achievement & strongestArmy);
+	UseDevelopmentAction(player::Player & player, const card::DevelopmentData & developmentData, Achievement & strongestArmy);
 
-   bool execute(board::Board & board) override;
-   ActionType getType() const override;
+	bool execute(board::Board & board) override;
+	ActionType getType() const override;
+
+	bool validPrePlayerDecisionUse(bool developmentUsed) const;
+	bool validPlayerDecisionUse(bool developmentUsed) const;
 
 private:
-   player::Player & m_player;
-   const card::DevelopmentData & m_developmentData;
-   Achievement & m_strongestArmy;
+	player::Player & m_player;
+	const card::DevelopmentData & m_developmentData;
+	Achievement & m_strongestArmy;
 };
 
 #endif // !ACTIONS_HPP

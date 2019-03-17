@@ -6,8 +6,8 @@
 
 #include <vector>
 #include <queue>
-#include "Actions.hpp"
 
+// TODO: Rename to Phase?
 class State
 {
 public:
@@ -41,15 +41,27 @@ public:
 	void nextState(Game & game, const Action & action) override;
 
 	std::vector<ActionType> getPossibleActions() override;
+
+private:
+	bool m_developmentUsed = false;
+
+	bool validDevelopmentUse(const Action & action) const;
 };
 
 class PlayerDecision : public State
 {
 public:
+	explicit PlayerDecision(bool developmentUsed);
+
 	bool isValid(const Action & action) const override;
 	void nextState(Game & game, const Action & action) override;
 
 	std::vector<ActionType> getPossibleActions() override;
+
+private:
+	bool m_developmentUsed;
+
+	bool validDevelopmentUse(const Action & action) const;
 };
 
 class CardBurnState : public State

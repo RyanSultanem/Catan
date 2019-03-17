@@ -90,6 +90,8 @@ bool PlaceInitialSettlementRoadAction::execute(board::Board & board)
 		if (isSuccess)
 			postExecute(board);
 	}
+	else
+		isSuccess = false;
 
 	return isSuccess;
 }
@@ -142,6 +144,8 @@ bool PlaceRoadAction::execute(board::Board & board)
 		if (isSuccess)
 			postExecute(board);
 	}
+	else
+		isSuccess = false;
 
 	return isSuccess;
 }
@@ -173,19 +177,21 @@ PlaceCityAction::PlaceCityAction(player::Player & player, int position)
 
 bool PlaceCityAction::execute(board::Board & board)
 {
-	bool isSuceess = preExecute();
+	bool isSuccess = preExecute();
 
 	std::optional<token::building::CityRef> optCity = m_player.getCity();
 
-	if(isSuceess && optCity)
+	if(isSuccess && optCity)
 	{
-		isSuceess = board.placeCity(m_position, *optCity, PlaceCityCondition(m_player.getId()));
+		isSuccess = board.placeCity(m_position, *optCity, PlaceCityCondition(m_player.getId()));
 
-		if (isSuceess)
+		if (isSuccess)
 			postExecute();
 	}
+	else
+		isSuccess = false;
 
-	return isSuceess;
+	return isSuccess;
 }
 
 ActionType PlaceCityAction::getType() const
@@ -356,8 +362,13 @@ ActionType MoveRobberAction::getType() const
 
 CardBurnAction::CardBurnAction(player::Player & player, const std::unordered_map<int, int> & ressourcesToBurn)
 	: m_player(player)
-	, m_ressourcesToBurn(ressourcesToBurn)
+	, m_ressourcesToBurn(ressourcesToBurn.size())
 {
+	std::transform(ressourcesToBurn.begin(), ressourcesToBurn.end(), std::inserter(m_ressourcesToBurn, m_ressourcesToBurn.begin()),
+		[](const std::pair<int, int> & element)
+	{
+		return std::pair<card::RessourceType, int>(static_cast<card::RessourceType>(element.first), element.second);
+	});
 }
 
 bool CardBurnAction::execute(board::Board & /*board*/)
@@ -383,7 +394,9 @@ ActionType CardBurnAction::getType() const
 
 bool CardBurnAction::preExecute() const
 {
-	return m_player.getNumberOfRessources() / 2 == utility::getCount(m_ressourcesToBurn);
+	return m_player.getNumberOfRessources() / 2 == utility::getCount(m_ressourcesToBurn) 
+		&& player::reactions::ressourcesAvailable(m_player, m_ressourcesToBurn);
+
 }
 
 BuyDevelopmentAction::BuyDevelopmentAction(player::Player & player, DevelopmentStock & developmentStock)
@@ -449,5 +462,18 @@ bool UseDevelopmentAction::execute(board::Board & board)
 ActionType UseDevelopmentAction::getType() const
 {
    return ActionType::UseDevelopment;
+}
+
+bool UseDevelopmentAction::validPrePlayerDecisionUse(bool developmentUsed) const
+{
+	return !developmentUsed && m_developmentData.getDevelopmentType() == card::DevelopmentType::Knight;
+}
+
+bool UseDevelopmentAction::validPlayerDecisionUse(bool developmentUsed) const
+{
+	if (m_developmentData.getDevelopmentType() == card::DevelopmentType::VictoryPoint)
+		return true;
+
+	return !developmentUsed;
 }
 

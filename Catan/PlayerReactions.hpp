@@ -10,7 +10,9 @@
 namespace player {
 namespace reactions {
 
-	//TODO: refactor to use Building*
+bool ressourcesAvailable(const Player & player, const std::unordered_map<card::RessourceType, int> & costs);
+
+	//TODO: refactor to use Building* + Visitor on Token for XXPlaced Functions
 bool settlementRessourcesAvailable(const Player & player);
 bool settlementPay(Player & player);
 void settlmentPlaced(Player & player);

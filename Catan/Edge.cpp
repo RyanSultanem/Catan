@@ -1,7 +1,6 @@
 #include "Edge.h"
 #include "Vertex.h"
 #include "Road.hpp"
-#include "Building.hpp"
 
 namespace board {
 
@@ -38,10 +37,13 @@ const std::optional<token::Road*> & Edge::getRoad() const
 	return m_road;
 }
 
-bool edgesHasPlayerRoad(const std::vector<EdgeCRef> & edges, int playerReference)
+bool edgesHasPlayerRoad(const std::vector<EdgeCRef> & edges, int playerReference, const Vertex & vertexBetweenRoads)
 {
+	if (vertexBetweenRoads.getBuilding() && !vertexBetweenRoads.hasBuildingOfPlayer(playerReference))
+		return false;
+
 	return std::find_if(edges.begin(), edges.end(),
-		[playerReference](const Edge & otherEdge)
+		[playerReference, &vertexBetweenRoads](const Edge & otherEdge)
 	{
 		std::optional<token::Road*> optRoad = otherEdge.getRoad();
 		if (optRoad && optRoad.value()->getReference() == playerReference)
@@ -54,29 +56,26 @@ bool edgesHasPlayerRoad(const std::vector<EdgeCRef> & edges, int playerReference
 bool Edge::hasPlayerNeighboorRoad(int playerReference) const
 {
 	std::vector<EdgeCRef> v1OtherEdges = m_v1.getOtherEdges(*this);
-	if (edgesHasPlayerRoad(v1OtherEdges, playerReference))
+	if (edgesHasPlayerRoad(v1OtherEdges, playerReference, m_v1))
 		return true;
 
 	std::vector<EdgeCRef> v2OtherEdges = m_v2.getOtherEdges(*this);
-	return edgesHasPlayerRoad(v2OtherEdges, playerReference);
+	return edgesHasPlayerRoad(v2OtherEdges, playerReference, m_v2);
 }
 
 bool Edge::hasPlayerNeighboorBuilding(int playerReference) const
 {
-	const std::optional<token::building::Building*> buildingV1 = m_v1.getBuilding();
-	if (buildingV1 && buildingV1.value()->getReference() == playerReference)
-		return true;
-
-	const std::optional<token::building::Building*> buildingV2 = m_v2.getBuilding();
-	if (buildingV2 && buildingV2.value()->getReference() == playerReference)
-		return true;
-
-	return false;
+	return m_v1.hasBuildingOfPlayer(playerReference) || m_v2.hasBuildingOfPlayer(playerReference);
 }
 
 bool Edge::hasVertex(int vertexReference) const
 {	
 	return m_v1.getId() == vertexReference || m_v2.getId() == vertexReference;
+}
+
+bool Edge::hasRoadOfPlayer(int playerReference) const
+{
+	return m_road.has_value() && m_road.value()->getReference() == playerReference;
 }
 
 std::optional<VertexCRef> Edge::getOtherVertex(const Vertex& vertex) const

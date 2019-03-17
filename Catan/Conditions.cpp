@@ -33,7 +33,7 @@ PlaceRoadCondition::PlaceRoadCondition(int playerReference)
 
 bool PlaceRoadCondition::checkCondition(const board::Edge & edge) const
 {
-	return !edge.getRoad() && edge.hasPlayerNeighboorRoad(m_playerReference) || edge.hasPlayerNeighboorBuilding(m_playerReference);
+	return !edge.getRoad() && (edge.hasPlayerNeighboorRoad(m_playerReference) || edge.hasPlayerNeighboorBuilding(m_playerReference));
 }
 
 PlaceInitialRoadCondition::PlaceInitialRoadCondition(int playerReference, int initialSettlementPosition)

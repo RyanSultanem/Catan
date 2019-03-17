@@ -52,6 +52,7 @@ std::string getDevelopmentTypeString(DevelopmentType developmentType)
 	case DevelopmentType::BuildTwoFreeRoads:	return "B";
 	case DevelopmentType::Monopoly:				return "M";
 	case DevelopmentType::VictoryPoint:			return "V";
+	default:									return "NA";
 	}
 }
 

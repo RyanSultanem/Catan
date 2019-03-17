@@ -64,25 +64,31 @@ bool InitialSettlementState::updateGameSecondRun(Game & game)
 
 bool PrePlayerDecision::isValid(const Action & action) const
 {
-	// TODO: check if a development wasnt already used; also pass to PlayerDecisionState
-
 	return action.getType() == ActionType::RollDice
-		|| action.getType() == ActionType::UseDevelopment; // TODO: Maybe force to Knight only ? Check if needed.
+		|| validDevelopmentUse(action); 
 }
 
 void PrePlayerDecision::nextState(Game & game, const Action & action)
 {
-	if (action.getType() == ActionType::RollDice)
+	if (validDevelopmentUse(action))
+	{
+		m_developmentUsed = true;
+	}
+	else if (action.getType() == ActionType::RollDice)
 	{
 		std::unique_ptr<State> nextState;
 		
 		const RollDice * rollDiceAction = dynamic_cast<const RollDice *>(&action);
 		if (rollDiceAction && rollDiceAction->shouldBurn()) //TODO: check if rollDiceAction shoudl really be checked for validity.
+		{
 			nextState = std::make_unique<CardBurnState>(game, game.getActivePlayerId(), rollDiceAction->getPlayerBurnQueue());
+		}
 		else if (rollDiceAction && rollDiceAction->shouldChangeRobber())
+		{
 			nextState = std::make_unique<MovingRobberState>();
+		}
 		else
-			nextState = std::make_unique<PlayerDecision>();
+			nextState = std::make_unique<PlayerDecision>(m_developmentUsed);
 
 		game.setState(std::move(nextState));
 		return;
@@ -94,6 +100,20 @@ std::vector<ActionType> PrePlayerDecision::getPossibleActions()
 	return { ActionType::RollDice , ActionType::UseDevelopment };
 }
 
+bool PrePlayerDecision::validDevelopmentUse(const Action& action) const
+{
+	if (action.getType() != ActionType::UseDevelopment)
+		return false;
+
+	const UseDevelopmentAction & useDevelopmentAction = dynamic_cast<const UseDevelopmentAction &>(action);
+	return useDevelopmentAction.validPrePlayerDecisionUse(m_developmentUsed);
+}
+
+PlayerDecision::PlayerDecision(bool developmentUsed)
+	: m_developmentUsed(developmentUsed)
+{
+}
+
 bool PlayerDecision::isValid(const Action & action) const
 {
 	// Any action that the player can take.
@@ -102,13 +122,17 @@ bool PlayerDecision::isValid(const Action & action) const
       || action.getType() == ActionType::PlaceCity
       || action.getType() == ActionType::ExchangeCards
       || action.getType() == ActionType::BuyDevelopment
-      || action.getType() == ActionType::UseDevelopment // TODO: check if not already used
+      || validDevelopmentUse(action)
 	  || action.getType() == ActionType::Done; 
 }
 
 void PlayerDecision::nextState(Game & game, const Action & action)
 {
-	if (action.getType() == ActionType::Done)
+	if (action.getType() == ActionType::UseDevelopment)
+	{
+		m_developmentUsed = true;
+	}
+	else if (action.getType() == ActionType::Done)
 	{
 		game.setNextActivePlayer();
 		game.setState(std::make_unique<PrePlayerDecision>());
@@ -124,6 +148,15 @@ std::vector<ActionType> PlayerDecision::getPossibleActions()
 		ActionType::ExchangeCards, ActionType::BuyDevelopment, ActionType::UseDevelopment,
 		ActionType::Done
 	};
+}
+
+bool PlayerDecision::validDevelopmentUse(const Action & action) const
+{
+	if (action.getType() != ActionType::UseDevelopment)
+		return false;
+
+	const UseDevelopmentAction & useDevelopmentAction = dynamic_cast<const UseDevelopmentAction &>(action);
+	return useDevelopmentAction.validPlayerDecisionUse(m_developmentUsed);
 }
 
 CardBurnState::CardBurnState(Game & game, int currentPlayer, const std::queue<int> & playersBurn)

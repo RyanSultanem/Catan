@@ -3,7 +3,6 @@
 #include "Vertex.h"
 #include "Edge.h"
 #include "Building.hpp"
-#include "Road.hpp"
 
 namespace board {
 
@@ -77,13 +76,14 @@ bool Vertex::hasAtLeastOneAdjecentRoad(int playerReference) const
 	return std::find_if(m_edges.begin(), m_edges.end(),
 		[playerReference](const Edge & edge)
 	{
-		std::optional<token::Road*> roadRef = edge.getRoad();
-		if (roadRef)
-			return roadRef.value()->getReference() == playerReference;
-
-		return false;
+		return edge.hasRoadOfPlayer(playerReference);
 
 	}) != m_edges.end();
+}
+
+bool Vertex::hasBuildingOfPlayer(int playerReference) const
+{
+	return m_building.has_value() && m_building.value()->getReference() == playerReference;
 }
 
 std::vector<EdgeCRef> Vertex::getOtherEdges(const Edge & givenEdge) const

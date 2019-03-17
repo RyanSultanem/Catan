@@ -183,9 +183,19 @@ std::vector<card::DevelopmentCRef> Player::getUsedDevelopments() const
 	return usedDevelopments;
 }
 
-void Player::setExchangeCost(card::RessourceType ressourceType, int cost)
+void Player::setAllExchangeCosts(int newCost)
 {
-	m_exchangeCosts[ressourceType] = cost;
+	std::for_each(m_exchangeCosts.begin(), m_exchangeCosts.end(),
+		[this, newCost](const std::pair<card::RessourceType, int>& exchangeCost)
+	{
+		setExchangeCost(exchangeCost.first, newCost);
+	});
+}
+
+void Player::setExchangeCost(card::RessourceType ressourceType, int newCost)
+{
+	if(m_exchangeCosts.at(ressourceType) > newCost)
+		m_exchangeCosts[ressourceType] = newCost;
 }
 
 int Player::getExchangeCost(card::RessourceType ressourceType) const

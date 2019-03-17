@@ -17,7 +17,7 @@ bool Achievement::update(player::Player & player, const AchievementChecker & che
 	bool updated = false;
 	int newCount = checker.getAchievementCount(player.getId());
 
-	if(newCount > m_count)
+	if(newCount >= m_minRequirement && newCount > m_count)
 	{
 		m_count = newCount;
 

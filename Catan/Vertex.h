@@ -27,6 +27,8 @@ public:
 
 	bool hasAdjencentBuilding() const;
 	bool hasAtLeastOneAdjecentRoad(int playerReference) const;
+	bool hasBuildingOfPlayer(int playerReference) const;
+
 	std::vector<EdgeCRef> getOtherEdges(const Edge & edge) const;
 
 	std::string serialize() const override;

@@ -1,222 +1,205 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    <Filter Include="actions">
+      <UniqueIdentifier>{577a269b-e8d4-455f-bb56-267d31952f20}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    <Filter Include="board">
+      <UniqueIdentifier>{891e4798-276c-4946-937c-cc1bad414ba3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="utility">
+      <UniqueIdentifier>{706d963b-1bdf-49c6-85bc-1c7367785ac5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\fwd">
-      <UniqueIdentifier>{52401765-6321-4816-b510-aa17e1bc708f}</UniqueIdentifier>
+    <Filter Include="token">
+      <UniqueIdentifier>{edce2f39-6ace-4e2e-84f2-5f9e64116d29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="player">
+      <UniqueIdentifier>{bfc7b8ca-b771-4ee8-a09f-109ea3800c8e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="card">
+      <UniqueIdentifier>{2a94c434-082e-4b9d-9993-604771d38d71}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Card.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="actions\Actions.fwd.hpp">
+      <Filter>actions</Filter>
     </ClInclude>
-    <ClInclude Include="Board.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="actions\Actions.hpp">
+      <Filter>actions</Filter>
     </ClInclude>
-    <ClInclude Include="Land.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="board\Board.fwd.hpp">
+      <Filter>board</Filter>
     </ClInclude>
-    <ClInclude Include="Cell.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="board\Vertex.fwd.hpp">
+      <Filter>board</Filter>
     </ClInclude>
-    <ClInclude Include="Board.fwd.h">
-      <Filter>Header Files\fwd</Filter>
+    <ClInclude Include="board\Edge.fwd.hpp">
+      <Filter>board</Filter>
     </ClInclude>
-    <ClInclude Include="Card.fwd.h">
-      <Filter>Header Files\fwd</Filter>
+    <ClInclude Include="board\Harbor.fwd.hpp">
+      <Filter>board</Filter>
     </ClInclude>
-    <ClInclude Include="Cell.fwd.h">
-      <Filter>Header Files\fwd</Filter>
+    <ClInclude Include="board\Land.fwd.hpp">
+      <Filter>board</Filter>
     </ClInclude>
-    <ClInclude Include="Land.fwd.h">
-      <Filter>Header Files\fwd</Filter>
+    <ClInclude Include="board\Board.hpp">
+      <Filter>board</Filter>
     </ClInclude>
-    <ClInclude Include="Vertex.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="board\Vertex.hpp">
+      <Filter>board</Filter>
     </ClInclude>
-    <ClInclude Include="Vertex.fwd.h">
-      <Filter>Header Files\fwd</Filter>
+    <ClInclude Include="board\Land.hpp">
+      <Filter>board</Filter>
     </ClInclude>
-    <ClInclude Include="Edge.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="board\Cell.hpp">
+      <Filter>board</Filter>
     </ClInclude>
-    <ClInclude Include="Edge.fwd.h">
-      <Filter>Header Files\fwd</Filter>
+    <ClInclude Include="board\Harbor.hpp">
+      <Filter>board</Filter>
     </ClInclude>
-    <ClInclude Include="Building.hpp">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="utility\Utility.hpp">
+      <Filter>utility</Filter>
     </ClInclude>
-    <ClInclude Include="Building.fwd.hpp">
-      <Filter>Header Files\fwd</Filter>
+    <ClInclude Include="utility\NumberGenerator.hpp">
+      <Filter>utility</Filter>
     </ClInclude>
-    <ClInclude Include="Road.fwd.hpp">
-      <Filter>Header Files\fwd</Filter>
+    <ClInclude Include="utility\NumberGenerator.fwd.hpp">
+      <Filter>utility</Filter>
     </ClInclude>
-    <ClInclude Include="Road.hpp">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="utility\Serializable.hpp">
+      <Filter>utility</Filter>
     </ClInclude>
-    <ClInclude Include="Token.hpp">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="board\Edge.hpp">
+      <Filter>board</Filter>
     </ClInclude>
-    <ClInclude Include="Game.hpp">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="board\Dice.hpp">
+      <Filter>board</Filter>
     </ClInclude>
-    <ClInclude Include="Player.hpp">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="board\Dice.fwd.hpp">
+      <Filter>board</Filter>
     </ClInclude>
-    <ClInclude Include="Interface.hpp">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="player\Player.fwd.hpp">
+      <Filter>player</Filter>
     </ClInclude>
-    <ClInclude Include="Serializable.hpp">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="player\PlayerInterface.hpp">
+      <Filter>player</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerInterface.hpp">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="player\PlayerReactions.hpp">
+      <Filter>player</Filter>
     </ClInclude>
-    <ClInclude Include="Player.fwd.hpp">
-      <Filter>Header Files\fwd</Filter>
+    <ClInclude Include="player\Player.hpp">
+      <Filter>player</Filter>
     </ClInclude>
-    <ClInclude Include="Dice.hpp">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="token\Token.hpp">
+      <Filter>token</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerReactions.hpp">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="token\Robber.hpp">
+      <Filter>token</Filter>
     </ClInclude>
-    <ClInclude Include="Actions.hpp">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="token\Road.hpp">
+      <Filter>token</Filter>
     </ClInclude>
-    <ClInclude Include="Actions.fwd.hpp">
-      <Filter>Header Files\fwd</Filter>
+    <ClInclude Include="token\Building.hpp">
+      <Filter>token</Filter>
     </ClInclude>
-    <ClInclude Include="GameInterface.hpp">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="token\Road.fwd.hpp">
+      <Filter>token</Filter>
     </ClInclude>
-    <ClInclude Include="State.hpp">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="token\Building.fwd.hpp">
+      <Filter>token</Filter>
     </ClInclude>
-    <ClInclude Include="Game.fwd.hpp">
-      <Filter>Header Files\fwd</Filter>
+    <ClInclude Include="card\Card.hpp">
+      <Filter>card</Filter>
     </ClInclude>
-    <ClInclude Include="Conditions.hpp">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="card\Development.hpp">
+      <Filter>card</Filter>
     </ClInclude>
-    <ClInclude Include="Conditions.fwd.hpp">
-      <Filter>Header Files\fwd</Filter>
+    <ClInclude Include="card\DevelopmentStock.hpp">
+      <Filter>card</Filter>
     </ClInclude>
-    <ClInclude Include="Harbor.hpp">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="board\Cell.fwd.hpp">
+      <Filter>board</Filter>
     </ClInclude>
-    <ClInclude Include="Harbor.fwd.hpp">
-      <Filter>Header Files\fwd</Filter>
+    <ClInclude Include="card\Card.fwd.hpp">
+      <Filter>card</Filter>
     </ClInclude>
-    <ClInclude Include="Robber.hpp">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="card\Development.fwd.hpp">
+      <Filter>card</Filter>
     </ClInclude>
-    <ClInclude Include="Utility.hpp">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="card\DevelopmentStock.fwd.hpp">
+      <Filter>card</Filter>
     </ClInclude>
-    <ClInclude Include="DevelopmentStock.hpp">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="token\Conditions.hpp">
+      <Filter>token</Filter>
     </ClInclude>
-    <ClInclude Include="Development.hpp">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="token\Conditions.fwd.hpp">
+      <Filter>token</Filter>
     </ClInclude>
-    <ClInclude Include="Development.fwd.hpp">
-      <Filter>Header Files\fwd</Filter>
-    </ClInclude>
-    <ClInclude Include="State.fwd.hpp">
-      <Filter>Header Files\fwd</Filter>
-    </ClInclude>
-    <ClInclude Include="NumberGenerator.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="NumberGenerator.fwd.hpp">
-      <Filter>Header Files\fwd</Filter>
-    </ClInclude>
-    <ClInclude Include="Dice.fwd.hpp">
-      <Filter>Header Files\fwd</Filter>
-    </ClInclude>
-    <ClInclude Include="Achievement.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Achievement.fwd.hpp">
-      <Filter>Header Files\fwd</Filter>
-    </ClInclude>
+    <ClInclude Include="Achievement.fwd.hpp" />
+    <ClInclude Include="Game.fwd.hpp" />
+    <ClInclude Include="State.fwd.hpp" />
+    <ClInclude Include="Achievement.hpp" />
+    <ClInclude Include="Game.hpp" />
+    <ClInclude Include="GameInterface.hpp" />
+    <ClInclude Include="State.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Card.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="actions\Actions.cpp">
+      <Filter>actions</Filter>
     </ClCompile>
-    <ClCompile Include="Board.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="board\Board.cpp">
+      <Filter>board</Filter>
     </ClCompile>
-    <ClCompile Include="Land.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="board\Cell.cpp">
+      <Filter>board</Filter>
     </ClCompile>
-    <ClCompile Include="Cell.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="board\Edge.cpp">
+      <Filter>board</Filter>
     </ClCompile>
-    <ClCompile Include="Edge.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="board\Vertex.cpp">
+      <Filter>board</Filter>
     </ClCompile>
-    <ClCompile Include="Vertex.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="board\Land.cpp">
+      <Filter>board</Filter>
     </ClCompile>
-    <ClCompile Include="Building.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="board\Harbor.cpp">
+      <Filter>board</Filter>
     </ClCompile>
-    <ClCompile Include="Road.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="utility\NumberGenerator.cpp">
+      <Filter>utility</Filter>
     </ClCompile>
-    <ClCompile Include="Game.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="board\Dice.cpp">
+      <Filter>board</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="player\PlayerReactions.cpp">
+      <Filter>player</Filter>
     </ClCompile>
-    <ClCompile Include="Dice.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="player\Player.cpp">
+      <Filter>player</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerReactions.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="token\Robber.cpp">
+      <Filter>token</Filter>
     </ClCompile>
-    <ClCompile Include="Actions.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="token\Road.cpp">
+      <Filter>token</Filter>
     </ClCompile>
-    <ClCompile Include="State.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="token\Building.cpp">
+      <Filter>token</Filter>
     </ClCompile>
-    <ClCompile Include="Conditions.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="card\Card.cpp">
+      <Filter>card</Filter>
     </ClCompile>
-    <ClCompile Include="Harbor.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="card\Development.cpp">
+      <Filter>card</Filter>
     </ClCompile>
-    <ClCompile Include="Robber.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="card\DevelopmentStock.cpp">
+      <Filter>card</Filter>
     </ClCompile>
-    <ClCompile Include="Development.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="token\Conditions.cpp">
+      <Filter>token</Filter>
     </ClCompile>
-    <ClCompile Include="DevelopmentStock.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="NumberGenerator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Achievement.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
+    <ClCompile Include="Achievement.cpp" />
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="State.cpp" />
   </ItemGroup>
 </Project>

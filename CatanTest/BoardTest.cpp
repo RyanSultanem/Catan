@@ -1,6 +1,8 @@
 #include "gtest/gtest.h"
-#include "Board.h"
-#include "Card.h"
+
+#include <board/Board.hpp>
+
+#include <card/Card.hpp>
 
 using namespace board;
 

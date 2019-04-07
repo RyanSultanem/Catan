@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
 
-#include "Player.hpp"
+#include <player/Player.hpp>
 
 TEST(PlayerTest, NoRessources)
 {

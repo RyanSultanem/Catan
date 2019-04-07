@@ -1,13 +1,15 @@
 #ifndef GAME_INTERFACE_HPP
 #define GAME_INTERFACE_HPP
 
-#include "Development.fwd.hpp"
-#include "Actions.fwd.hpp"
-#include "NumberGenerator.fwd.hpp"
+#include <actions/Actions.fwd.hpp>
 
-#include <vector>
-#include <unordered_map>
+#include <card/Development.fwd.hpp>
+
+#include <utility/NumberGenerator.fwd.hpp>
+
 #include <memory>
+#include <unordered_map>
+#include <vector>
 
 class GameInterface // TODO: should change to contain game
 {

@@ -1,9 +1,11 @@
-#include "Achievement.hpp"
+#include <Achievement.hpp>
 
-#include "Player.hpp"
-#include "Development.hpp"
-#include "Edge.h"
-#include "Vertex.h"
+#include <card/Development.hpp>
+
+#include <board/Edge.hpp>
+#include <board/Vertex.hpp>
+
+#include <player/Player.hpp>
 
 Achievement::Achievement(int minRequirement)
 	: m_minRequirement(minRequirement)

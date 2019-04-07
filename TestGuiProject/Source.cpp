@@ -1,13 +1,16 @@
-#include "../Catan/GameInterface.hpp"
+#include <GameInterface.hpp>
 
-#include "../Catan/Actions.hpp" // TODO: hack. should be removed. should only have access to ActionType
-#include "../Catan/Development.hpp"
-#include "../Catan/NumberGenerator.hpp"
-#include <vector>
+#include <actions/Actions.hpp> // TODO: hack. should be removed. should only have access to ActionType
+#include <card/Card.hpp>
+#include <card/Development.hpp>
+#include <utility/NumberGenerator.hpp>
+
+#include <ctime>
 #include <iostream>
 #include <string>
 #include <unordered_map>
-#include <ctime>
+#include <vector>
+
 class InputNumberGenerator : public NumberGenerator
 {
 public:
@@ -15,6 +18,7 @@ public:
 	{
 		srand(time(0));
 	}
+
 	int generateNumber(int min, int max) const override
 	{
 		int number = 0;

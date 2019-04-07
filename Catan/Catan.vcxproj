@@ -75,6 +75,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -83,6 +84,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -93,6 +95,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -107,6 +110,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -116,72 +120,72 @@
   <ItemGroup>
     <ClInclude Include="Achievement.fwd.hpp" />
     <ClInclude Include="Achievement.hpp" />
-    <ClInclude Include="Actions.fwd.hpp" />
-    <ClInclude Include="Actions.hpp" />
-    <ClInclude Include="Board.fwd.h" />
-    <ClInclude Include="Board.h" />
-    <ClInclude Include="Building.fwd.hpp" />
-    <ClInclude Include="Building.hpp" />
-    <ClInclude Include="Card.fwd.h" />
-    <ClInclude Include="Card.h" />
-    <ClInclude Include="Cell.fwd.h" />
-    <ClInclude Include="Cell.h" />
-    <ClInclude Include="Conditions.fwd.hpp" />
-    <ClInclude Include="Conditions.hpp" />
-    <ClInclude Include="Development.fwd.hpp" />
-    <ClInclude Include="Development.hpp" />
-    <ClInclude Include="DevelopmentStock.hpp" />
-    <ClInclude Include="Dice.fwd.hpp" />
-    <ClInclude Include="Dice.hpp" />
-    <ClInclude Include="Edge.fwd.h" />
-    <ClInclude Include="Edge.h" />
+    <ClInclude Include="actions\Actions.fwd.hpp" />
+    <ClInclude Include="actions\Actions.hpp" />
+    <ClInclude Include="board\Board.fwd.hpp" />
+    <ClInclude Include="board\Board.hpp" />
+    <ClInclude Include="board\Cell.fwd.hpp" />
+    <ClInclude Include="board\Cell.hpp" />
+    <ClInclude Include="board\Dice.fwd.hpp" />
+    <ClInclude Include="board\Dice.hpp" />
+    <ClInclude Include="board\Edge.fwd.hpp" />
+    <ClInclude Include="board\Edge.hpp" />
+    <ClInclude Include="board\Harbor.fwd.hpp" />
+    <ClInclude Include="board\Harbor.hpp" />
+    <ClInclude Include="board\Land.fwd.hpp" />
+    <ClInclude Include="board\Land.hpp" />
+    <ClInclude Include="board\Vertex.fwd.hpp" />
+    <ClInclude Include="board\Vertex.hpp" />
+    <ClInclude Include="card\Card.fwd.hpp" />
+    <ClInclude Include="card\Card.hpp" />
+    <ClInclude Include="card\Development.fwd.hpp" />
+    <ClInclude Include="card\Development.hpp" />
+    <ClInclude Include="card\DevelopmentStock.fwd.hpp" />
+    <ClInclude Include="card\DevelopmentStock.hpp" />
     <ClInclude Include="Game.fwd.hpp" />
     <ClInclude Include="Game.hpp" />
     <ClInclude Include="GameInterface.hpp" />
-    <ClInclude Include="Harbor.fwd.hpp" />
-    <ClInclude Include="Harbor.hpp" />
-    <ClInclude Include="Interface.hpp" />
-    <ClInclude Include="Land.fwd.h" />
-    <ClInclude Include="Land.h" />
-    <ClInclude Include="NumberGenerator.fwd.hpp" />
-    <ClInclude Include="NumberGenerator.hpp" />
-    <ClInclude Include="Player.fwd.hpp" />
-    <ClInclude Include="PlayerReactions.hpp" />
-    <ClInclude Include="PlayerInterface.hpp" />
-    <ClInclude Include="Player.hpp" />
-    <ClInclude Include="Road.fwd.hpp" />
-    <ClInclude Include="Road.hpp" />
-    <ClInclude Include="Robber.hpp" />
-    <ClInclude Include="Serializable.hpp" />
+    <ClInclude Include="player\Player.fwd.hpp" />
+    <ClInclude Include="player\Player.hpp" />
+    <ClInclude Include="player\PlayerInterface.hpp" />
+    <ClInclude Include="player\PlayerReactions.hpp" />
     <ClInclude Include="State.fwd.hpp" />
     <ClInclude Include="State.hpp" />
-    <ClInclude Include="Token.hpp" />
-    <ClInclude Include="Utility.hpp" />
-    <ClInclude Include="Vertex.fwd.h" />
-    <ClInclude Include="Vertex.h" />
+    <ClInclude Include="token\Building.fwd.hpp" />
+    <ClInclude Include="token\Building.hpp" />
+    <ClInclude Include="token\Conditions.fwd.hpp" />
+    <ClInclude Include="token\Conditions.hpp" />
+    <ClInclude Include="token\Road.fwd.hpp" />
+    <ClInclude Include="token\Road.hpp" />
+    <ClInclude Include="token\Robber.hpp" />
+    <ClInclude Include="token\Token.hpp" />
+    <ClInclude Include="utility\NumberGenerator.fwd.hpp" />
+    <ClInclude Include="utility\NumberGenerator.hpp" />
+    <ClInclude Include="utility\Serializable.hpp" />
+    <ClInclude Include="utility\Utility.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Achievement.cpp" />
-    <ClCompile Include="Actions.cpp" />
-    <ClCompile Include="Board.cpp" />
-    <ClCompile Include="Building.cpp" />
-    <ClCompile Include="Card.cpp" />
-    <ClCompile Include="Cell.cpp" />
-    <ClCompile Include="Conditions.cpp" />
-    <ClCompile Include="Development.cpp" />
-    <ClCompile Include="DevelopmentStock.cpp" />
-    <ClCompile Include="Dice.cpp" />
-    <ClCompile Include="Edge.cpp" />
+    <ClCompile Include="actions\Actions.cpp" />
+    <ClCompile Include="board\Board.cpp" />
+    <ClCompile Include="board\Cell.cpp" />
+    <ClCompile Include="board\Dice.cpp" />
+    <ClCompile Include="board\Edge.cpp" />
+    <ClCompile Include="board\Harbor.cpp" />
+    <ClCompile Include="board\Land.cpp" />
+    <ClCompile Include="board\Vertex.cpp" />
+    <ClCompile Include="card\Card.cpp" />
+    <ClCompile Include="card\Development.cpp" />
+    <ClCompile Include="card\DevelopmentStock.cpp" />
     <ClCompile Include="Game.cpp" />
-    <ClCompile Include="Harbor.cpp" />
-    <ClCompile Include="Land.cpp" />
-    <ClCompile Include="NumberGenerator.cpp" />
-    <ClCompile Include="Player.cpp" />
-    <ClCompile Include="PlayerReactions.cpp" />
-    <ClCompile Include="Road.cpp" />
-    <ClCompile Include="Robber.cpp" />
+    <ClCompile Include="player\Player.cpp" />
+    <ClCompile Include="player\PlayerReactions.cpp" />
     <ClCompile Include="State.cpp" />
-    <ClCompile Include="Vertex.cpp" />
+    <ClCompile Include="token\Building.cpp" />
+    <ClCompile Include="token\Conditions.cpp" />
+    <ClCompile Include="token\Road.cpp" />
+    <ClCompile Include="token\Robber.cpp" />
+    <ClCompile Include="utility\NumberGenerator.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

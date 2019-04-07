@@ -1,0 +1,6 @@
+#ifndef CARD_DEVELOPMENT_STOCK_FWD_HPP
+#define CARD_DEVELOPMENT_STOCK_FWD_HPP
+
+class DevelopmentStock;
+
+#endif // !CARD_DEVELOPMENT_STOCK_FWD_HPP

@@ -1,11 +1,15 @@
 #ifndef ACHIEVEMENT_HPP
 #define ACHIEVEMENT_HPP
 
-#include "Achievement.fwd.hpp"
-#include "Edge.fwd.h"
-#include "Player.fwd.hpp"
+#include <Achievement.fwd.hpp>
+
+#include <board/Edge.fwd.hpp>
+
+#include <card/Development.fwd.hpp>
+
+#include <player/Player.fwd.hpp>
+
 #include <optional>
-#include "Development.fwd.hpp"
 
 class Achievement
 {

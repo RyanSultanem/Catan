@@ -1,9 +1,12 @@
-#include "State.hpp"
+#include <State.hpp>
 
-#include "Actions.hpp"
-#include "Game.hpp"
+#include <Game.hpp>
+
+#include <actions/Actions.hpp>
 
 #include <memory>
+
+// TODO: dynamic_casts can be changed with ActionData from alll Actions with optionals (like Development), check if should be done.
 
 InitialSettlementState::InitialSettlementState()
 	: m_secondRun(false)
@@ -81,11 +84,11 @@ void PrePlayerDecision::nextState(Game & game, const Action & action)
 		const RollDice * rollDiceAction = dynamic_cast<const RollDice *>(&action);
 		if (rollDiceAction && rollDiceAction->shouldBurn()) //TODO: check if rollDiceAction shoudl really be checked for validity.
 		{
-			nextState = std::make_unique<CardBurnState>(game, game.getActivePlayerId(), rollDiceAction->getPlayerBurnQueue());
+			nextState = std::make_unique<CardBurnState>(game, game.getActivePlayerId(), rollDiceAction->getPlayerBurnQueue(), m_developmentUsed);
 		}
 		else if (rollDiceAction && rollDiceAction->shouldChangeRobber())
 		{
-			nextState = std::make_unique<MovingRobberState>();
+			nextState = std::make_unique<MovingRobberState>(m_developmentUsed);
 		}
 		else
 			nextState = std::make_unique<PlayerDecision>(m_developmentUsed);
@@ -159,8 +162,9 @@ bool PlayerDecision::validDevelopmentUse(const Action & action) const
 	return useDevelopmentAction.validPlayerDecisionUse(m_developmentUsed);
 }
 
-CardBurnState::CardBurnState(Game & game, int currentPlayer, const std::queue<int> & playersBurn)
+CardBurnState::CardBurnState(Game & game, int currentPlayer, const std::queue<int> & playersBurn, bool developmentUsed)
 	: m_currentPlayer(currentPlayer)
+	, m_currentPlayerDevUsed(developmentUsed)
 	, m_playersBurn(playersBurn)
 {
 	setBurnActivePlayer(game);
@@ -176,7 +180,7 @@ void CardBurnState::nextState(Game & game, const Action & action)
 	if (m_playersBurn.empty())
 	{
 		game.setNextActivePlayer(m_currentPlayer);
-		game.setState(std::make_unique<MovingRobberState>());
+		game.setState(std::make_unique<MovingRobberState>(m_currentPlayerDevUsed));
 		return;
 	}
 	else
@@ -196,6 +200,11 @@ void CardBurnState::setBurnActivePlayer(Game & game)
 	m_playersBurn.pop();
 }
 
+MovingRobberState::MovingRobberState(bool developmentUsed)
+	: m_developmentUsed(developmentUsed)
+{
+}
+
 bool MovingRobberState::isValid(const Action & action) const
 {
 	return action.getType() == ActionType::MoveRobber;
@@ -203,7 +212,7 @@ bool MovingRobberState::isValid(const Action & action) const
 
 void MovingRobberState::nextState(Game & game, const Action & /*action*/)
 {
-	game.setState(std::make_unique<PlayerDecision>());
+	game.setState(std::make_unique<PlayerDecision>(m_developmentUsed));
 }
 
 std::vector<ActionType> MovingRobberState::getPossibleActions()

@@ -1,8 +1,9 @@
 #include "gtest/gtest.h"
 
-#include "Edge.h"
-#include "Vertex.h"
-#include "Road.hpp"
+#include <board/Edge.hpp>
+#include <board/Vertex.hpp>
+
+#include <token/Road.hpp>
 
 using namespace board;
 

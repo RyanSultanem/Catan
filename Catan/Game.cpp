@@ -1,8 +1,10 @@
-#include "Game.hpp"
+#include <Game.hpp>
 
-#include "Actions.hpp"
-#include "State.hpp"
-#include "NumberGenerator.hpp"
+#include <State.hpp>
+
+#include <actions/Actions.hpp>
+
+#include <utility/NumberGenerator.hpp>
 
 #include <algorithm>
 

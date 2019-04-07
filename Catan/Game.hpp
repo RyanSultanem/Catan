@@ -3,16 +3,20 @@
 
 #include "Game.fwd.hpp"
 
-#include "Board.h"
-#include "Dice.hpp"
-#include "Player.hpp"
-#include "GameInterface.hpp"
-#include "Achievement.hpp"
+#include <Achievement.hpp>
+#include <GameInterface.hpp>
+#include <State.fwd.hpp>
 
-#include "Actions.fwd.hpp"
-#include "State.fwd.hpp"
-#include "DevelopmentStock.hpp"
-#include "NumberGenerator.fwd.hpp"
+#include <actions/Actions.fwd.hpp>
+
+#include <board/Board.hpp>
+#include <board/Dice.hpp>
+
+#include <card/DevelopmentStock.hpp>
+
+#include <player/Player.hpp>
+
+#include <utility/NumberGenerator.fwd.hpp>
 
 #include <vector>
 

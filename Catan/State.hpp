@@ -1,11 +1,12 @@
 #ifndef STATE_HPP
 #define STATE_HPP
 
-#include "Actions.fwd.hpp"
-#include "Game.fwd.hpp"
+#include <Game.fwd.hpp>
 
-#include <vector>
+#include <actions/Actions.fwd.hpp>
+
 #include <queue>
+#include <vector>
 
 // TODO: Rename to Phase?
 class State
@@ -67,7 +68,7 @@ private:
 class CardBurnState : public State
 {
 public:
-	explicit CardBurnState(Game & game, int currentPlayer, const std::queue<int> & playersBurn);
+	explicit CardBurnState(Game & game, int currentPlayer, const std::queue<int> & playersBurn, bool developmentUsed);
 
 	bool isValid(const Action & action) const override;
 	void nextState(Game & game, const Action & action) override;
@@ -76,6 +77,7 @@ public:
 
 private:
 	int m_currentPlayer;
+	bool m_currentPlayerDevUsed;
 	std::queue<int> m_playersBurn;
 
 	void setBurnActivePlayer(Game & game);
@@ -84,10 +86,15 @@ private:
 class MovingRobberState : public State
 {
 public:
+	explicit MovingRobberState(bool developmentUsed);
+
 	bool isValid(const Action & action) const override;
 	void nextState(Game & game, const Action & action) override;
 
 	std::vector<ActionType> getPossibleActions() override;
+
+private:
+	bool m_developmentUsed;
 };
 
 #endif // !STATE_HPP

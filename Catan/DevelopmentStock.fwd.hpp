@@ -1,6 +1,0 @@
-#ifndef DEVELOPMENT_STOCK_FWD_HPP
-#define DEVELOPMENT_STOCK_FWD_HPP
-
-class DevelopmentStock;
-
-#endif // !DEVELOPMENT_STOCK_FWD_HPP

@@ -158,7 +158,10 @@
     <ClInclude Include="token\Road.fwd.hpp" />
     <ClInclude Include="token\Road.hpp" />
     <ClInclude Include="token\Robber.hpp" />
+    <ClInclude Include="token\Token.fwd.hpp" />
     <ClInclude Include="token\Token.hpp" />
+    <ClInclude Include="token\TokenVisitor.hpp" />
+    <ClInclude Include="token\TokenVistorPlaced.hpp" />
     <ClInclude Include="utility\NumberGenerator.fwd.hpp" />
     <ClInclude Include="utility\NumberGenerator.hpp" />
     <ClInclude Include="utility\Serializable.hpp" />
@@ -185,6 +188,7 @@
     <ClCompile Include="token\Conditions.cpp" />
     <ClCompile Include="token\Road.cpp" />
     <ClCompile Include="token\Robber.cpp" />
+    <ClCompile Include="token\TokenVistorPlaced.cpp" />
     <ClCompile Include="utility\NumberGenerator.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

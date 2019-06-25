@@ -31,6 +31,7 @@
     <ClCompile Include="CanaryTest.cpp" />
     <ClCompile Include="EdgeTest.cpp" />
     <ClCompile Include="GameTest.cpp" />
+    <ClCompile Include="PlayerReactionsTest.cpp" />
     <ClCompile Include="PlayerTest.cpp" />
     <ClCompile Include="Vertex.cpp" />
   </ItemGroup>

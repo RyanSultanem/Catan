@@ -142,6 +142,15 @@
     <ClInclude Include="Game.hpp" />
     <ClInclude Include="GameInterface.hpp" />
     <ClInclude Include="State.hpp" />
+    <ClInclude Include="token\TokenVisitor.hpp">
+      <Filter>token</Filter>
+    </ClInclude>
+    <ClInclude Include="token\TokenVistorPlaced.hpp">
+      <Filter>token</Filter>
+    </ClInclude>
+    <ClInclude Include="token\Token.fwd.hpp">
+      <Filter>token</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="actions\Actions.cpp">
@@ -201,5 +210,8 @@
     <ClCompile Include="Achievement.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="State.cpp" />
+    <ClCompile Include="token\TokenVistorPlaced.cpp">
+      <Filter>token</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

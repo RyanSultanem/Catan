@@ -49,7 +49,8 @@ ActionType PlaceSettlementAction::getType() const
 
 bool PlaceSettlementAction::preExecute() const
 {
-	return player::reactions::settlementRessourcesAvailable(m_player);
+	std::optional<token::building::SettlementRef> settlmentOpt = m_player.getSettlement();
+	return settlmentOpt ? player::reactions::tokenRessourcesAvailable(m_player, settlmentOpt.value()) : false;
 }
 
 namespace {
@@ -65,9 +66,9 @@ void updateHarborPlacement(player::Player & player, const board::Board & board, 
 
 void PlaceSettlementAction::postExecute(const board::Board & board) const
 {
-	if (player::reactions::settlementPay(m_player))
+	if (player::reactions::tokenPayRessources(m_player, m_player.getSettlement().value()))
 	{
-		player::reactions::settlmentPlaced(m_player);
+		player::reactions::tokenPlaced(m_player, m_player.getSettlement().value());
 		updateHarborPlacement(m_player, board, m_position);
 	}
 }
@@ -115,8 +116,8 @@ void PlaceInitialSettlementRoadAction::setSecondRun(bool secondRun)
 
 void PlaceInitialSettlementRoadAction::postExecute(const board::Board & board) const
 {
-	player::reactions::settlmentPlaced(m_player);
-	player::reactions::roadPlaced(m_player);
+	player::reactions::tokenPlaced(m_player, m_player.getSettlement().value());
+	player::reactions::tokenPlaced(m_player, m_player.getRoad().value());
 	
 	updateHarborPlacement(m_player, board, m_settlementPosition);
 
@@ -164,14 +165,15 @@ ActionType PlaceRoadAction::getType() const
 
 bool PlaceRoadAction::preExecute() const
 {
-	return player::reactions::roadRessourcesAvailable(m_player);
+	std::optional<token::RoadRef> roadOpt = m_player.getRoad();
+	return roadOpt ? player::reactions::tokenRessourcesAvailable(m_player, roadOpt.value()) : false;
 }
 
 void PlaceRoadAction::postExecute(board::Board & board) const
 {
-	if(player::reactions::roadPay(m_player))
+	if(player::reactions::tokenPayRessources(m_player, m_player.getRoad().value()))
 	{
-		player::reactions::roadPlaced(m_player);
+		player::reactions::tokenPlaced(m_player, m_player.getRoad().value());
 		m_longestRoad.update(m_player, LongestRoadChecker(*board.getEdgeAt(m_position)));
 	}
 }
@@ -208,13 +210,14 @@ ActionType PlaceCityAction::getType() const
 
 bool PlaceCityAction::preExecute() const
 {
-	return player::reactions::cityRessourcesAvailable(m_player);
+	std::optional<token::building::CityRef> cityOpt = m_player.getCity();
+	return cityOpt ? player::reactions::tokenRessourcesAvailable(m_player, cityOpt.value()) : false;
 }
 
 void PlaceCityAction::postExecute() const
 {
-	if(player::reactions::cityPay(m_player))
-		player::reactions::cityPlaced(m_player);
+	if(player::reactions::tokenPayRessources(m_player, m_player.getCity().value()))
+		player::reactions::tokenPlaced(m_player, m_player.getCity().value());
 }
 
 RollDice::RollDice(board::Dice & dice, std::vector<player::Player> & players, int activePlayer)
@@ -326,7 +329,7 @@ ExchangeCardsAction::ExchangeCardsAction(player::Player & player, int typeResult
 
 bool ExchangeCardsAction::execute(board::Board & /*board*/)
 {
-	return player::reactions::performExchangeCards(m_player, m_typeResult, m_typeToTrade);
+	return player::reactions::performExchangeCards(m_player, static_cast<card::RessourceType>(m_typeResult), static_cast<card::RessourceType>(m_typeToTrade));
 }
 
 ActionType ExchangeCardsAction::getType() const

@@ -3,6 +3,8 @@
 
 #include <card/Card.hpp>
 
+#include <token/TokenVisitor.hpp>
+
 #include <utility/Serializable.hpp>
 
 #include <map>
@@ -18,6 +20,8 @@ public:
 
    int getReference() const { return m_reference; }
 
+   virtual void accept(const TokenVisitor & visitor) const = 0;
+
    std::string serialize() const override { return std::to_string(getReference()); }
 
    bool operator==(const Token & other) const { return m_reference == other.m_reference; }
@@ -28,5 +32,6 @@ private:
    int m_reference;
 };
 
-}
+} // namespace token
+
 #endif // !TOKEN_TOKEN_HPP

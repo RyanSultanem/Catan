@@ -217,13 +217,13 @@ bool BuildTwoFreeRoadsAction::apply(player::Player & player, const DevelopmentDa
 
    if (firstRoadPositionPlaced)
    {
-      player::reactions::roadPlaced(player);
+      player::reactions::tokenPlaced(player, player.getRoad().value());
       std::optional<token::RoadRef> optRoad2 = player.getRoad();
       if (optRoad2)
       {
          bool secondRoadPositionPlaced = m_board.placeRoad(position2, *optRoad2, condition);
          if (secondRoadPositionPlaced)
-            player::reactions::roadPlaced(player);
+            player::reactions::tokenPlaced(player, player.getRoad().value());
       }
    }
    else
@@ -231,13 +231,13 @@ bool BuildTwoFreeRoadsAction::apply(player::Player & player, const DevelopmentDa
       bool secondRoadPositionPlaced = m_board.placeRoad(position2, *optRoad1, condition);
       if (secondRoadPositionPlaced)
       {
-         player::reactions::roadPlaced(player);
+         player::reactions::tokenPlaced(player, player.getRoad().value());
          std::optional<token::RoadRef> optRoad2 = player.getRoad();
          if (optRoad2)
          {
             bool firstRoadPositionPlaced = m_board.placeRoad(position1, *optRoad2, condition);
             if (firstRoadPositionPlaced)
-               player::reactions::roadPlaced(player);
+               player::reactions::tokenPlaced(player, player.getRoad().value());
          }
       }
       else

@@ -33,22 +33,17 @@ Settlement::Settlement(int reference)
 
 const std::unordered_map<card::RessourceType, int>& Settlement::getCost() const
 {
-	return getSettlementCost();
-}
-
-const std::unordered_map<card::RessourceType, int>& Settlement::getSettlementCost()
-{
 	return SETTLEMENT_COST;
 }
 
 int Settlement::getPoints() const
 {
-	return getSettlementPoints();
+	return SETTLEMENT_POINTS;
 }
 
-int Settlement::getSettlementPoints()
+void Settlement::accept(const TokenVisitor & visitor) const
 {
-	return SETTLEMENT_POINTS;
+	visitor.visit(*this);
 }
 
 std::string Settlement::serialize() const
@@ -63,22 +58,17 @@ City::City(int reference)
 
 const std::unordered_map<card::RessourceType, int>& City::getCost() const
 {
-	return getCityCost();
-}
-
-const std::unordered_map<card::RessourceType, int>& City::getCityCost()
-{
 	return CITY_COST;
 }
 
 int City::getPoints() const
 {
-	return getCityPoints();
+	return CITY_POINTS;
 }
 
-int City::getCityPoints()
+void City::accept(const TokenVisitor & visitor) const
 {
-	return CITY_POINTS;
+	visitor.visit(*this);
 }
 
 std::string City::serialize() const

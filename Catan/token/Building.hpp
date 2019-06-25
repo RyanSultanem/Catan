@@ -25,12 +25,11 @@ public:
    explicit Settlement(int reference);
 
 	const std::unordered_map<card::RessourceType, int>& getCost() const override;
-	static const std::unordered_map<card::RessourceType, int>& getSettlementCost();
 
+	void accept(const TokenVisitor & visitor) const override;
 	std::string serialize() const override;
 	
 	int getPoints() const override;
-	static int getSettlementPoints();
 };
 
 class City : public Building
@@ -39,12 +38,11 @@ public:
    explicit City(int reference);
 
 	const std::unordered_map<card::RessourceType, int>& getCost() const override;
-	static const std::unordered_map<card::RessourceType, int>& getCityCost();
 
+	void accept(const TokenVisitor & visitor) const override;
 	std::string serialize() const override;
 	
 	int getPoints() const override;
-	static int getCityPoints();
 };
 
 } // namespace building

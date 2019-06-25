@@ -17,10 +17,10 @@ public:
    explicit Road(int reference);
 
 	const std::unordered_map<card::RessourceType, int>& getCost() const override;
-	static const std::unordered_map<card::RessourceType, int>& getRoadCost();
 
 	bool operator==(const Road& other) const;
 
+	void accept(const TokenVisitor & visitor) const override;
 	std::string serialize() const override;
 };
 

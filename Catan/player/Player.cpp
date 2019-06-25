@@ -89,6 +89,11 @@ int Player::getId() const
    return m_id;
 }
 
+int Player::getPoints() const
+{
+	return m_points;
+}
+
 void player::Player::receivePoints(int points)
 {
    m_points += points;

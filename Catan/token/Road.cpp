@@ -15,7 +15,7 @@ Road::Road(int reference)
 
 const std::unordered_map<card::RessourceType, int>& Road::getCost() const
 {
-	return getRoadCost();
+	return ROAD_COST;
 }
 
 bool Road::operator==(const Road & other) const
@@ -23,14 +23,14 @@ bool Road::operator==(const Road & other) const
    return Token::operator==(other);
 }
 
+void Road::accept(const TokenVisitor & visitor) const
+{
+	visitor.visit(*this);
+}
+
 std::string Road::serialize() const
 {
    return "R|" + Token::serialize();
-}
-
-const std::unordered_map<card::RessourceType, int>& Road::getRoadCost()
-{
-	return ROAD_COST;
 }
 
 } // namespace token

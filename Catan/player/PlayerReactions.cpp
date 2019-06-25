@@ -7,6 +7,7 @@
 #include <player/Player.hpp>
 
 #include <token/Building.hpp>
+#include <token/TokenVistorPlaced.hpp>
 
 //TODO: rename file and namespace
 
@@ -40,85 +41,105 @@ bool ressourcesAvailable(const Player & player, const std::unordered_map<card::R
 	return hasRessources;
 }
 
-bool settlementRessourcesAvailable(const Player & player)
+//bool settlementRessourcesAvailable(const Player & player)
+//{
+//	const auto & settlmentCost = token::building::Settlement::getSettlementCost();
+//	
+//	return ressourcesAvailable(player, settlmentCost);
+//}
+//
+//bool settlementPay(Player & player)
+//{
+//	if (!settlementRessourcesAvailable(player)) // TODO: check if really needed; Actions already makes sure order is correct, or force the order to be here only, and dont expose the "needed" function(like exchange cards example)
+//		return false;
+//	
+//	const auto & settlmentCost = token::building::Settlement::getSettlementCost();
+//
+//	playerPayRessources(player, settlmentCost);
+//	return true;
+//}
+//
+//void settlmentPlaced(Player & player)
+//{
+//   player.decreaseSettlmentCount();
+//   player.receivePoints(token::building::Settlement::getSettlementPoints());
+//}
+//
+//bool roadRessourcesAvailable(const Player & player)
+//{
+//	const auto & roadCost = token::Road::getRoadCost();
+//
+//	return ressourcesAvailable(player, roadCost);
+//}
+//
+//bool roadPay(Player & player)
+//{
+//	if (!roadRessourcesAvailable(player))
+//		return false;
+//
+//	const auto & roadCost = token::Road::getRoadCost();
+//
+//	playerPayRessources(player, roadCost);
+//	return true;
+//}
+//
+//void roadPlaced(Player & player)
+//{
+//	player.decreaseRoadCount();
+//	// TODO: CHECK for longest road here.
+//}
+//
+//bool cityRessourcesAvailable(const Player & player)
+//{
+//	const auto & cityCost = token::building::City::getCityCost();
+//
+//	return ressourcesAvailable(player, cityCost);
+//}
+//
+//bool cityPay(Player & player)
+//{
+//	if (!cityRessourcesAvailable(player))
+//		return false;
+//
+//	const auto & cityCost = token::building::City::getCityCost();
+//
+//	playerPayRessources(player, cityCost);
+//	return true;
+//}
+//
+//void cityPlaced(Player & player)
+//{
+//	player.decreaseCityCount();
+//	player.increaseSettlmentCount();
+//	player.receivePoints(token::building::City::getCityPoints() - token::building::Settlement::getSettlementPoints());
+//}
+//
+bool tokenRessourcesAvailable(const Player & player, const token::Token & token)
 {
-	const auto & settlmentCost = token::building::Settlement::getSettlementCost();
-	
-	return ressourcesAvailable(player, settlmentCost);
+	const auto & tokenCost = token.getCost();
+
+	return ressourcesAvailable(player, tokenCost);
 }
 
-bool settlementPay(Player & player)
+bool tokenPayRessources(Player & player, const token::Token & token)
 {
-	if (!settlementRessourcesAvailable(player)) // TODO: check if really needed; Actions already makes sure order is correct, or force the order to be here only, and dont expose the "needed" function(like exchange cards example)
+	if (!tokenRessourcesAvailable(player, token))
 		return false;
-	
-	const auto & settlmentCost = token::building::Settlement::getSettlementCost();
 
-	playerPayRessources(player, settlmentCost);
+	const auto & tokenCost = token.getCost();
+
+	playerPayRessources(player, tokenCost);
 	return true;
 }
 
-void settlmentPlaced(Player & player)
+void tokenPlaced(Player & player, const token::Token & token)
 {
-   player.decreaseSettlmentCount();
-   player.receivePoints(token::building::Settlement::getSettlementPoints());
+	token::TokenVisitorPlaced visitorPlaced(player);
+	token.accept(visitorPlaced);
 }
 
-bool roadRessourcesAvailable(const Player & player)
+bool performExchangeCards(Player & player, card::RessourceType ressourceResult, card::RessourceType ressourceToTrade)
 {
-	const auto & roadCost = token::Road::getRoadCost();
-
-	return ressourcesAvailable(player, roadCost);
-}
-
-bool roadPay(Player & player)
-{
-	if (!roadRessourcesAvailable(player))
-		return false;
-
-	const auto & roadCost = token::Road::getRoadCost();
-
-	playerPayRessources(player, roadCost);
-	return true;
-}
-
-void roadPlaced(Player & player)
-{
-	player.decreaseRoadCount();
-	// TODO: CHECK for longest road here.
-}
-
-bool cityRessourcesAvailable(const Player & player)
-{
-	const auto & cityCost = token::building::City::getCityCost();
-
-	return ressourcesAvailable(player, cityCost);
-}
-
-bool cityPay(Player & player)
-{
-	if (!cityRessourcesAvailable(player))
-		return false;
-
-	const auto & cityCost = token::building::City::getCityCost();
-
-	playerPayRessources(player, cityCost);
-	return true;
-}
-
-void cityPlaced(Player & player)
-{
-	player.decreaseCityCount();
-	player.increaseSettlmentCount();
-	player.receivePoints(token::building::City::getCityPoints() - token::building::Settlement::getSettlementPoints());
-}
-
-bool performExchangeCards(Player & player, int typeResult, int typeToTrade)
-{
-	// TODO: remove static_cast by replacing the int with the correct type higher in the stack.
-	card::RessourceType ressourceToTrade(static_cast<card::RessourceType>(typeToTrade));
-	card::RessourceType ressourceResult(static_cast<card::RessourceType>(typeResult));
-
    if (ressourceToTrade == ressourceResult)
       return false;
 

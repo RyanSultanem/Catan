@@ -27,6 +27,7 @@ public:
 	std::optional<token::RoadRef> getRoad();
 
 	int getId() const override;
+	int getPoints() const;
 	void receivePoints(int points);
 
 	void increaseSettlmentCount();

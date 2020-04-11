@@ -25,7 +25,7 @@ typename std::unordered_map<Item, int>::iterator getIndexIterator(std::unordered
 	return std::find_if(unorderedMap.begin(), unorderedMap.end(),
 		[&index](const std::pair<Item, int> & element)
 	{
-		if (index - element.second <= 0)
+		if (element.second != 0 && index - element.second <= 0)
 			return true;
 
 		index -= element.second;

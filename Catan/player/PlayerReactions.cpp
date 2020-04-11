@@ -161,12 +161,12 @@ void settlementPlacedOnHarbor(Player & player, const Harbor & harbor)
 		player.setAllExchangeCosts(harbor.getNewTradeCost());
 }
 
-void stealPlayerCard(Player & receiver, Player & giver, int index)
+void stealPlayerCard(Player & receiver, Player & giver, int randomIndex)
 {
 	if (receiver.getId() == giver.getId())
 		return; 
 
-	std::optional<card::RessourceType> randomRessource = giver.removeRandomRessource(index);
+	std::optional<card::RessourceType> randomRessource = giver.removeRessourceAtIndex(randomIndex);
 	if(randomRessource)
 		receiver.addRessource(*randomRessource, 1);
 }
@@ -183,15 +183,16 @@ void stealAllRessources(Player & receiver, Player & sender, card::RessourceType 
 
 bool burnCards(Player & player, const std::unordered_map<card::RessourceType, int> & ressourcesToBurn)
 {
-	bool success = true;
+	if (!ressourcesAvailable(player, ressourcesToBurn))
+		return false;
 
 	std::for_each(ressourcesToBurn.begin(), ressourcesToBurn.end(),
-		[&player, &success](auto & element)
+		[&player](auto & element)
 	{
-		success = success && player.removeRessource(element.first, element.second);
+		player.removeRessource(element.first, element.second);
 	});
 
-	return success;
+	return true;
 }
 
 bool developmentRessourceAvailable(const Player & player)

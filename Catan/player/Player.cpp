@@ -143,7 +143,7 @@ int Player::getNumberOfRessources() const
 	return utility::getCount(m_ressources);
 }
 
-std::optional<card::RessourceType> Player::removeRandomRessource(int index)
+std::optional<card::RessourceType> Player::removeRessourceAtIndex(int index)
 {
 	const auto ressourceIterator = utility::getIndexIterator(m_ressources, index);
 

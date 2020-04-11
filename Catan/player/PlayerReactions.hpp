@@ -23,7 +23,7 @@ void tokenPlaced(Player & player, const token::Token & token);
 bool performExchangeCards(Player & player, card::RessourceType typeResult, card::RessourceType typeToTrade);
 void settlementPlacedOnHarbor(Player & player, const Harbor & harbor);
 
-void stealPlayerCard(Player & receiver, Player & giver, int index);
+void stealPlayerCard(Player & receiver, Player & giver, int randomIndex);
 void stealAllRessources(Player & receiver, Player & sender, card::RessourceType ressource);
 
 bool burnCards(Player & player, const std::unordered_map<card::RessourceType, int> & ressourcesToBurn);

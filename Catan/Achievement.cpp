@@ -7,6 +7,8 @@
 
 #include <player/Player.hpp>
 
+#include <set>
+
 Achievement::Achievement(int minRequirement)
 	: m_minRequirement(minRequirement)
 	, m_player(std::nullopt)
@@ -46,34 +48,66 @@ LongestRoadChecker::LongestRoadChecker(const board::Edge & edge)
 {
 }
 
-int getSideLongest(const board::Edge & edge, const board::Vertex & vertex, int playerId)
+static bool visited(const std::set<int> & visistedEdgesIds, int edgeId)
 {
-	if (edge.getId() != playerId)
-		return 0;
+	return visistedEdgesIds.find(edgeId) != visistedEdgesIds.end();
+}
 
-	std::vector<board::EdgeCRef> otherEdges =  vertex.getOtherEdges(edge);
+struct PathLengthVisited
+{
+	PathLengthVisited(const std::set<int> & visitedEdges, int length)
+		: visitedEdgesCopy(visitedEdges)
+		, length(length)
+	{}
+
+	bool operator<(const PathLengthVisited & first) const
+	{
+		return this->length < first.length;
+	}
+
+	std::set<int> visitedEdgesCopy;
+	int length = 0;
+};
+
+static int getSideLongest(const board::Edge & edge, const board::Vertex & vertex, int playerId, std::set<int> & visitedEdgesIds)
+{
+	if (visited(visitedEdgesIds, edge.getId()) || !edge.hasRoadOfPlayer(playerId))
+		return 0;
+	visitedEdgesIds.insert(edge.getId());
+
+	std::vector<board::EdgeCRef> otherEdges = vertex.getOtherEdges(edge);
 	int edgeCount = otherEdges.size();
-	std::vector<int> longestsCount(edgeCount);
+	std::vector<PathLengthVisited> longestsCountVisited(edgeCount, PathLengthVisited(visitedEdgesIds, 0)); // Copies of Sets is important for cases with loops
 
 	for(int i = 0; i < edgeCount; ++i)
 	{
 		const board::Edge & otherEdge = otherEdges.at(i);
-		board::VertexCRef otherVertex = *otherEdge.getOtherVertex(vertex); // for now assumes that it cannot be wrong.
+		board::VertexCRef otherVertex = *otherEdge.getOtherVertex(vertex);
 		
-		longestsCount[i] = 1 + getSideLongest(otherEdge, otherVertex, playerId);
+		longestsCountVisited[i].length = 1 + getSideLongest(otherEdge, otherVertex, playerId, longestsCountVisited[i].visitedEdgesCopy);
 	}
 
-	return *std::max_element(longestsCount.begin(), longestsCount.end()); // Also assumes that it cannot be wrong
+	const PathLengthVisited & subLongest = *std::max_element(longestsCountVisited.begin(), longestsCountVisited.end());
+	visitedEdgesIds = subLongest.visitedEdgesCopy;
+
+	return subLongest.length;
 }
 
 int LongestRoadChecker::getAchievementCount(int playerId) const
 {
-	if (m_edge.getId() != playerId)
+	if (!m_edge.hasRoadOfPlayer(playerId))
 		return 0;
 
+	// TODO: To resolve loop issues, Add a part to find the edges that are at extremities
+	// Then compute for each of these edges
+	// Result is the max of those edges.
+	// If none is found, simply continue with the given edge, it means all the edges are in a loop, and it wont matter.
+
 	std::vector<board::VertexCRef> vertices = m_edge.getVertices();
-	int firstSideLongest = getSideLongest(m_edge, vertices.at(0), playerId);
-	int secondSideLonget = getSideLongest(m_edge, vertices.at(1), playerId);
+	std::set<int> visitedEdgesIds;
+	int firstSideLongest = getSideLongest(m_edge, vertices.at(0), playerId, visitedEdgesIds);
+	visitedEdgesIds.erase(m_edge.getId());
+	int secondSideLonget = getSideLongest(m_edge, vertices.at(1), playerId, visitedEdgesIds);
 
 	return firstSideLongest + secondSideLonget - 1; // TODO: This is wrong when we have loops
 }

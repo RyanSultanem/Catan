@@ -5,6 +5,8 @@
 #include <board/factory/BoardFactory.hpp>
 #include <player/Player.hpp>
 
+#include <token/Conditions.hpp>
+
 #include <utility/NumberGenerator.hpp>
 
 #include <gtest/gtest.h>
@@ -178,4 +180,303 @@ TEST(StrongestArmyTest, KnightCountUsedWithOtherDevelopmentInPlay)
 	int result = checker.getAchievementCount(player.getId());
 
 	EXPECT_EQ(result, knightCountUsed);
+}
+
+class PlaceRoadConditionMock : public PlaceRoadCondition
+{
+public:
+	explicit PlaceRoadConditionMock(int playerReference)
+		: PlaceRoadCondition(playerReference)
+	{
+	}
+	bool checkCondition(const board::Edge & edge) const override 
+	{
+		return true; 
+	};
+};
+
+TEST(LongestRoadTest, FirstEdgeTest)
+{
+	player::Player player(0);
+	board::Board board = board::BoardFactory().generateBoard();
+	PlaceRoadConditionMock trueConditionMocked(player.getId());
+
+	board.placeRoad(0, *player.getRoad(), trueConditionMocked);
+	board.placeRoad(1, *player.getRoad(), trueConditionMocked);
+	board.placeRoad(2, *player.getRoad(), trueConditionMocked);
+
+	std::optional<board::EdgeCRef> edgeOpt = board.getEdgeAt(0);
+
+	LongestRoadChecker checker(*edgeOpt);
+	int firstLength = checker.getAchievementCount(player.getId());
+	EXPECT_EQ(firstLength, 3);
+
+	board.placeRoad(3, *player.getRoad(), trueConditionMocked);
+	int secondLength = checker.getAchievementCount(player.getId());
+	EXPECT_EQ(secondLength, 4);
+}
+
+TEST(LongestRoadTest, LastEdgeTest)
+{
+	player::Player player(0);
+	board::Board board = board::BoardFactory().generateBoard();
+	PlaceRoadConditionMock trueConditionMocked(player.getId());
+
+	board.placeRoad(0, *player.getRoad(), trueConditionMocked);
+	board.placeRoad(1, *player.getRoad(), trueConditionMocked);
+	board.placeRoad(2, *player.getRoad(), trueConditionMocked);
+
+	std::optional<board::EdgeCRef> edgeOpt = board.getEdgeAt(2);
+
+	LongestRoadChecker checker(*edgeOpt);
+	int length = checker.getAchievementCount(player.getId());
+	EXPECT_EQ(length, 3);
+}
+
+TEST(LongestRoadTest, MiddleEdgeTest)
+{
+	player::Player player(0);
+	board::Board board = board::BoardFactory().generateBoard();
+	PlaceRoadConditionMock trueConditionMocked(player.getId());
+
+	board.placeRoad(0, *player.getRoad(), trueConditionMocked);
+	board.placeRoad(1, *player.getRoad(), trueConditionMocked);
+	board.placeRoad(2, *player.getRoad(), trueConditionMocked);
+
+	std::optional<board::EdgeCRef> edgeOpt = board.getEdgeAt(1);
+
+	LongestRoadChecker checker(*edgeOpt);
+	int length = checker.getAchievementCount(player.getId());
+	EXPECT_EQ(length, 3);
+}
+
+TEST(LongestRoadTest, LongestRoadWithShorterRamifications)
+{
+	player::Player player(0);
+	board::Board board = board::BoardFactory().generateBoard();
+	PlaceRoadConditionMock trueConditionMocked(player.getId());
+
+	board.placeRoad(12, *player.getRoad(), trueConditionMocked);
+	board.placeRoad(13, *player.getRoad(), trueConditionMocked);
+	board.placeRoad(14, *player.getRoad(), trueConditionMocked);
+	board.placeRoad(20, *player.getRoad(), trueConditionMocked);
+	board.placeRoad(28, *player.getRoad(), trueConditionMocked);
+	board.placeRoad(29, *player.getRoad(), trueConditionMocked);
+	board.placeRoad(27, *player.getRoad(), trueConditionMocked);
+
+	std::optional<board::EdgeCRef> edgeOpt = board.getEdgeAt(12);
+
+	LongestRoadChecker checker(*edgeOpt);
+	int length = checker.getAchievementCount(player.getId());
+	EXPECT_EQ(length, 5);
+}
+
+TEST(LongestRoadTest, LoopOnly)
+{
+	player::Player player(0);
+	board::Board board = board::BoardFactory().generateBoard();
+	PlaceRoadConditionMock trueConditionMocked(player.getId());
+
+	board.placeRoad(12, *player.getRoad(), trueConditionMocked);
+	board.placeRoad(13, *player.getRoad(), trueConditionMocked);
+	board.placeRoad(20, *player.getRoad(), trueConditionMocked);
+	board.placeRoad(27, *player.getRoad(), trueConditionMocked);
+	board.placeRoad(26, *player.getRoad(), trueConditionMocked);
+	board.placeRoad(19, *player.getRoad(), trueConditionMocked);
+
+	std::optional<board::EdgeCRef> edgeOpt = board.getEdgeAt(12);
+
+	LongestRoadChecker checker(*edgeOpt);
+	int length = checker.getAchievementCount(player.getId());
+	EXPECT_EQ(length, 6);
+}
+
+TEST(LongestRoadTest, LoopWithSingleRamification_FromRamification)
+{
+	player::Player player(0);
+	board::Board board = board::BoardFactory().generateBoard();
+	PlaceRoadConditionMock trueConditionMocked(player.getId());
+
+	//Loop
+	board.placeRoad(12, *player.getRoad(), trueConditionMocked);
+	board.placeRoad(13, *player.getRoad(), trueConditionMocked);
+	board.placeRoad(20, *player.getRoad(), trueConditionMocked);
+	board.placeRoad(27, *player.getRoad(), trueConditionMocked);
+	board.placeRoad(26, *player.getRoad(), trueConditionMocked);
+	board.placeRoad(19, *player.getRoad(), trueConditionMocked);
+
+	//Ramification Size 1
+	board.placeRoad(25, *player.getRoad(), trueConditionMocked);
+
+	std::optional<board::EdgeCRef> edgeOpt = board.getEdgeAt(25);
+
+	LongestRoadChecker checker(*edgeOpt);
+	int length = checker.getAchievementCount(player.getId());
+	EXPECT_EQ(length, 7); // Size of loop + Ramification Size
+}
+
+TEST(LongestRoadTest, LoopWithSingleRamification_FromLoop)
+{
+	player::Player player(0);
+	board::Board board = board::BoardFactory().generateBoard();
+	PlaceRoadConditionMock trueConditionMocked(player.getId());
+
+	//Loop
+	board.placeRoad(12, *player.getRoad(), trueConditionMocked);
+	board.placeRoad(13, *player.getRoad(), trueConditionMocked);
+	board.placeRoad(20, *player.getRoad(), trueConditionMocked);
+	board.placeRoad(27, *player.getRoad(), trueConditionMocked);
+	board.placeRoad(26, *player.getRoad(), trueConditionMocked);
+	board.placeRoad(19, *player.getRoad(), trueConditionMocked);
+
+	//Ramification Size 1
+	board.placeRoad(25, *player.getRoad(), trueConditionMocked);
+
+	std::optional<board::EdgeCRef> edgeOpt = board.getEdgeAt(12);
+
+	LongestRoadChecker checker(*edgeOpt);
+	int length = checker.getAchievementCount(player.getId());
+	EXPECT_EQ(length, 7); // Size of loop + Ramification Size
+}
+
+TEST(LongestRoadTest, LoopWithDifferentRamificationSize_FromLoop)
+{
+	player::Player player(0);
+	board::Board board = board::BoardFactory().generateBoard();
+	PlaceRoadConditionMock trueConditionMocked(player.getId());
+
+	//Loop
+	board.placeRoad(12, *player.getRoad(), trueConditionMocked);
+	board.placeRoad(13, *player.getRoad(), trueConditionMocked);
+	board.placeRoad(20, *player.getRoad(), trueConditionMocked);
+	board.placeRoad(27, *player.getRoad(), trueConditionMocked);
+	board.placeRoad(26, *player.getRoad(), trueConditionMocked);
+	board.placeRoad(19, *player.getRoad(), trueConditionMocked);
+
+	//Ramification Size 1
+	board.placeRoad(25, *player.getRoad(), trueConditionMocked);
+
+	//Ramification Size 2
+	board.placeRoad(28, *player.getRoad(), trueConditionMocked);
+	board.placeRoad(29, *player.getRoad(), trueConditionMocked);
+
+	std::optional<board::EdgeCRef> edgeOpt = board.getEdgeAt(12);
+
+	LongestRoadChecker checker(*edgeOpt);
+	int length = checker.getAchievementCount(player.getId());
+	EXPECT_EQ(length, 8); // Size of loop + Biggest Ramification
+}
+
+TEST(LongestRoadTest, LoopWithDifferentRamificationSize_FromBigRamification)
+{
+	player::Player player(0);
+	board::Board board = board::BoardFactory().generateBoard();
+	PlaceRoadConditionMock trueConditionMocked(player.getId());
+
+	//Loop
+	board.placeRoad(12, *player.getRoad(), trueConditionMocked);
+	board.placeRoad(13, *player.getRoad(), trueConditionMocked);
+	board.placeRoad(20, *player.getRoad(), trueConditionMocked);
+	board.placeRoad(27, *player.getRoad(), trueConditionMocked);
+	board.placeRoad(26, *player.getRoad(), trueConditionMocked);
+	board.placeRoad(19, *player.getRoad(), trueConditionMocked);
+
+	//Ramification Size 1
+	board.placeRoad(25, *player.getRoad(), trueConditionMocked);
+
+	//Ramification Size 2
+	board.placeRoad(28, *player.getRoad(), trueConditionMocked);
+	board.placeRoad(29, *player.getRoad(), trueConditionMocked);
+
+	std::optional<board::EdgeCRef> edgeOpt = board.getEdgeAt(29);
+
+	LongestRoadChecker checker(*edgeOpt);
+	int length = checker.getAchievementCount(player.getId());
+	EXPECT_EQ(length, 8); // Size of loop + Biggest Ramification
+}
+
+TEST(LongestRoadTest, LoopWithDifferentRamificationSize_FromSmallRamification)
+{
+	player::Player player(0);
+	board::Board board = board::BoardFactory().generateBoard();
+	PlaceRoadConditionMock trueConditionMocked(player.getId());
+
+	//Loop
+	board.placeRoad(12, *player.getRoad(), trueConditionMocked);
+	board.placeRoad(13, *player.getRoad(), trueConditionMocked);
+	board.placeRoad(20, *player.getRoad(), trueConditionMocked);
+	board.placeRoad(27, *player.getRoad(), trueConditionMocked);
+	board.placeRoad(26, *player.getRoad(), trueConditionMocked);
+	board.placeRoad(19, *player.getRoad(), trueConditionMocked);
+
+	//Ramification Size 1
+	board.placeRoad(25, *player.getRoad(), trueConditionMocked);
+
+	//Ramification Size 2
+	board.placeRoad(28, *player.getRoad(), trueConditionMocked);
+	board.placeRoad(29, *player.getRoad(), trueConditionMocked);
+
+	std::optional<board::EdgeCRef> edgeOpt = board.getEdgeAt(25);
+
+	LongestRoadChecker checker(*edgeOpt);
+	int length = checker.getAchievementCount(player.getId());
+	EXPECT_EQ(length, 8); // Size of loop + Biggest Ramification
+}
+
+TEST(LongestRoadTest, LoopWithTwoNeighborRamifications_FromRamification)
+{
+	player::Player player(0);
+	board::Board board = board::BoardFactory().generateBoard();
+	PlaceRoadConditionMock trueConditionMocked(player.getId());
+
+	//Loop
+	board.placeRoad(12, *player.getRoad(), trueConditionMocked);
+	board.placeRoad(13, *player.getRoad(), trueConditionMocked);
+	board.placeRoad(20, *player.getRoad(), trueConditionMocked);
+	board.placeRoad(27, *player.getRoad(), trueConditionMocked);
+	board.placeRoad(26, *player.getRoad(), trueConditionMocked);
+	board.placeRoad(19, *player.getRoad(), trueConditionMocked);
+
+	//Ramification Size 2
+	board.placeRoad(28, *player.getRoad(), trueConditionMocked);
+	board.placeRoad(29, *player.getRoad(), trueConditionMocked);
+
+	//Ramification Size 2
+	board.placeRoad(14, *player.getRoad(), trueConditionMocked);
+	board.placeRoad(15, *player.getRoad(), trueConditionMocked);
+
+	std::optional<board::EdgeCRef> edgeOpt = board.getEdgeAt(28);
+
+	LongestRoadChecker checker(*edgeOpt);
+	int length = checker.getAchievementCount(player.getId());
+	EXPECT_EQ(length, 9); // Size of loop + both ramifications - 1(from loop)
+}
+
+TEST(LongestRoadTest, LoopWithTwoNeighborRamifications_FromLoop)
+{
+	player::Player player(0);
+	board::Board board = board::BoardFactory().generateBoard();
+	PlaceRoadConditionMock trueConditionMocked(player.getId());
+
+	//Loop
+	board.placeRoad(12, *player.getRoad(), trueConditionMocked);
+	board.placeRoad(13, *player.getRoad(), trueConditionMocked);
+	board.placeRoad(20, *player.getRoad(), trueConditionMocked);
+	board.placeRoad(27, *player.getRoad(), trueConditionMocked);
+	board.placeRoad(26, *player.getRoad(), trueConditionMocked);
+	board.placeRoad(19, *player.getRoad(), trueConditionMocked);
+
+	//Ramification Size 2
+	board.placeRoad(28, *player.getRoad(), trueConditionMocked);
+	board.placeRoad(29, *player.getRoad(), trueConditionMocked);
+
+	//Ramification Size 2
+	board.placeRoad(14, *player.getRoad(), trueConditionMocked);
+	board.placeRoad(15, *player.getRoad(), trueConditionMocked);
+
+	std::optional<board::EdgeCRef> edgeOpt = board.getEdgeAt(12);
+
+	LongestRoadChecker checker(*edgeOpt);
+	int length = checker.getAchievementCount(player.getId());
+	EXPECT_EQ(length, 9); // Size of loop + both ramifications - 1(from loop)
 }

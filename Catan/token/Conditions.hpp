@@ -33,7 +33,7 @@ class PlaceRoadCondition : public PlaceTokenCondition<board::Edge>
 {
 public:
 	explicit PlaceRoadCondition(int playerReference);
-	virtual bool checkCondition(const board::Edge & edge) const;
+	bool checkCondition(const board::Edge & edge) const override;
 
 private:
 	int m_playerReference;
@@ -53,7 +53,7 @@ class PlaceCityCondition : public PlaceTokenCondition<board::Vertex>
 {
 public:
 	explicit PlaceCityCondition(int playerReference);
-	bool checkCondition(const board::Vertex & vertex) const;
+	bool checkCondition(const board::Vertex & vertex) const override;
 
 private:
 	int m_playerReference;

@@ -19,6 +19,9 @@
     <Filter Include="card">
       <UniqueIdentifier>{2a94c434-082e-4b9d-9993-604771d38d71}</UniqueIdentifier>
     </Filter>
+    <Filter Include="board\factory">
+      <UniqueIdentifier>{56257313-0a03-4378-9684-e1bec64c320e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="actions\Actions.fwd.hpp">
@@ -151,6 +154,9 @@
     <ClInclude Include="token\Token.fwd.hpp">
       <Filter>token</Filter>
     </ClInclude>
+    <ClInclude Include="board\factory\BoardFactory.hpp">
+      <Filter>board\factory</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="actions\Actions.cpp">
@@ -212,6 +218,9 @@
     <ClCompile Include="State.cpp" />
     <ClCompile Include="token\TokenVistorPlaced.cpp">
       <Filter>token</Filter>
+    </ClCompile>
+    <ClCompile Include="board\factory\BoardFactory.cpp">
+      <Filter>board\factory</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

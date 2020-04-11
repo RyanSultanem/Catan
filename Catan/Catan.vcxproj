@@ -130,6 +130,7 @@
     <ClInclude Include="board\Dice.hpp" />
     <ClInclude Include="board\Edge.fwd.hpp" />
     <ClInclude Include="board\Edge.hpp" />
+    <ClInclude Include="board\factory\BoardFactory.hpp" />
     <ClInclude Include="board\Harbor.fwd.hpp" />
     <ClInclude Include="board\Harbor.hpp" />
     <ClInclude Include="board\Land.fwd.hpp" />
@@ -174,6 +175,7 @@
     <ClCompile Include="board\Cell.cpp" />
     <ClCompile Include="board\Dice.cpp" />
     <ClCompile Include="board\Edge.cpp" />
+    <ClCompile Include="board\factory\BoardFactory.cpp" />
     <ClCompile Include="board\Harbor.cpp" />
     <ClCompile Include="board\Land.cpp" />
     <ClCompile Include="board\Vertex.cpp" />

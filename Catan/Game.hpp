@@ -68,7 +68,7 @@ private:
    
 	bool m_gameEnded; // TODO: should be removed or changed
 
-
+	void setupBoard();
 	void setupPlayers(int numberOfPlayers);
 	void initalizeDevelopmentStock();
 

@@ -4,6 +4,8 @@
 
 #include <actions/Actions.hpp>
 
+#include <board/factory/BoardFactory.hpp>
+
 #include <utility/NumberGenerator.hpp>
 
 #include <algorithm>
@@ -19,6 +21,7 @@ Game::Game(int numberOfPlayers, std::unique_ptr<NumberGenerator> && numberGenera
 	, m_activePlayer(0)
 	, m_gameEnded(false)
 {
+	setupBoard();
 	setupPlayers(numberOfPlayers);
 	initalizeDevelopmentStock();
 }
@@ -163,6 +166,12 @@ void Game::setNextActivePlayer(int playerId)
 void Game::setState(std::unique_ptr<State> && state)
 {
 	m_state = std::move(state);
+}
+
+void Game::setupBoard()
+{
+	board::BoardFactory factory;
+	m_board = factory.generateBoard();
 }
 
 void Game::setupPlayers(int numberOfPlayers)

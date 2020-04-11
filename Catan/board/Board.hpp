@@ -20,14 +20,13 @@
 
 namespace board {
 
-// TODO: Board to be constructed outside of the class
-// TODO: Randomize the board.
-// TODO: aray instead of vector for known length?
+// TODO: aray instead of vector for known length? Depends on if we want fixed sized of Boards To decide
 
 class Board : public serialize::Serializable
 {
 public:
 	Board();
+	Board(std::vector<cell::Cell> && cells, std::vector<Vertex> && vertices, std::vector<Edge> && edges, const token::Robber & robber);
 	int getNumberOfCells() const;
 	int getNumberOfLand(const card::RessourceType& ressource) const;
 	int getNumberOfVertices() const;
@@ -52,26 +51,11 @@ public:
 	std::string serialize() const override;
 
 private:
-	int m_cellId = 0;
 	std::vector<cell::Cell> m_cells;
-
-	int m_vertexId = 0;
 	std::vector<Vertex> m_vertices;
-
-	int m_edgeId = 0;
 	std::vector<Edge> m_edges;
 
-	token::Robber m_robber;
-
-	// Building the board
-	void createVertices();
-	void setHarbors();
-	void createEdges();
-	void connectVerticesWithTwoEdges(int start, int size, int direction);
-	void connectVerticesWithSingleEdge(int start, int size, int direction);
-	void initializeCells();
-	void initializeRobber();
-	std::vector<VertexRef> createVerticesVector(const std::vector<int>& indices);
+	token::Robber m_robber;	
 };
 
 } // namespace board

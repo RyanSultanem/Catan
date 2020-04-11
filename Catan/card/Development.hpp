@@ -42,7 +42,7 @@ private:
 	bool m_used;
 };
 
-class DevelopmentData
+class DevelopmentData // TODO: Change to use Variant
 {
 public:
 	DevelopmentData();

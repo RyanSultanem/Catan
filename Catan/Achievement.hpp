@@ -22,6 +22,9 @@ private:
 
 	std::optional<player::PlayerRef> m_player; // TODO: Change to PointReceiver
 	int m_count;
+
+private:
+	void updatePlayerInformation(player::Player & player);
 };
 
 class AchievementChecker

@@ -29,7 +29,7 @@ public:
 	virtual ~Token() {};
 
 private:
-   int m_reference;
+   int m_reference; // TODO: should be playerId/playerReference or Owner?
 };
 
 } // namespace token

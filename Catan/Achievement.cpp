@@ -21,17 +21,24 @@ bool Achievement::update(player::Player & player, const AchievementChecker & che
 
 	if(newCount >= m_minRequirement && newCount > m_count)
 	{
+		updated = (player.getId() != (m_player ? m_player->get().getId() : -1));
 		m_count = newCount;
 
-		if(m_player)
-			m_player->get().receivePoints(-2);
-		player.receivePoints(2);
-		
-		m_player = player;
-		updated = true;
+		if (updated)
+		{
+			updatePlayerInformation(player);
+		}
 	}
 
 	return updated;
+}
+
+void Achievement::updatePlayerInformation(player::Player & player)
+{
+	if (m_player)
+		m_player->get().receivePoints(-2);
+	player.receivePoints(2);
+	m_player = player;
 }
 
 LongestRoadChecker::LongestRoadChecker(const board::Edge & edge)

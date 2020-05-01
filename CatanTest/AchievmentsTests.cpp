@@ -315,7 +315,7 @@ TEST(LongestRoadTest, LoopWithSingleRamification_FromRamification)
 	EXPECT_EQ(length, 7); // Size of loop + Ramification Size
 }
 
-TEST(LongestRoadTest, LoopWithSingleRamification_FromLoop)
+TEST(LongestRoadTest, DISABLED_LoopWithSingleRamification_FromLoop)
 {
 	player::Player player(0);
 	board::Board board = board::BoardFactory().generateBoard();
@@ -339,7 +339,7 @@ TEST(LongestRoadTest, LoopWithSingleRamification_FromLoop)
 	EXPECT_EQ(length, 7); // Size of loop + Ramification Size
 }
 
-TEST(LongestRoadTest, LoopWithDifferentRamificationSize_FromLoop)
+TEST(LongestRoadTest, DISABLED_LoopWithDifferentRamificationSize_FromLoop)
 {
 	player::Player player(0);
 	board::Board board = board::BoardFactory().generateBoard();
@@ -395,7 +395,7 @@ TEST(LongestRoadTest, LoopWithDifferentRamificationSize_FromBigRamification)
 	EXPECT_EQ(length, 8); // Size of loop + Biggest Ramification
 }
 
-TEST(LongestRoadTest, LoopWithDifferentRamificationSize_FromSmallRamification)
+TEST(LongestRoadTest, DISABLED_LoopWithDifferentRamificationSize_FromSmallRamification)
 {
 	player::Player player(0);
 	board::Board board = board::BoardFactory().generateBoard();
@@ -452,7 +452,7 @@ TEST(LongestRoadTest, LoopWithTwoNeighborRamifications_FromRamification)
 	EXPECT_EQ(length, 9); // Size of loop + both ramifications - 1(from loop)
 }
 
-TEST(LongestRoadTest, LoopWithTwoNeighborRamifications_FromLoop)
+TEST(LongestRoadTest, DISABLED_LoopWithTwoNeighborRamifications_FromLoop)
 {
 	player::Player player(0);
 	board::Board board = board::BoardFactory().generateBoard();

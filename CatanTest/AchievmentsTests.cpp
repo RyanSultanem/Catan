@@ -5,7 +5,7 @@
 #include <board/factory/BoardFactory.hpp>
 #include <player/Player.hpp>
 
-#include <token/Conditions.hpp>
+#include <mock/PlaceConditionMock.hpp>
 
 #include <utility/NumberGenerator.hpp>
 
@@ -133,7 +133,8 @@ TEST(StrongestArmyTest, KnightCountAndUsedEqual)
 	// TODO: Required here for scope.. should be able to do better when development reduces dependency
 	board::Board board = board::BoardFactory().generateBoard();
 	std::vector<player::Player> players{ player };
-	card::KnightAction knightAction(players, board, RandomNumberGenerator());
+	Achievement strongestArmy(3);
+	card::KnightAction knightAction(players, board, strongestArmy, RandomNumberGenerator());
 	simulateUseDevelopment(player, knightAction, knightCount, knightCountUsed);
 
 	StrongestArmyChecker checker(player);
@@ -151,7 +152,8 @@ TEST(StrongestArmyTest, KnightCountGreaterThanUsed)
 	// TODO: Required here for scope.. should be able to do better
 	board::Board board = board::BoardFactory().generateBoard();
 	std::vector<player::Player> players{ player };
-	card::KnightAction knightAction(players, board, RandomNumberGenerator());
+	Achievement strongestArmy(3);
+	card::KnightAction knightAction(players, board, strongestArmy, RandomNumberGenerator());
 	simulateUseDevelopment(player, knightAction, knightCount, knightCountUsed);
 
 	StrongestArmyChecker checker(player);
@@ -169,7 +171,8 @@ TEST(StrongestArmyTest, KnightCountUsedWithOtherDevelopmentInPlay)
 	// TODO: Required here for scope.. should be able to do better
 	board::Board board = board::BoardFactory().generateBoard();
 	std::vector<player::Player> players{ player };
-	card::KnightAction knightAction(players, board, RandomNumberGenerator());
+	Achievement strongestArmy(3);
+	card::KnightAction knightAction(players, board, strongestArmy, RandomNumberGenerator());
 	simulateUseDevelopment(player, knightAction, knightCount, knightCountUsed);
 	card::MonopolyAction monopolyAction(players);
 	int monopolyCount = 2;
@@ -181,19 +184,6 @@ TEST(StrongestArmyTest, KnightCountUsedWithOtherDevelopmentInPlay)
 
 	EXPECT_EQ(result, knightCountUsed);
 }
-
-class PlaceRoadConditionMock : public PlaceRoadCondition
-{
-public:
-	explicit PlaceRoadConditionMock(int playerReference)
-		: PlaceRoadCondition(playerReference)
-	{
-	}
-	bool checkCondition(const board::Edge & edge) const override 
-	{
-		return true; 
-	};
-};
 
 TEST(LongestRoadTest, FirstEdgeTest)
 {

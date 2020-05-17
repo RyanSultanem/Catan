@@ -1,8 +1,10 @@
 #include <card/Development.hpp>
 
+#include <Achievement.hpp>
 #include <actions/Actions.hpp>
 
 #include <board/Board.hpp>
+#include <board/factory/BoardFactory.hpp>
 
 #include <player/Player.hpp>
 #include <player/PlayerReactions.hpp>
@@ -141,9 +143,10 @@ const std::unordered_map<card::RessourceType, int> & getDevelopmentCost()
 	return DEVELOPMENT_COST;
 }
 
-KnightAction::KnightAction(std::vector<player::Player> & players, board::Board & board, const NumberGenerator & numberGenerator)
+KnightAction::KnightAction(std::vector<player::Player> & players, board::Board & board, Achievement & strongestArmy, const NumberGenerator & numberGenerator)
 	: m_players(players)
 	, m_board(board)
+	, m_strongestArmy(strongestArmy)
 	, m_numberGenerator(numberGenerator)
 {
 }
@@ -162,7 +165,12 @@ bool KnightAction::apply(player::Player & player, const DevelopmentData & data) 
 {
    std::pair<int,int> cellVertexPositions = data.getCellVertexPosition().value();
    MoveRobberAction moveRobberAction(player, cellVertexPositions.first, cellVertexPositions.second, m_players, m_numberGenerator);
-   return moveRobberAction.execute(m_board);
+   bool result = moveRobberAction.execute(m_board);
+   
+   if (result)
+	   m_strongestArmy.update(player, StrongestArmyChecker(player));;
+
+   return result;
 }
 
 DevelopmentType FreeRessourcesAction::getType() const
@@ -184,8 +192,9 @@ bool FreeRessourcesAction::apply(player::Player & player, const DevelopmentData 
    return true;
 }
 
-BuildTwoFreeRoadsAction::BuildTwoFreeRoadsAction(board::Board & board)
+BuildTwoFreeRoadsAction::BuildTwoFreeRoadsAction(board::Board & board, Achievement & longestRoad)
    : m_board(board)
+   , m_longestRoad(longestRoad)
 {
 }
 
@@ -199,52 +208,40 @@ bool BuildTwoFreeRoadsAction::validData(const DevelopmentData & data) const
    return data.getRoadPositions().has_value();
 }
 
+static bool applyTwoRoads(board::Board & board, player::Player & player, const DevelopmentData & data, Achievement & longestRoad)
+{
+	int position1 = data.getRoadPositions().value().first;
+	int position2 = data.getRoadPositions().value().second;
+
+	PlaceFreeRoadAction buildRoad1(player, position1, longestRoad);
+	PlaceFreeRoadAction buildRoad2(player, position2, longestRoad);
+
+	bool result1 = buildRoad1.execute(board);
+	bool result2 = buildRoad2.execute(board);
+
+	if (result2 && !result1)
+		result1 = buildRoad1.execute(board);
+	else if (result1 && !result2)
+		result2 = buildRoad2.execute(board);
+
+	return result1 && result2;
+}
+
 bool BuildTwoFreeRoadsAction::apply(player::Player & player, const DevelopmentData & data) const
 {
-	// TODO: To rewrite/refactor URGENT, i think its correct though..
-	// TODO: Use PlaceRoadAction!!!
+   if (!applyOnCopiesCheck(player, data))
+	   return false;
 
-   int position1 = data.getRoadPositions().value().first;
-   int position2 = data.getRoadPositions().value().second;
+   return applyTwoRoads(m_board, player, data, m_longestRoad);
+}
 
-   std::optional<token::RoadRef> optRoad1 = player.getRoad();
+bool BuildTwoFreeRoadsAction::applyOnCopiesCheck(player::Player & player, const DevelopmentData & data) const
+{
+	player::Player copyPlayer(player);
+	board::Board copyBoard = board::BoardFactory().generateBoardCopy(m_board);
+	Achievement copyLongestRoad(m_longestRoad);
 
-   if (!optRoad1)
-      return false;
-
-   PlaceRoadCondition condition(player.getId());
-   bool firstRoadPositionPlaced = m_board.placeRoad(position1, *optRoad1, condition);
-
-   if (firstRoadPositionPlaced)
-   {
-      player::reactions::tokenPlaced(player, player.getRoad().value());
-      std::optional<token::RoadRef> optRoad2 = player.getRoad();
-      if (optRoad2)
-      {
-         bool secondRoadPositionPlaced = m_board.placeRoad(position2, *optRoad2, condition);
-         if (secondRoadPositionPlaced)
-            player::reactions::tokenPlaced(player, player.getRoad().value());
-      }
-   }
-   else
-   {
-      bool secondRoadPositionPlaced = m_board.placeRoad(position2, *optRoad1, condition);
-      if (secondRoadPositionPlaced)
-      {
-         player::reactions::tokenPlaced(player, player.getRoad().value());
-         std::optional<token::RoadRef> optRoad2 = player.getRoad();
-         if (optRoad2)
-         {
-            bool firstRoadPositionPlaced = m_board.placeRoad(position1, *optRoad2, condition);
-            if (firstRoadPositionPlaced)
-               player::reactions::tokenPlaced(player, player.getRoad().value());
-         }
-      }
-      else
-         return false; // TODO: check.
-   }
-
-   return true;
+	return applyTwoRoads(copyBoard, copyPlayer, data, copyLongestRoad);
 }
 
 MonopolyAction::MonopolyAction(std::vector<player::Player> & players)

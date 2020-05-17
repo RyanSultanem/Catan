@@ -95,8 +95,17 @@ private:
 	int m_position;
 	Achievement & m_longestRoad;
 
-	bool preExecute() const;
+	virtual bool preExecute(player::Player & player) const;
 	void postExecute(board::Board & board) const;
+};
+
+class PlaceFreeRoadAction : public PlaceRoadAction
+{
+public:
+	PlaceFreeRoadAction(player::Player & player, int position, Achievement & longestRoad);
+
+private:
+	bool preExecute(player::Player & player) const override;
 };
 
 class PlaceCityAction : public Action

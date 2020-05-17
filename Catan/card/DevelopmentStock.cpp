@@ -27,7 +27,7 @@ bool DevelopmentStock::empty() const
 	return utility::getCount(m_developmentCardCount) == 0;
 }
 
-void DevelopmentStock::initialize(std::vector<player::Player> & players, board::Board & board)
+void DevelopmentStock::initialize(std::vector<player::Player> & players, board::Board & board, Achievement & longestRoad, Achievement & strongestArmy)
 {
 	m_developmentCardCount.emplace(card::DevelopmentType::Knight,				15);
 	m_developmentCardCount.emplace(card::DevelopmentType::FreeRessources,		2);
@@ -35,9 +35,9 @@ void DevelopmentStock::initialize(std::vector<player::Player> & players, board::
 	m_developmentCardCount.emplace(card::DevelopmentType::Monopoly,				2);
 	m_developmentCardCount.emplace(card::DevelopmentType::VictoryPoint,			5);
 
-	m_developmentActions.emplace(card::DevelopmentType::Knight,				std::make_unique<card::KnightAction>(players, board, m_numberGenerator));
+	m_developmentActions.emplace(card::DevelopmentType::Knight,				std::make_unique<card::KnightAction>(players, board, strongestArmy, m_numberGenerator));
 	m_developmentActions.emplace(card::DevelopmentType::FreeRessources,		std::make_unique<card::FreeRessourcesAction>());
-	m_developmentActions.emplace(card::DevelopmentType::BuildTwoFreeRoads,	std::make_unique<card::BuildTwoFreeRoadsAction>(board));
+	m_developmentActions.emplace(card::DevelopmentType::BuildTwoFreeRoads,	std::make_unique<card::BuildTwoFreeRoadsAction>(board, longestRoad));
 	m_developmentActions.emplace(card::DevelopmentType::Monopoly,			std::make_unique<card::MonopolyAction>(players));
 	m_developmentActions.emplace(card::DevelopmentType::VictoryPoint,		std::make_unique<card::VictoryPointAction>());	
 }

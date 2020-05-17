@@ -27,6 +27,9 @@ class Board : public serialize::Serializable
 public:
 	Board();
 	Board(std::vector<cell::Cell> && cells, std::vector<Vertex> && vertices, std::vector<Edge> && edges, const token::Robber & robber);
+
+	Board copyBoard(std::vector<cell::Cell> && cells, std::vector<Vertex> && vertices, std::vector<Edge> && edges, token::Robber & robber) const;
+
 	int getNumberOfCells() const;
 	int getNumberOfLand(const card::RessourceType& ressource) const;
 	int getNumberOfVertices() const;

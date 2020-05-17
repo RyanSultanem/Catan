@@ -13,6 +13,7 @@ public:
 	BoardFactory();
 
 	Board generateBoard();
+	Board generateBoardCopy(const Board & other);
 
 private:
 	int m_cellId = 0;
@@ -25,7 +26,8 @@ private:
 	std::vector<Edge> m_edges;
 
 	token::Robber m_robber;
-
+	
+	void prepareBoardComponents();
 	void resetBoardComponents();
 
 	void createVertices();

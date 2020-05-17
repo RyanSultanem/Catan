@@ -183,7 +183,7 @@ void Game::setupPlayers(int numberOfPlayers)
 
 void Game::initalizeDevelopmentStock()
 {
-	m_developmentStock.initialize(m_players, m_board);
+	m_developmentStock.initialize(m_players, m_board, m_longestRoad, m_strongestArmy);
 }
 
 bool Game::processAction(Action & action)

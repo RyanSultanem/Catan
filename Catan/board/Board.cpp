@@ -24,6 +24,25 @@ Board::Board(std::vector<cell::Cell> && cells, std::vector<Vertex> && vertices, 
 {
 }
 
+Board Board::copyBoard(std::vector<cell::Cell>&& cells, std::vector<Vertex>&& vertices, std::vector<Edge>&& edges, token::Robber & robber) const
+{
+	for (int i = 0; i < vertices.size(); ++i)
+	{
+		if (m_vertices[i].getBuilding())
+			vertices[i].setBuilding(*m_vertices[i].getBuilding().value());
+	}
+
+	for (int i = 0; i < edges.size(); ++i)
+	{
+		if (m_edges[i].getRoad())
+			edges[i].setRoad(*m_edges[i].getRoad().value());
+	}
+
+	robber = m_robber; // TODO: wrong to do a simple copy. to check how to use moveRobber for correctness
+
+	return Board(std::move(cells), std::move(vertices), std::move(edges), robber);
+}
+
 int Board::getNumberOfCells() const
 {
 	return m_cells.size();

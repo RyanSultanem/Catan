@@ -141,7 +141,7 @@ PlaceRoadAction::PlaceRoadAction(player::Player & player, int position, Achievem
 
 bool PlaceRoadAction::execute(board::Board & board)
 {
-	bool isSuccess = preExecute();
+	bool isSuccess = preExecute(m_player);
 
 	std::optional<token::RoadRef> optRoad = m_player.getRoad();
 
@@ -163,10 +163,10 @@ ActionType PlaceRoadAction::getType() const
 	return ActionType::PlaceRoad;
 }
 
-bool PlaceRoadAction::preExecute() const
+bool PlaceRoadAction::preExecute(player::Player & player) const
 {
-	std::optional<token::RoadRef> roadOpt = m_player.getRoad();
-	return roadOpt ? player::reactions::tokenRessourcesAvailable(m_player, roadOpt.value()) : false;
+	std::optional<token::RoadRef> roadOpt = player.getRoad();
+	return roadOpt ? player::reactions::tokenRessourcesAvailable(player, roadOpt.value()) : false;
 }
 
 void PlaceRoadAction::postExecute(board::Board & board) const
@@ -459,14 +459,7 @@ bool UseDevelopmentAction::execute(board::Board & board)
 		return false;
 
 	card::Development & developmentCard = *optDevelopmentCard;
-    bool success = developmentCard.executeAction(m_player, m_developmentData);
-
-	if(m_developmentData.getDevelopmentType() == card::DevelopmentType::Knight)
-		m_strongestArmy.update(m_player, StrongestArmyChecker(m_player));
-		
-    // TODO: check for longest 
-
-	return success;
+    return developmentCard.executeAction(m_player, m_developmentData);
 }
 
 ActionType UseDevelopmentAction::getType() const
@@ -487,3 +480,12 @@ bool UseDevelopmentAction::validPlayerDecisionUse(bool developmentUsed) const
 	return !developmentUsed;
 }
 
+PlaceFreeRoadAction::PlaceFreeRoadAction(player::Player & player, int position, Achievement & longestRoad)
+	: PlaceRoadAction(player, position, longestRoad)
+{
+}
+
+bool PlaceFreeRoadAction::preExecute(player::Player & player) const
+{
+	return player.getRoad() != std::nullopt;
+}

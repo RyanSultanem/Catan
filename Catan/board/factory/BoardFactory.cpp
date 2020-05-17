@@ -11,13 +11,25 @@ board::BoardFactory::BoardFactory()
 Board board::BoardFactory::generateBoard()
 {
 	resetBoardComponents();
+	prepareBoardComponents();
 
+	return Board(std::move(m_cells), std::move(m_vertices), std::move(m_edges), m_robber);
+}
+
+Board BoardFactory::generateBoardCopy(const Board & other)
+{
+	resetBoardComponents();
+	prepareBoardComponents();
+
+	return other.copyBoard(std::move(m_cells), std::move(m_vertices), std::move(m_edges), m_robber);
+}
+
+void BoardFactory::prepareBoardComponents()
+{
 	createVertices();
 	createEdges();
 	initializeCells();
 	initializeRobber();
-
-	return Board(std::move(m_cells), std::move(m_vertices), std::move(m_edges), m_robber);
 }
 
 void BoardFactory::resetBoardComponents()

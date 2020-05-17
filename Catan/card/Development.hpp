@@ -1,6 +1,7 @@
 #ifndef CARD_DEVELOPMENT_HPP
 #define CARD_DEVELOPMENT_HPP
 
+#include <Achievement.fwd.hpp>
 #include <board/Board.fwd.hpp>
 
 #include <card/Card.hpp>
@@ -84,13 +85,14 @@ const std::unordered_map<card::RessourceType,int> & getDevelopmentCost();
 class KnightAction : public DevelopmentAction
 {
 public:
-	explicit KnightAction(std::vector<player::Player> & players, board::Board & board, const NumberGenerator & numberGenerator);
+	explicit KnightAction(std::vector<player::Player> & players, board::Board & board, Achievement & strongestArmy, const NumberGenerator & numberGenerator);
 
 	DevelopmentType getType() const override;
 
 private:
 	std::vector<player::Player> & m_players;
 	board::Board & m_board;
+	Achievement & m_strongestArmy;
 	const NumberGenerator & m_numberGenerator;
 
 	bool validData(const DevelopmentData & data) const override;
@@ -110,15 +112,18 @@ private:
 class BuildTwoFreeRoadsAction : public DevelopmentAction
 {
 public:
-	explicit BuildTwoFreeRoadsAction(board::Board & board);
+	explicit BuildTwoFreeRoadsAction(board::Board & board, Achievement & longestRoad);
 
 	DevelopmentType getType() const override;
 
 private:
 	board::Board & m_board;
+	Achievement & m_longestRoad;
 
 	bool validData(const DevelopmentData & data) const override;
 	bool apply(player::Player & player, const DevelopmentData & data) const override;
+
+	bool applyOnCopiesCheck(player::Player & player, const DevelopmentData & data) const;
 };
 
 class MonopolyAction : public DevelopmentAction

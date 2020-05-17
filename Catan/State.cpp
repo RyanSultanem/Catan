@@ -2,7 +2,9 @@
 
 #include <Game.hpp>
 
-#include <actions/Actions.hpp>
+#include <actions/DevelopmentAction.hpp>
+#include <actions/PlaceTokenAction.hpp>
+#include <actions/PlayerAction.hpp>
 
 #include <memory>
 

@@ -1,7 +1,9 @@
 #include <card/Development.hpp>
 
 #include <Achievement.hpp>
-#include <actions/Actions.hpp>
+
+#include <actions/PlaceTokenAction.hpp>
+#include <actions/PlayerAction.hpp>
 
 #include <board/Board.hpp>
 #include <board/factory/BoardFactory.hpp>

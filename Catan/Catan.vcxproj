@@ -122,6 +122,9 @@
     <ClInclude Include="Achievement.hpp" />
     <ClInclude Include="actions\Actions.fwd.hpp" />
     <ClInclude Include="actions\Actions.hpp" />
+    <ClInclude Include="actions\DevelopmentAction.hpp" />
+    <ClInclude Include="actions\PlaceTokenAction.hpp" />
+    <ClInclude Include="actions\PlayerAction.hpp" />
     <ClInclude Include="board\Board.fwd.hpp" />
     <ClInclude Include="board\Board.hpp" />
     <ClInclude Include="board\Cell.fwd.hpp" />
@@ -170,7 +173,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Achievement.cpp" />
-    <ClCompile Include="actions\Actions.cpp" />
+    <ClCompile Include="actions\DevelopmentAction.cpp" />
+    <ClCompile Include="actions\PlaceTokenAction.cpp" />
+    <ClCompile Include="actions\PlayerAction.cpp" />
     <ClCompile Include="board\Board.cpp" />
     <ClCompile Include="board\Cell.cpp" />
     <ClCompile Include="board\Dice.cpp" />

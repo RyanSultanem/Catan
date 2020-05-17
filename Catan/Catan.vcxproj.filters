@@ -157,11 +157,17 @@
     <ClInclude Include="board\factory\BoardFactory.hpp">
       <Filter>board\factory</Filter>
     </ClInclude>
+    <ClInclude Include="actions\PlaceTokenAction.hpp">
+      <Filter>actions</Filter>
+    </ClInclude>
+    <ClInclude Include="actions\DevelopmentAction.hpp">
+      <Filter>actions</Filter>
+    </ClInclude>
+    <ClInclude Include="actions\PlayerAction.hpp">
+      <Filter>actions</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="actions\Actions.cpp">
-      <Filter>actions</Filter>
-    </ClCompile>
     <ClCompile Include="board\Board.cpp">
       <Filter>board</Filter>
     </ClCompile>
@@ -221,6 +227,15 @@
     </ClCompile>
     <ClCompile Include="board\factory\BoardFactory.cpp">
       <Filter>board\factory</Filter>
+    </ClCompile>
+    <ClCompile Include="actions\PlaceTokenAction.cpp">
+      <Filter>actions</Filter>
+    </ClCompile>
+    <ClCompile Include="actions\DevelopmentAction.cpp">
+      <Filter>actions</Filter>
+    </ClCompile>
+    <ClCompile Include="actions\PlayerAction.cpp">
+      <Filter>actions</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

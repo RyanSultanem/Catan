@@ -2,7 +2,9 @@
 
 #include <State.hpp>
 
-#include <actions/Actions.hpp>
+#include <actions/DevelopmentAction.hpp>
+#include <actions/PlaceTokenAction.hpp>
+#include <actions/PlayerAction.hpp>
 
 #include <board/factory/BoardFactory.hpp>
 

@@ -48,5 +48,8 @@
     <ClCompile Include="Mock\PlaceConditionMock.hpp">
       <Filter>mocks</Filter>
     </ClCompile>
+    <ClCompile Include="BoardTokenPlacementTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

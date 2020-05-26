@@ -25,8 +25,11 @@ private:
 class PlaceInitialSettlementCondition : public PlaceSettlementCondition
 {
 public:
-	explicit PlaceInitialSettlementCondition(int playerReference);
+	explicit PlaceInitialSettlementCondition(int playerReference, int initialRoadPosition);
 	bool checkCondition(const board::Vertex & vertex) const override;
+
+private:
+	int m_initialRoadPosition;
 };
 
 class PlaceRoadCondition : public PlaceTokenCondition<board::Edge>

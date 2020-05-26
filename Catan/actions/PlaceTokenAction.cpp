@@ -82,7 +82,7 @@ bool PlaceInitialSettlementRoadAction::execute(board::Board & board)
 	{
 		// TODO: fix issue if place settlmenet is succcessful bit road isnt. preExecute with conditions?
 		// TODO: check road and settlement are adjencebt before placing
-		isSuccess = board.placeSettlement(m_settlementPosition, *optSettlement, PlaceInitialSettlementCondition(m_player.getId()));
+		isSuccess = board.placeSettlement(m_settlementPosition, *optSettlement, PlaceInitialSettlementCondition(m_player.getId(), m_roadPosition));
 		isSuccess = isSuccess && board.placeRoad(m_roadPosition, *optRoad, PlaceInitialRoadCondition(m_player.getId(), m_settlementPosition));
 
 		if (isSuccess)

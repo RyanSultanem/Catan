@@ -29,6 +29,7 @@
   <ItemGroup>
     <ClCompile Include="AchievmentsTests.cpp" />
     <ClCompile Include="BoardTest.cpp" />
+    <ClCompile Include="BoardTokenPlacementTest.cpp" />
     <ClCompile Include="CanaryTest.cpp" />
     <ClCompile Include="DevelopmentTests.cpp" />
     <ClCompile Include="EdgeTest.cpp" />

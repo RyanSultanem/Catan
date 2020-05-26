@@ -7,7 +7,7 @@
 
 using namespace board;
 
-struct BoardTest : public testing::Test
+struct BoardInitializationTest : public testing::Test
 {
 	static Board board;
 	static void SetUpTestCase()
@@ -17,22 +17,22 @@ struct BoardTest : public testing::Test
 	}
 }; 
 
-Board BoardTest::board;
+Board BoardInitializationTest::board;
 
-TEST_F(BoardTest, creationTest)
+TEST_F(BoardInitializationTest, creationTest)
 {
 	EXPECT_EQ(19, board.getNumberOfCells());
 	EXPECT_EQ(54, board.getNumberOfVertices());
 	EXPECT_EQ(72, board.getNumberOfEdges());
 }
 
-TEST_F(BoardTest, cellIdTest)
+TEST_F(BoardInitializationTest, cellIdTest)
 {
 	EXPECT_EQ(5, board.getCellId(5));
 	EXPECT_EQ(18, board.getCellId(18));
 }
 
-TEST_F(BoardTest, ressourceType)
+TEST_F(BoardInitializationTest, ressourceType)
 {
 	EXPECT_EQ(3, board.getNumberOfLand(card::RessourceType::BRICK));
 	EXPECT_EQ(4, board.getNumberOfLand(card::RessourceType::GRAIN));
@@ -42,7 +42,7 @@ TEST_F(BoardTest, ressourceType)
 	EXPECT_EQ(4, board.getNumberOfLand(card::RessourceType::WOOL));
 }
 
-TEST_F(BoardTest, edgeNeighBoorTest)
+TEST_F(BoardInitializationTest, edgeNeighBoorTest)
 {
 	EXPECT_EQ(true, board.isConnectedEdges({}));
 	EXPECT_EQ(true, board.isConnectedEdges({0, 1, 0}));

@@ -17,14 +17,15 @@ bool PlaceSettlementCondition::checkCondition(const board::Vertex & vertex) cons
 	return !vertex.getBuilding() && !vertex.hasAdjencentBuilding() && vertex.hasAtLeastOneAdjecentRoad(m_playerReference);
 }
 
-PlaceInitialSettlementCondition::PlaceInitialSettlementCondition(int playerReference)
+PlaceInitialSettlementCondition::PlaceInitialSettlementCondition(int playerReference, int initialRoadPosition)
 	: PlaceSettlementCondition(playerReference)
+	, m_initialRoadPosition(initialRoadPosition)
 {
 }
 
 bool PlaceInitialSettlementCondition::checkCondition(const board::Vertex & vertex) const
 {
-	return !vertex.getBuilding() && !vertex.hasAdjencentBuilding();
+	return !vertex.getBuilding() && !vertex.hasAdjencentBuilding() && vertex.hasEdge(m_initialRoadPosition);
 }
 
 PlaceRoadCondition::PlaceRoadCondition(int playerReference)

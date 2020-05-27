@@ -19,6 +19,7 @@ bool BuyDevelopmentAction::execute(board::Board & /*board*/)
 	{
 		if (player::reactions::developmentPay(m_player))
 		{
+			// TODO: should be moved under player::reactions (potential)
 			std::optional<card::Development> optDevelopment = m_developmentStock.drawCard();
 			if (optDevelopment)
 			{

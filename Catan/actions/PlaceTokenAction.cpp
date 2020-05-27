@@ -80,8 +80,6 @@ bool PlaceInitialSettlementRoadAction::execute(board::Board & board)
 
 	if (optSettlement && optRoad)
 	{
-		// TODO: fix issue if place settlmenet is succcessful bit road isnt. preExecute with conditions?
-		// TODO: check road and settlement are adjencebt before placing
 		isSuccess = board.placeSettlement(m_settlementPosition, *optSettlement, PlaceInitialSettlementCondition(m_player.getId(), m_roadPosition));
 		isSuccess = isSuccess && board.placeRoad(m_roadPosition, *optRoad, PlaceInitialRoadCondition(m_player.getId(), m_settlementPosition));
 
@@ -114,7 +112,7 @@ void PlaceInitialSettlementRoadAction::postExecute(const board::Board & board) c
 	if (m_secondRun)
 	{
 		const std::vector<card::RessourceType> ressources = board.getRessourcesFromVertexPosition(m_settlementPosition);
-		std::for_each(ressources.begin(), ressources.end(),
+		std::for_each(ressources.begin(), ressources.end(), // TODO: should be moved under player::reactions
 			[this](const card::RessourceType ressource)
 			{
 				m_player.addRessource(ressource, 1);

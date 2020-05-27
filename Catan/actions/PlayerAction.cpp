@@ -61,6 +61,7 @@ const std::queue<int>& RollDice::getPlayerBurnQueue() const
 void RollDice::giveRessources(const board::Board & board, int diceValue) const
 {
 	// TODO: ...ugly
+	// TODO: should be moved under player::reactions
 	const std::vector<cell::CellCRef> activeCells = board.getCellsWithNumber(diceValue);
 
 	std::for_each(activeCells.begin(), activeCells.end(),
@@ -174,14 +175,6 @@ bool CardBurnAction::execute(board::Board & /*board*/)
 {
 	if (!preExecute())
 		return false;
-
-	/*std::unordered_map<card::RessourceType, int> realRessources(m_ressourcesToBurn.size());
-
-	std::transform(m_ressourcesToBurn.begin(), m_ressourcesToBurn.end(), std::inserter(realRessources, realRessources.begin()),
-		[](const std::pair<int, int> & element)
-	{
-		return std::pair<card::RessourceType, int>(static_cast<card::RessourceType>(element.first), element.second);
-	});*/
 
 	return player::reactions::burnCards(m_player, m_ressourcesToBurn);
 }

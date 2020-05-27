@@ -49,11 +49,9 @@ public:
 
 	int getPlayerCount() const;
 
-	void setState(std::unique_ptr<State> && state);
-
 private:
 	std::unique_ptr<NumberGenerator> m_numberGenerator;
-	std::unique_ptr<State> m_state;
+	std::unique_ptr<State> m_state; // TODO: Possible enhancement, have State as a non polymoprhic type, with and internal polymoprhic data.
 	board::Board m_board;
 	board::Dice m_dice;
 	DevelopmentStock m_developmentStock;
@@ -71,6 +69,7 @@ private:
 	void initalizeDevelopmentStock();
 
 	bool processAction(Action & action);
+	void updateStateWithAction(Action & action);
 };
 
 #endif // GAME_HPP

@@ -154,11 +154,6 @@ int Game::getDiceValue() const
 	return m_dice.getValue();
 }
 
-void Game::setState(std::unique_ptr<State> && state)
-{
-	m_state = std::move(state);
-}
-
 void Game::setupBoard()
 {
 	board::BoardFactory factory;
@@ -177,17 +172,22 @@ void Game::initalizeDevelopmentStock()
 
 bool Game::processAction(Action & action)
 {
-	// TODO: This whole code could be in State to assure allignement in calls. Board in construcotr of action
-
 	if (!m_state->isValid(action))
 		return false;
 
 	bool actionSuccess = action.execute(m_board);
 
 	if (actionSuccess)
-		m_state->nextState(*this, m_players, action);
+		updateStateWithAction(action);
 	
 	return actionSuccess;
+}
+
+void Game::updateStateWithAction(Action & action)
+{
+	NextStateResult newStateResult = m_state->nextState(m_players, action);
+	if (newStateResult.getIsUpdated())
+		m_state = std::move(newStateResult.getNewState());
 }
 
 namespace builder {

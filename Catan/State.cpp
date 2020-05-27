@@ -4,11 +4,29 @@
 #include <actions/PlaceTokenAction.hpp>
 #include <actions/PlayerAction.hpp>
 
-#include <Game.hpp>
-
 #include <Players.hpp>
 
-#include <memory>
+NextStateResult::NextStateResult()
+	: m_updated(false)
+	, m_newState(nullptr)
+{
+}
+
+NextStateResult::NextStateResult(std::unique_ptr<State> && newState)
+	: m_updated(true)
+	, m_newState(std::move(newState))
+{
+}
+
+bool NextStateResult::getIsUpdated() const
+{
+	return m_updated;
+}
+
+std::unique_ptr<State> NextStateResult::getNewState()
+{
+	return std::move(m_newState);
+}
 
 // TODO: dynamic_casts can be changed with ActionData from alll Actions with optionals (like Development), check if should be done.
 
@@ -22,18 +40,17 @@ bool InitialSettlementState::isValid(const Action & action) const
 	return action.getType() == ActionType::PlaceInitialSettlementRoad;
 }
 
-void InitialSettlementState::nextState(Game & game, Players & players, const Action & action)
+NextStateResult InitialSettlementState::nextState(Players & players, const Action & action)
 {
 	if (!isValid(action)) // TODO: needed?
-		return;
+		return NextStateResult();
 
 	// TODO: check if can do something more understandable: currently works but not very clear
 	bool updated = updatePlayersSecondRun(players);
 	
 	if (m_secondRun && players.getActivePlayerId() == 0)
 	{
-		game.setState(std::make_unique<PrePlayerDecision>()); // TODO: Dangerous.. deletes itself can use bool returned to know if should change state instaed.
-		return;
+		return NextStateResult(std::make_unique<PrePlayerDecision>());
 	}
 
 	if (!updated)
@@ -41,6 +58,8 @@ void InitialSettlementState::nextState(Game & game, Players & players, const Act
 		int currentActivePlayer = players.getActivePlayerId();
 		players.setNextActivePlayer(m_secondRun ? --currentActivePlayer : ++currentActivePlayer);
 	}
+
+	return NextStateResult();
 }
 
 std::vector<ActionType> InitialSettlementState::getPossibleActions()
@@ -75,7 +94,7 @@ bool PrePlayerDecision::isValid(const Action & action) const
 		|| validDevelopmentUse(action); 
 }
 
-void PrePlayerDecision::nextState(Game & game, Players & players, const Action & action)
+NextStateResult PrePlayerDecision::nextState(Players & players, const Action & action)
 {
 	if (validDevelopmentUse(action))
 	{
@@ -97,9 +116,10 @@ void PrePlayerDecision::nextState(Game & game, Players & players, const Action &
 		else
 			nextState = std::make_unique<PlayerDecision>(m_developmentUsed);
 
-		game.setState(std::move(nextState));
-		return;
+		return NextStateResult(std::move(nextState));
 	}
+
+	return NextStateResult();
 }
 
 std::vector<ActionType> PrePlayerDecision::getPossibleActions()
@@ -133,7 +153,7 @@ bool PlayerDecision::isValid(const Action & action) const
 	  || action.getType() == ActionType::Done; 
 }
 
-void PlayerDecision::nextState(Game & game, Players & players, const Action & action)
+NextStateResult PlayerDecision::nextState(Players & players, const Action & action)
 {
 	if (action.getType() == ActionType::UseDevelopment)
 	{
@@ -142,9 +162,10 @@ void PlayerDecision::nextState(Game & game, Players & players, const Action & ac
 	else if (action.getType() == ActionType::Done)
 	{
 		players.setNextActivePlayer();
-		game.setState(std::make_unique<PrePlayerDecision>());
-		return;
+		return NextStateResult(std::make_unique<PrePlayerDecision>());
 	}
+
+	return NextStateResult();
 }
 
 std::vector<ActionType> PlayerDecision::getPossibleActions()
@@ -179,18 +200,19 @@ bool CardBurnState::isValid(const Action & action) const
 	return action.getType() == ActionType::CardBurn;
 }
 
-void CardBurnState::nextState(Game & game, Players & players, const Action & action)
+NextStateResult CardBurnState::nextState(Players & players, const Action & action)
 {
 	if (m_playersBurn.empty())
 	{
 		players.setNextActivePlayer(m_currentPlayer);
-		game.setState(std::make_unique<MovingRobberState>(m_currentPlayerDevUsed));
-		return;
+		return NextStateResult(std::make_unique<MovingRobberState>(m_currentPlayerDevUsed));
 	}
 	else
 	{
 		setBurnActivePlayer(players);
 	}
+
+	return NextStateResult(false);
 }
 
 std::vector<ActionType> CardBurnState::getPossibleActions()
@@ -214,9 +236,9 @@ bool MovingRobberState::isValid(const Action & action) const
 	return action.getType() == ActionType::MoveRobber;
 }
 
-void MovingRobberState::nextState(Game & game, Players & players, const Action & /*action*/)
+NextStateResult MovingRobberState::nextState(Players & players, const Action & /*action*/)
 {
-	game.setState(std::make_unique<PlayerDecision>(m_developmentUsed));
+	return NextStateResult(std::make_unique<PlayerDecision>(m_developmentUsed));
 }
 
 std::vector<ActionType> MovingRobberState::getPossibleActions()

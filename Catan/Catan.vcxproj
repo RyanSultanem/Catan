@@ -149,6 +149,7 @@
     <ClInclude Include="Game.fwd.hpp" />
     <ClInclude Include="Game.hpp" />
     <ClInclude Include="GameInterface.hpp" />
+    <ClInclude Include="Players.fwd.hpp" />
     <ClInclude Include="Players.hpp" />
     <ClInclude Include="player\Player.fwd.hpp" />
     <ClInclude Include="player\Player.hpp" />

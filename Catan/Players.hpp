@@ -1,7 +1,7 @@
 #ifndef PLAYERS_HPP
 #define PLAYERS_HPP
 
-#include <player/Player.fwd.hpp>
+#include <player/Player.hpp>
 
 #include <vector>
 

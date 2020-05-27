@@ -185,7 +185,7 @@ bool Game::processAction(Action & action)
 	bool actionSuccess = action.execute(m_board);
 
 	if (actionSuccess)
-		m_state->nextState(players, action);
+		m_state->nextState(*this, m_players, action);
 	
 	return actionSuccess;
 }

@@ -88,7 +88,7 @@ void PrePlayerDecision::nextState(Game & game, Players & players, const Action &
 		const RollDice * rollDiceAction = dynamic_cast<const RollDice *>(&action);
 		if (rollDiceAction && rollDiceAction->shouldBurn()) //TODO: check if rollDiceAction shoudl really be checked for validity.
 		{
-			nextState = std::make_unique<CardBurnState>(game, game.getActivePlayerId(), rollDiceAction->getPlayerBurnQueue(), m_developmentUsed);
+			nextState = std::make_unique<CardBurnState>(players, players.getActivePlayerId(), rollDiceAction->getPlayerBurnQueue(), m_developmentUsed);
 		}
 		else if (rollDiceAction && rollDiceAction->shouldChangeRobber())
 		{

@@ -95,16 +95,12 @@ void RollDice::checkCardBurn()
 	} while (playerIndex != m_activePlayer);
 }
 
-Done::Done(Game & game)
-	: m_game(game)
+Done::Done()
 {
 }
 
 bool Done::execute(board::Board & /*board*/)
 {
-	// TODO: chcek if this should be here: for now it is also in state change. so removed below
-	 //m_game.setNextActivePlayer();
-
 	return true;
 }
 

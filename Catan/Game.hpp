@@ -1,7 +1,7 @@
 #ifndef GAME_HPP
 #define GAME_HPP
 
-#include "Game.fwd.hpp"
+#include <Game.fwd.hpp>
 
 #include <Achievement.hpp>
 #include <GameInterface.hpp>
@@ -14,7 +14,7 @@
 
 #include <card/DevelopmentStock.hpp>
 
-#include <player/Player.hpp>
+#include <Players.hpp>
 
 #include <utility/NumberGenerator.fwd.hpp>
 
@@ -48,8 +48,6 @@ public:
 	int getDiceValue() const override;
 
 	int getPlayerCount() const;
-	void setNextActivePlayer();
-	void setNextActivePlayer(int playerId);
 
 	void setState(std::unique_ptr<State> && state);
 
@@ -62,12 +60,12 @@ private:
 
 	Achievement m_longestRoad;
 	Achievement m_strongestArmy;
-
-	std::vector<player::Player> m_players;
-	int m_activePlayer;
    
+	Players m_players;
+
 	bool m_gameEnded; // TODO: should be removed or changed
 
+private:
 	void setupBoard();
 	void setupPlayers(int numberOfPlayers);
 	void initalizeDevelopmentStock();

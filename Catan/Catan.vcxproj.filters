@@ -166,6 +166,7 @@
     <ClInclude Include="actions\PlayerAction.hpp">
       <Filter>actions</Filter>
     </ClInclude>
+    <ClInclude Include="Players.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="board\Board.cpp">
@@ -237,5 +238,6 @@
     <ClCompile Include="actions\PlayerAction.cpp">
       <Filter>actions</Filter>
     </ClCompile>
+    <ClCompile Include="Players.cpp" />
   </ItemGroup>
 </Project>

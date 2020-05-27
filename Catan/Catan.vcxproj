@@ -149,6 +149,7 @@
     <ClInclude Include="Game.fwd.hpp" />
     <ClInclude Include="Game.hpp" />
     <ClInclude Include="GameInterface.hpp" />
+    <ClInclude Include="Players.hpp" />
     <ClInclude Include="player\Player.fwd.hpp" />
     <ClInclude Include="player\Player.hpp" />
     <ClInclude Include="player\PlayerInterface.hpp" />
@@ -188,6 +189,7 @@
     <ClCompile Include="card\Development.cpp" />
     <ClCompile Include="card\DevelopmentStock.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Players.cpp" />
     <ClCompile Include="player\Player.cpp" />
     <ClCompile Include="player\PlayerReactions.cpp" />
     <ClCompile Include="State.cpp" />

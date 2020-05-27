@@ -7,8 +7,7 @@
 
 #include <card/Card.hpp>
 
-#include <Game.fwd.hpp>
-
+#include <Players.fwd.hpp>
 #include <player/Player.fwd.hpp>
 
 #include <utility/NumberGenerator.fwd.hpp>
@@ -43,13 +42,10 @@ private:
 class Done : public Action
 {
 public:
-	explicit Done(Game & game); // TODO: Create an ActivePlayer class to be handled here instead of Game. Also could contain changing player logic.
+	Done();
 
 	bool execute(board::Board & board) override;
 	ActionType getType() const override;
-
-private:
-	Game & m_game;
 };
 
 

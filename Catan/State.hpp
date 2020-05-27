@@ -5,6 +5,8 @@
 
 #include <actions/Actions.fwd.hpp>
 
+#include <Players.fwd.hpp>
+
 #include <queue>
 #include <vector>
 
@@ -13,7 +15,7 @@ class State
 {
 public:
 	virtual bool isValid(const Action & action) const = 0;
-	virtual void nextState(Game & game, const Action & action) = 0; // TODO: might need to rename.
+	virtual void nextState(Game & game, Players & players, const Action & action) = 0; // TODO: might need to rename.
 
 	virtual std::vector<ActionType> getPossibleActions() = 0;
 };
@@ -24,7 +26,7 @@ public:
 	InitialSettlementState();
 
 	bool isValid(const Action & action) const override;
-	void nextState(Game & game, const Action & action) override;
+	void nextState(Game & game, Players & players, const Action & action) override;
 
 	std::vector<ActionType> getPossibleActions() override;
 	void preProcessAction(PlaceInitialSettlementRoadAction & action);
@@ -32,14 +34,14 @@ public:
 private:
 	bool m_secondRun;
 
-	bool updateGameSecondRun(Game & game);
+	bool updatePlayersSecondRun(Players & players);
 };
 
 class PrePlayerDecision : public State
 {
 public:
 	bool isValid(const Action & action) const override;
-	void nextState(Game & game, const Action & action) override;
+	void nextState(Game & game, Players & players, const Action & action) override;
 
 	std::vector<ActionType> getPossibleActions() override;
 
@@ -55,7 +57,7 @@ public:
 	explicit PlayerDecision(bool developmentUsed);
 
 	bool isValid(const Action & action) const override;
-	void nextState(Game & game, const Action & action) override;
+	void nextState(Game & game, Players & players, const Action & action) override;
 
 	std::vector<ActionType> getPossibleActions() override;
 
@@ -68,10 +70,10 @@ private:
 class CardBurnState : public State
 {
 public:
-	explicit CardBurnState(Game & game, int currentPlayer, const std::queue<int> & playersBurn, bool developmentUsed);
+	explicit CardBurnState(Players & players, int currentPlayer, const std::queue<int> & playersBurn, bool developmentUsed);
 
 	bool isValid(const Action & action) const override;
-	void nextState(Game & game, const Action & action) override;
+	void nextState(Game & game, Players & players, const Action & action) override;
 
 	std::vector<ActionType> getPossibleActions() override;
 
@@ -80,7 +82,7 @@ private:
 	bool m_currentPlayerDevUsed;
 	std::queue<int> m_playersBurn;
 
-	void setBurnActivePlayer(Game & game);
+	void setBurnActivePlayer(Players & players);
 };
 
 class MovingRobberState : public State
@@ -89,7 +91,7 @@ public:
 	explicit MovingRobberState(bool developmentUsed);
 
 	bool isValid(const Action & action) const override;
-	void nextState(Game & game, const Action & action) override;
+	void nextState(Game & game, Players & players, const Action & action) override;
 
 	std::vector<ActionType> getPossibleActions() override;
 

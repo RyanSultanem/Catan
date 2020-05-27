@@ -1,10 +1,12 @@
 #include <State.hpp>
 
-#include <Game.hpp>
-
 #include <actions/DevelopmentAction.hpp>
 #include <actions/PlaceTokenAction.hpp>
 #include <actions/PlayerAction.hpp>
+
+#include <Game.hpp>
+
+#include <Players.hpp>
 
 #include <memory>
 
@@ -20,15 +22,15 @@ bool InitialSettlementState::isValid(const Action & action) const
 	return action.getType() == ActionType::PlaceInitialSettlementRoad;
 }
 
-void InitialSettlementState::nextState(Game & game, const Action & action)
+void InitialSettlementState::nextState(Game & game, Players & players, const Action & action)
 {
 	if (!isValid(action)) // TODO: needed?
 		return;
 
 	// TODO: check if can do something more understandable: currently works but not very clear
-	bool updated = updateGameSecondRun(game);
+	bool updated = updatePlayersSecondRun(players);
 	
-	if (m_secondRun && game.getActivePlayerId() == 0)
+	if (m_secondRun && players.getActivePlayerId() == 0)
 	{
 		game.setState(std::make_unique<PrePlayerDecision>()); // TODO: Dangerous.. deletes itself can use bool returned to know if should change state instaed.
 		return;
@@ -36,8 +38,8 @@ void InitialSettlementState::nextState(Game & game, const Action & action)
 
 	if (!updated)
 	{
-		int currentActivePlayer = game.getActivePlayerId();
-		game.setNextActivePlayer(m_secondRun ? --currentActivePlayer : ++currentActivePlayer);
+		int currentActivePlayer = players.getActivePlayerId();
+		players.setNextActivePlayer(m_secondRun ? --currentActivePlayer : ++currentActivePlayer);
 	}
 }
 
@@ -51,13 +53,13 @@ void InitialSettlementState::preProcessAction(PlaceInitialSettlementRoadAction &
 	action.setSecondRun(m_secondRun);
 }
 
-bool InitialSettlementState::updateGameSecondRun(Game & game)
+bool InitialSettlementState::updatePlayersSecondRun(Players & players)
 {
 	bool updated = false;
 
 	if (!m_secondRun)
 	{
-		if (game.getActivePlayerId() == game.getPlayerCount() - 1)
+		if (players.getActivePlayerId() == players.getNumberOfPlayers() - 1)
 		{
 			m_secondRun = true;
 			updated = true;
@@ -73,7 +75,7 @@ bool PrePlayerDecision::isValid(const Action & action) const
 		|| validDevelopmentUse(action); 
 }
 
-void PrePlayerDecision::nextState(Game & game, const Action & action)
+void PrePlayerDecision::nextState(Game & game, Players & players, const Action & action)
 {
 	if (validDevelopmentUse(action))
 	{
@@ -131,7 +133,7 @@ bool PlayerDecision::isValid(const Action & action) const
 	  || action.getType() == ActionType::Done; 
 }
 
-void PlayerDecision::nextState(Game & game, const Action & action)
+void PlayerDecision::nextState(Game & game, Players & players, const Action & action)
 {
 	if (action.getType() == ActionType::UseDevelopment)
 	{
@@ -139,7 +141,7 @@ void PlayerDecision::nextState(Game & game, const Action & action)
 	}
 	else if (action.getType() == ActionType::Done)
 	{
-		game.setNextActivePlayer();
+		players.setNextActivePlayer();
 		game.setState(std::make_unique<PrePlayerDecision>());
 		return;
 	}
@@ -164,12 +166,12 @@ bool PlayerDecision::validDevelopmentUse(const Action & action) const
 	return useDevelopmentAction.validPlayerDecisionUse(m_developmentUsed);
 }
 
-CardBurnState::CardBurnState(Game & game, int currentPlayer, const std::queue<int> & playersBurn, bool developmentUsed)
+CardBurnState::CardBurnState(Players & players, int currentPlayer, const std::queue<int> & playersBurn, bool developmentUsed)
 	: m_currentPlayer(currentPlayer)
 	, m_currentPlayerDevUsed(developmentUsed)
 	, m_playersBurn(playersBurn)
 {
-	setBurnActivePlayer(game);
+	setBurnActivePlayer(players);
 }
 
 bool CardBurnState::isValid(const Action & action) const
@@ -177,17 +179,17 @@ bool CardBurnState::isValid(const Action & action) const
 	return action.getType() == ActionType::CardBurn;
 }
 
-void CardBurnState::nextState(Game & game, const Action & action) 
+void CardBurnState::nextState(Game & game, Players & players, const Action & action)
 {
 	if (m_playersBurn.empty())
 	{
-		game.setNextActivePlayer(m_currentPlayer);
+		players.setNextActivePlayer(m_currentPlayer);
 		game.setState(std::make_unique<MovingRobberState>(m_currentPlayerDevUsed));
 		return;
 	}
 	else
 	{
-		setBurnActivePlayer(game);
+		setBurnActivePlayer(players);
 	}
 }
 
@@ -196,9 +198,9 @@ std::vector<ActionType> CardBurnState::getPossibleActions()
 	return { ActionType::CardBurn };
 }
 
-void CardBurnState::setBurnActivePlayer(Game & game)
+void CardBurnState::setBurnActivePlayer(Players & players)
 {
-	game.setNextActivePlayer(m_playersBurn.front());
+	players.setNextActivePlayer(m_playersBurn.front());
 	m_playersBurn.pop();
 }
 
@@ -212,7 +214,7 @@ bool MovingRobberState::isValid(const Action & action) const
 	return action.getType() == ActionType::MoveRobber;
 }
 
-void MovingRobberState::nextState(Game & game, const Action & /*action*/)
+void MovingRobberState::nextState(Game & game, Players & players, const Action & /*action*/)
 {
 	game.setState(std::make_unique<PlayerDecision>(m_developmentUsed));
 }

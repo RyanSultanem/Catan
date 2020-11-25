@@ -34,12 +34,12 @@ TEST_F(BoardInitializationTest, cellIdTest)
 
 TEST_F(BoardInitializationTest, ressourceType)
 {
-	EXPECT_EQ(3, board.getNumberOfLand(card::RessourceType::BRICK));
-	EXPECT_EQ(4, board.getNumberOfLand(card::RessourceType::GRAIN));
-	EXPECT_EQ(4, board.getNumberOfLand(card::RessourceType::LUMBER));
-	EXPECT_EQ(1, board.getNumberOfLand(card::RessourceType::NO_RESSOURCE));
-	EXPECT_EQ(3, board.getNumberOfLand(card::RessourceType::ORE));
-	EXPECT_EQ(4, board.getNumberOfLand(card::RessourceType::WOOL));
+	EXPECT_EQ(3, board.getNumberOfLand(card::Ressource::BRICK));
+	EXPECT_EQ(4, board.getNumberOfLand(card::Ressource::GRAIN));
+	EXPECT_EQ(4, board.getNumberOfLand(card::Ressource::LUMBER));
+	EXPECT_EQ(1, board.getNumberOfLand(card::Ressource::NO_RESSOURCE));
+	EXPECT_EQ(3, board.getNumberOfLand(card::Ressource::ORE));
+	EXPECT_EQ(4, board.getNumberOfLand(card::Ressource::WOOL));
 }
 
 TEST_F(BoardInitializationTest, edgeNeighBoorTest)

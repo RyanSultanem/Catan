@@ -15,16 +15,16 @@ class Achievement
 {
 public:
 	explicit Achievement(int minRequirement);
-	bool update(player::Player & player, const AchievementChecker & checker);
+	bool update(player::PointReceiver & newPointReceiver, const AchievementChecker & checker);
 
 private:
 	const int m_minRequirement;
 
-	std::optional<player::PlayerRef> m_player; // TODO: Change to PointReceiver
+	std::optional<player::PointReceiverRef> m_pointReceiver;
 	int m_count;
 
 private:
-	void updatePlayerInformation(player::Player & player);
+	void updatePlayerInformation(player::PointReceiver & newPointReceiver);
 };
 
 class AchievementChecker

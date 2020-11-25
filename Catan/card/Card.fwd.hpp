@@ -3,8 +3,7 @@
 
 namespace card {
 
-class Ressource;
-enum class RessourceType;
+enum class Ressource;
 
 } // namespace card
 

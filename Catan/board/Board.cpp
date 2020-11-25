@@ -7,6 +7,8 @@
 #include <token/Building.hpp>
 #include <token/Conditions.hpp>
 
+#include <utility/Utility.hpp>
+
 #include <algorithm>
 #include <numeric>
 
@@ -48,7 +50,7 @@ int Board::getNumberOfCells() const
 	return m_cells.size();
 }
 
-int Board::getNumberOfLand(const card::RessourceType& ressource) const
+int Board::getNumberOfLand(const card::Ressource& ressource) const
 {
 	return std::count_if(m_cells.begin(), m_cells.end(), [&](const cell::Cell& p) {
 		return p.getLand().getRessourceType() == ressource;
@@ -91,12 +93,23 @@ bool Board::isConnectedEdges(const std::vector<int> & edgeIds) const
 	return true;
 }
 
+bool Board::checkAdjacent(int cellPosition, int vertexPosition) const
+{
+	if(!utility::isValidPosition(m_cells, cellPosition) || !utility::isValidPosition(m_vertices, vertexPosition))
+		return false;
+
+	 const cell::Cell & cell = m_cells[cellPosition];
+	 const Vertex & vertex = m_vertices[vertexPosition];
+
+	 return cell.hasVertex(vertex.getId());
+}
+
 bool Board::placeSettlement(int position, token::building::Settlement & settlement, const PlaceSettlementCondition & condition)
 {
-   if (position < 0 || position >= m_vertices.size())
+   if (!utility::isValidPosition(m_vertices, position))
       return false;
 
-   Vertex & vertex = m_vertices.at(position);
+   Vertex & vertex = m_vertices[position];
    
    if(condition.checkCondition(vertex))
    {
@@ -109,10 +122,10 @@ bool Board::placeSettlement(int position, token::building::Settlement & settleme
 
 bool Board::placeRoad(int position, token::Road & road, const PlaceRoadCondition & condition)
 {
-	if (position < 0 || position >= m_edges.size())
+	if (!utility::isValidPosition(m_edges, position))
 		return false;
 
-	Edge & edge = m_edges.at(position);
+	Edge & edge = m_edges[position];
 
 	if(condition.checkCondition(edge))
 	{
@@ -125,10 +138,10 @@ bool Board::placeRoad(int position, token::Road & road, const PlaceRoadCondition
 
 bool Board::placeCity(int position, token::building::City & city, const PlaceCityCondition & condition)
 {
-	if (position < 0 || position >= m_vertices.size())
+	if (!utility::isValidPosition(m_vertices, position))
 		return false;
 
-	Vertex & vertex = m_vertices.at(position);
+	Vertex & vertex = m_vertices[position];
 
 	if(condition.checkCondition(vertex))
 	{
@@ -141,16 +154,16 @@ bool Board::placeCity(int position, token::building::City & city, const PlaceCit
 
 bool Board::moveRobber(int position)
 {
-	if (position < 0 || position >= m_cells.size())
+	if (!utility::isValidPosition(m_cells, position))
 		return false;
 
-	m_robber.applyTo(m_cells.at(position));
+	m_robber.applyTo(m_cells[position]);
 	return true;
 }
 
-std::vector<card::RessourceType> Board::getRessourcesFromVertexPosition(int position) const
+std::vector<card::Ressource> Board::getRessourcesFromVertexPosition(int position) const
 {
-	std::vector<card::RessourceType> ressources;
+	std::vector<card::Ressource> ressources;
 	ressources.reserve(3);
 
 	std::for_each(m_cells.begin(), m_cells.end(),
@@ -158,9 +171,9 @@ std::vector<card::RessourceType> Board::getRessourcesFromVertexPosition(int posi
 	{
 		if(cell.hasVertex(position))
 		{
-			card::RessourceType ressourceType = cell.produceLandRessource().getType();
+			card::Ressource ressourceType = cell.produceLandRessource();
 			
-			if(ressourceType != card::RessourceType::NO_RESSOURCE)
+			if(ressourceType != card::Ressource::NO_RESSOURCE)
 				return ressources.push_back(ressourceType);
 		}
 	});
@@ -170,10 +183,10 @@ std::vector<card::RessourceType> Board::getRessourcesFromVertexPosition(int posi
 
 std::optional<HarborCRef> Board::getHarbor(int position) const
 {
-	if (position < 0 || position >= m_vertices.size())
+	if (!utility::isValidPosition(m_vertices, position))
 		return std::nullopt;
 
-	return m_vertices.at(position).getHarbor();
+	return m_vertices[position].getHarbor();
 }
 
 std::string Board::serialize() const
@@ -207,20 +220,19 @@ std::vector<cell::CellCRef> Board::getCellsWithNumber(int value) const
 
 std::optional<EdgeCRef> Board::getEdgeAt(int position) const
 {
-	if(position < 0 || position >= m_edges.size())
+	if(!utility::isValidPosition(m_edges, position))
 		return std::nullopt;
 
-	return m_edges.at(position);
+	return m_edges[position];
 }
 
 std::optional<int> Board::getVertexPlayerRef(int position) const
 {
-	if (position < 0 || position >= m_vertices.size())
+	if (!utility::isValidPosition(m_vertices, position))
 		return std::nullopt;
 
-	const std::optional<token::building::Building*> & building = m_vertices.at(position).getBuilding();
+	const std::optional<token::building::Building*> & building = m_vertices[position].getBuilding();
 	
-	//return building ? building.value()->getReference() : std::nullopt; // TODO: ???
 	if (building)
 		return building.value()->getReference();
 	else

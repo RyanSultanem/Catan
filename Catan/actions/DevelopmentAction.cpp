@@ -11,7 +11,7 @@ BuyDevelopmentAction::BuyDevelopmentAction(player::Player & player, DevelopmentS
 {
 }
 
-bool BuyDevelopmentAction::execute(board::Board & /*board*/)
+bool BuyDevelopmentAction::execute()
 {
 	bool isSuccess = preExecute();
 
@@ -19,7 +19,6 @@ bool BuyDevelopmentAction::execute(board::Board & /*board*/)
 	{
 		if (player::reactions::developmentPay(m_player))
 		{
-			// TODO: should be moved under player::reactions (potential)
 			std::optional<card::Development> optDevelopment = m_developmentStock.drawCard();
 			if (optDevelopment)
 			{
@@ -49,7 +48,7 @@ UseDevelopmentAction::UseDevelopmentAction(player::Player & player, const card::
 {
 }
 
-bool UseDevelopmentAction::execute(board::Board & /*board*/)
+bool UseDevelopmentAction::execute()
 {
 	std::optional<card::DevelopmentRef> optDevelopmentCard = m_player.getUnusedDevelopment(m_developmentData.getDevelopmentType());
 	if (!optDevelopmentCard)

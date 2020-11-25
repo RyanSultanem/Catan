@@ -172,18 +172,18 @@ TEST(Monopoly, AllMonopolyRessourceSteal)
 
 	card::MonopolyAction action(players);
 
-	players[0].addRessource(card::RessourceType::BRICK, 3);
-	players[1].addRessource(card::RessourceType::BRICK, 5);
-	players[2].addRessource(card::RessourceType::BRICK, 7);
+	players[0].addRessource(card::Ressource::BRICK, 3);
+	players[1].addRessource(card::Ressource::BRICK, 5);
+	players[2].addRessource(card::Ressource::BRICK, 7);
 
 	card::DevelopmentData data;
-	data.setMonopolyRessource(card::RessourceType::BRICK);
+	data.setMonopolyRessource(card::Ressource::BRICK);
 
 	action.execute(players[0], data);
 
-	EXPECT_EQ(players[0].getRessourceCount(card::RessourceType::BRICK), 15);
-	EXPECT_EQ(players[1].getRessourceCount(card::RessourceType::BRICK), 0);
-	EXPECT_EQ(players[2].getRessourceCount(card::RessourceType::BRICK), 0);
+	EXPECT_EQ(players[0].getRessourceCount(card::Ressource::BRICK), 15);
+	EXPECT_EQ(players[1].getRessourceCount(card::Ressource::BRICK), 0);
+	EXPECT_EQ(players[2].getRessourceCount(card::Ressource::BRICK), 0);
 }
 
 TEST(Monopoly, DoesNot_Affect_NonMonopolyResssource)
@@ -194,19 +194,19 @@ TEST(Monopoly, DoesNot_Affect_NonMonopolyResssource)
 
 	card::MonopolyAction action(players);
 
-	players[0].addRessource(card::RessourceType::BRICK, 3);
-	players[1].addRessource(card::RessourceType::BRICK, 5);
+	players[0].addRessource(card::Ressource::BRICK, 3);
+	players[1].addRessource(card::Ressource::BRICK, 5);
 
-	players[0].addRessource(card::RessourceType::WOOL, 2);
-	players[1].addRessource(card::RessourceType::WOOL, 1);
+	players[0].addRessource(card::Ressource::WOOL, 2);
+	players[1].addRessource(card::Ressource::WOOL, 1);
 
 	card::DevelopmentData data;
-	data.setMonopolyRessource(card::RessourceType::BRICK);
+	data.setMonopolyRessource(card::Ressource::BRICK);
 
 	action.execute(players[0], data);
 
-	EXPECT_EQ(players[0].getRessourceCount(card::RessourceType::WOOL), 2);
-	EXPECT_EQ(players[1].getRessourceCount(card::RessourceType::WOOL), 1);
+	EXPECT_EQ(players[0].getRessourceCount(card::Ressource::WOOL), 2);
+	EXPECT_EQ(players[1].getRessourceCount(card::Ressource::WOOL), 1);
 }
 
 TEST(FreeRessources, AddingTwoDifferentRessources)
@@ -215,17 +215,17 @@ TEST(FreeRessources, AddingTwoDifferentRessources)
 
 	card::FreeRessourcesAction action;
 	card::DevelopmentData data;
-	data.setFreeRessources({ card::RessourceType::BRICK, card::RessourceType::LUMBER });
+	data.setFreeRessources({ card::Ressource::BRICK, card::Ressource::LUMBER });
 
-	int initialBrickCount = player.getRessourceCount(card::RessourceType::BRICK);
-	int initialLumberCount = player.getRessourceCount(card::RessourceType::LUMBER);
-	int initialWoolCount = player.getRessourceCount(card::RessourceType::WOOL);
+	int initialBrickCount = player.getRessourceCount(card::Ressource::BRICK);
+	int initialLumberCount = player.getRessourceCount(card::Ressource::LUMBER);
+	int initialWoolCount = player.getRessourceCount(card::Ressource::WOOL);
 
 	action.execute(player, data);
 
-	EXPECT_EQ(player.getRessourceCount(card::RessourceType::BRICK) - initialBrickCount, 1);
-	EXPECT_EQ(player.getRessourceCount(card::RessourceType::LUMBER) - initialLumberCount, 1);
-	EXPECT_EQ(player.getRessourceCount(card::RessourceType::WOOL) - initialWoolCount, 0);
+	EXPECT_EQ(player.getRessourceCount(card::Ressource::BRICK) - initialBrickCount, 1);
+	EXPECT_EQ(player.getRessourceCount(card::Ressource::LUMBER) - initialLumberCount, 1);
+	EXPECT_EQ(player.getRessourceCount(card::Ressource::WOOL) - initialWoolCount, 0);
 }
 
 TEST(FreeRessources, AddingSameRessourceTwice)
@@ -234,15 +234,15 @@ TEST(FreeRessources, AddingSameRessourceTwice)
 
 	card::FreeRessourcesAction action;
 	card::DevelopmentData data;
-	data.setFreeRessources({ card::RessourceType::BRICK, card::RessourceType::BRICK });
+	data.setFreeRessources({ card::Ressource::BRICK, card::Ressource::BRICK });
 
-	int initialBrickCount = player.getRessourceCount(card::RessourceType::BRICK);
-	int initialLumberCount = player.getRessourceCount(card::RessourceType::LUMBER);
-	int initialWoolCount = player.getRessourceCount(card::RessourceType::WOOL);
+	int initialBrickCount = player.getRessourceCount(card::Ressource::BRICK);
+	int initialLumberCount = player.getRessourceCount(card::Ressource::LUMBER);
+	int initialWoolCount = player.getRessourceCount(card::Ressource::WOOL);
 
 	action.execute(player, data);
 
-	EXPECT_EQ(player.getRessourceCount(card::RessourceType::BRICK) - initialBrickCount, 2);
-	EXPECT_EQ(player.getRessourceCount(card::RessourceType::LUMBER) - initialLumberCount, 0);
-	EXPECT_EQ(player.getRessourceCount(card::RessourceType::WOOL) - initialWoolCount, 0);
+	EXPECT_EQ(player.getRessourceCount(card::Ressource::BRICK) - initialBrickCount, 2);
+	EXPECT_EQ(player.getRessourceCount(card::Ressource::LUMBER) - initialLumberCount, 0);
+	EXPECT_EQ(player.getRessourceCount(card::Ressource::WOOL) - initialWoolCount, 0);
 }

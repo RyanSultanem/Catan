@@ -22,8 +22,8 @@ public:
 	void initialize(std::vector<player::Player> & players, board::Board & board, Achievement & longestRoad, Achievement & strongestArmy); // TODO: dependency on board shouldnt be on stock level, maybe players dependecy too.
 
 private:
-	std::unordered_map<card::DevelopmentType, int> m_developmentCardCount; // TODO: two maps could be combined as 1 with pair on second element
-	std::unordered_map<card::DevelopmentType, std::unique_ptr<card::DevelopmentAction>> m_developmentActions; // TODO: check if can get rid of unique_ptr (used for late initialization mainly..)
+	std::unordered_map<card::DevelopmentType, int> m_developmentCardCount; // TODO: two maps could be combined as 1 with pair on second element ? 
+	std::unordered_map<card::DevelopmentType, std::unique_ptr<card::DevelopmentAction>> m_developmentActions;
 
 	const NumberGenerator & m_numberGenerator;
 };

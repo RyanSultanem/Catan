@@ -5,6 +5,8 @@
 
 #include <card/Development.fwd.hpp>
 
+#include <GameEndingListenner.hpp>
+
 #include <token/Building.hpp>
 #include <token/Road.hpp>
 
@@ -15,7 +17,7 @@
 
 namespace player {
    
-class Player : public Owner, public serialize::Serializable
+class Player : public PointReceiver, public serialize::Serializable
 {
 public:
 	explicit Player(int id);
@@ -28,26 +30,28 @@ public:
 
 	int getId() const override;
 	int getPoints() const;
-	void receivePoints(int points);
+	void receivePoints(int points) override;
 
 	void increaseSettlmentCount();
 	void decreaseSettlmentCount();
 	void decreaseRoadCount();
 	void decreaseCityCount();
 
-	void addRessource(card::RessourceType ressourceType, unsigned int count);
-	bool removeRessource(card::RessourceType ressourceType, unsigned int count);
-	int getRessourceCount(card::RessourceType ressourceType) const;
+	void addRessource(card::Ressource ressourceType, unsigned int count);
+	bool removeRessource(card::Ressource ressourceType, unsigned int count);
+	int getRessourceCount(card::Ressource ressourceType) const;
 	int getNumberOfRessources() const;
-	std::optional<card::RessourceType> removeRessourceAtIndex(int index);
+	std::optional<card::Ressource> removeRessourceAtIndex(int index);
 
 	void receiveDevelopment(const card::Development & development);
 	std::optional<card::DevelopmentRef> getUnusedDevelopment(card::DevelopmentType developmentType);
 	std::vector<card::DevelopmentCRef> getUsedDevelopments() const;
    
 	void setAllExchangeCosts(int newCost);
-	void setExchangeCost(card::RessourceType ressourceType, int newCost);
-	int getExchangeCost(card::RessourceType ressourceType) const;
+	void setExchangeCost(card::Ressource ressourceType, int newCost);
+	int getExchangeCost(card::Ressource ressourceType) const;
+
+	void addGameEndListenner(GameEndingListenner * gameEndingListenner);
 
 	std::string serialize() const override;
 
@@ -64,9 +68,11 @@ private:
 	token::Road m_road;
 	int m_roadCount;
 
-	std::unordered_map<card::RessourceType, int> m_ressources;
-	std::unordered_map<card::RessourceType, int> m_exchangeCosts;
+	std::unordered_map<card::Ressource, int> m_ressources;
+	std::unordered_map<card::Ressource, int> m_exchangeCosts;
 	std::vector<card::Development> m_developmentCards;
+
+	GameEndingListenner * m_gameEndingListenner;
 };
 
 } // namespace player

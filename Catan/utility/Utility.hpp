@@ -33,6 +33,12 @@ typename std::unordered_map<Item, int>::iterator getIndexIterator(std::unordered
 	});
 }
 
+template<typename Container>
+static bool isValidPosition(const Container& container, int position)
+{
+	return position >= 0 && position < container.size();
+}
+
 } // namespace utiliy
 
 #endif // !UTILITY_UTILITY_HPP

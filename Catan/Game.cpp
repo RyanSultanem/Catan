@@ -21,7 +21,7 @@ Game::Game(int numberOfPlayers, std::unique_ptr<NumberGenerator> && numberGenera
 	, m_longestRoad(5)
 	, m_strongestArmy(3)
 	, m_players()
-	, m_gameEnded(false)
+	, m_winnerId(std::nullopt)
 {
 	setupBoard();
 	setupPlayers(numberOfPlayers);
@@ -43,7 +43,7 @@ bool Game::placeInitialSetlementRoad(int settlementPosition, int roadPosition)
 	if (!initialSettlementState)
 		return false;
 
-	PlaceInitialSettlementRoadAction intialSettlementRoadAction(m_players.getActivePlayer(), settlementPosition, roadPosition);
+	PlaceInitialSettlementRoadAction intialSettlementRoadAction(m_players.getActivePlayer(), m_board, settlementPosition, roadPosition);
 	initialSettlementState->preProcessAction(intialSettlementRoadAction); // TODO: check if can do better; "dyanmic_cast"..
 
 	return processAction(intialSettlementRoadAction);
@@ -51,21 +51,21 @@ bool Game::placeInitialSetlementRoad(int settlementPosition, int roadPosition)
 
 bool Game::placeSettlement(int position)
 {
-	PlaceSettlementAction action(m_players.getActivePlayer(), position);
+	PlaceSettlementAction action(m_players.getActivePlayer(), m_board, position);
 	
 	return processAction(action);
 }
 
 bool Game::placeRoad(int position)
 {
-	PlaceRoadAction action(m_players.getActivePlayer(), position, m_longestRoad);
+	PlaceRoadAction action(m_players.getActivePlayer(), m_board, position, m_longestRoad);
 
 	return processAction(action);
 }
 
 bool Game::placeCity(int position)
 {
-	PlaceCityAction action(m_players.getActivePlayer(), position);
+	PlaceCityAction action(m_players.getActivePlayer(), m_board, position);
 
 	return processAction(action);
 }
@@ -79,7 +79,7 @@ bool Game::exchangeCards(int resultType, int typeToTrade)
 
 bool Game::moveRobber(int cellPosition, int vertexPosition)
 {
-	MoveRobberAction moveRobberAction(m_players.getActivePlayer(), cellPosition, vertexPosition, m_players.getPlayers(), *m_numberGenerator);
+	MoveRobberAction moveRobberAction(m_players.getActivePlayer(), m_board, cellPosition, vertexPosition, m_players.getPlayers(), *m_numberGenerator);
 
 	return processAction(moveRobberAction);
 }
@@ -107,7 +107,7 @@ bool Game::useDevelopmentCard(const card::DevelopmentData & developmentData)
 
 bool Game::rollDice()
 {
-	RollDice action(m_dice, m_players.getPlayers(), m_players.getActivePlayerId());
+	RollDice action(m_board, m_dice, m_players.getPlayers(), m_players.getActivePlayerId());
 
 	return processAction(action);
 }
@@ -121,7 +121,12 @@ bool Game::done()
 
 bool Game::gameEnded() const
 {
-	return m_gameEnded;
+	return m_winnerId != std::nullopt;
+}
+
+std::optional<int> Game::getWinnerId() const
+{
+	return m_winnerId;
 }
 
 std::vector<ActionType> Game::getPossibleActions() const
@@ -132,6 +137,12 @@ std::vector<ActionType> Game::getPossibleActions() const
 int Game::getPlayerCount() const
 {
 	return m_players.getNumberOfPlayers();
+}
+
+void Game::updateGameEnd(int playerId)
+{
+	if (!m_winnerId)
+		m_winnerId = playerId;
 }
 
 int Game::getActivePlayerId() const
@@ -162,7 +173,7 @@ void Game::setupBoard()
 
 void Game::setupPlayers(int numberOfPlayers)
 {
-   m_players.initializePlayers(numberOfPlayers);
+   m_players.initializePlayers(numberOfPlayers, this);
 }
 
 void Game::initalizeDevelopmentStock()
@@ -175,7 +186,7 @@ bool Game::processAction(Action & action)
 	if (!m_state->isValid(action))
 		return false;
 
-	bool actionSuccess = action.execute(m_board);
+	bool actionSuccess = action.execute();
 
 	if (actionSuccess)
 		updateStateWithAction(action);

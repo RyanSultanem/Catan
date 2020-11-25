@@ -13,7 +13,6 @@ PlaceSettlementCondition::PlaceSettlementCondition(int playerReference)
 
 bool PlaceSettlementCondition::checkCondition(const board::Vertex & vertex) const
 {
-	// TODO: should the checks definitions be moved in this file instad of Vertex/Edge?
 	return !vertex.getBuilding() && !vertex.hasAdjencentBuilding() && vertex.hasAtLeastOneAdjecentRoad(m_playerReference);
 }
 

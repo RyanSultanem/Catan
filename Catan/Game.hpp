@@ -4,6 +4,7 @@
 #include <Game.fwd.hpp>
 
 #include <Achievement.hpp>
+#include <GameEndingListenner.hpp>
 #include <GameInterface.hpp>
 #include <State.fwd.hpp>
 
@@ -20,7 +21,7 @@
 
 #include <vector>
 
-class Game : public GameInterface
+class Game : public GameInterface, public GameEndingListenner
 {
 public:
 	Game(int numberOfPlayers, std::unique_ptr<NumberGenerator> && numberGenerator);
@@ -41,6 +42,7 @@ public:
 	bool done() override;
 
 	bool gameEnded() const override;
+	std::optional<int> getWinnerId() const override;
 	std::vector<ActionType> getPossibleActions() const override;
 	int getActivePlayerId() const override;
 	std::string getBoardInfo() const override;
@@ -49,9 +51,12 @@ public:
 
 	int getPlayerCount() const;
 
+	void updateGameEnd(int playerId) override;
+
 private:
 	std::unique_ptr<NumberGenerator> m_numberGenerator;
 	std::unique_ptr<State> m_state; // TODO: Possible enhancement, have State as a non polymoprhic type, with and internal polymoprhic data.
+	
 	board::Board m_board;
 	board::Dice m_dice;
 	DevelopmentStock m_developmentStock;
@@ -61,7 +66,7 @@ private:
    
 	Players m_players;
 
-	bool m_gameEnded; // TODO: should be removed or changed
+	std::optional<int> m_winnerId;
 
 private:
 	void setupBoard();

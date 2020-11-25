@@ -3,20 +3,20 @@
 namespace token {
 namespace building {
 
-const std::unordered_map<card::RessourceType, int> SETTLEMENT_COST =
+const std::unordered_map<card::Ressource, int> SETTLEMENT_COST =
 {
-	{ card::RessourceType::BRICK, 1 },
-	{ card::RessourceType::GRAIN, 1 },
-	{ card::RessourceType::LUMBER, 1 },
-	{ card::RessourceType::WOOL, 1 }
+	{ card::Ressource::BRICK, 1 },
+	{ card::Ressource::GRAIN, 1 },
+	{ card::Ressource::LUMBER, 1 },
+	{ card::Ressource::WOOL, 1 }
 };
 
 const int SETTLEMENT_POINTS = 1;
 
-const std::unordered_map<card::RessourceType, int> CITY_COST =
+const std::unordered_map<card::Ressource, int> CITY_COST =
 {
-	{ card::RessourceType::GRAIN, 2},
-	{ card::RessourceType::ORE, 3}
+	{ card::Ressource::GRAIN, 2},
+	{ card::Ressource::ORE, 3}
 };
 
 const int CITY_POINTS = 2;
@@ -31,7 +31,7 @@ Settlement::Settlement(int reference)
 {
 }
 
-const std::unordered_map<card::RessourceType, int>& Settlement::getCost() const
+const std::unordered_map<card::Ressource, int>& Settlement::getCost() const
 {
 	return SETTLEMENT_COST;
 }
@@ -56,7 +56,7 @@ City::City(int reference)
 {
 }
 
-const std::unordered_map<card::RessourceType, int>& City::getCost() const
+const std::unordered_map<card::Ressource, int>& City::getCost() const
 {
 	return CITY_COST;
 }

@@ -20,17 +20,17 @@ Player::Player(int id)
 	, m_exchangeCosts(5)
 	, m_developmentCards()
 {
-	m_ressources.emplace(card::RessourceType::LUMBER,	0);
-	m_ressources.emplace(card::RessourceType::BRICK,	0);
-	m_ressources.emplace(card::RessourceType::GRAIN,	0);
-	m_ressources.emplace(card::RessourceType::WOOL,		0);
-	m_ressources.emplace(card::RessourceType::ORE,		0);
+	m_ressources.emplace(card::Ressource::LUMBER,	0);
+	m_ressources.emplace(card::Ressource::BRICK,	0);
+	m_ressources.emplace(card::Ressource::GRAIN,	0);
+	m_ressources.emplace(card::Ressource::WOOL,		0);
+	m_ressources.emplace(card::Ressource::ORE,		0);
 
-	m_exchangeCosts.emplace(card::RessourceType::LUMBER,	4);
-	m_exchangeCosts.emplace(card::RessourceType::BRICK,		4);
-	m_exchangeCosts.emplace(card::RessourceType::GRAIN,		4);
-	m_exchangeCosts.emplace(card::RessourceType::WOOL,		4);
-	m_exchangeCosts.emplace(card::RessourceType::ORE,		4);
+	m_exchangeCosts.emplace(card::Ressource::LUMBER,	4);
+	m_exchangeCosts.emplace(card::Ressource::BRICK,		4);
+	m_exchangeCosts.emplace(card::Ressource::GRAIN,		4);
+	m_exchangeCosts.emplace(card::Ressource::WOOL,		4);
+	m_exchangeCosts.emplace(card::Ressource::ORE,		4);
 
 	m_developmentCards.reserve(5); // Not necessarily 5. Just to avoid reconstruction everytime.
 }
@@ -97,6 +97,9 @@ int Player::getPoints() const
 void player::Player::receivePoints(int points)
 {
    m_points += points;
+
+   if (m_gameEndingListenner && m_points >= 10) // TODO: magic number to put in settings/rules
+	   m_gameEndingListenner->updateGameEnd(m_id);
 }
 
 void Player::increaseSettlmentCount()
@@ -117,12 +120,12 @@ void Player::decreaseRoadCount()
 		--m_roadCount;
 }
 
-void Player::addRessource(card::RessourceType ressourceType, unsigned int count)
+void Player::addRessource(card::Ressource ressourceType, unsigned int count)
 {
 	m_ressources[ressourceType] += count;
 }
 
-bool Player::removeRessource(card::RessourceType ressourceType, unsigned int count)
+bool Player::removeRessource(card::Ressource ressourceType, unsigned int count)
 {
 	if (m_ressources[ressourceType] >= count)
 	{
@@ -133,7 +136,7 @@ bool Player::removeRessource(card::RessourceType ressourceType, unsigned int cou
 	return false;
 }
 
-int Player::getRessourceCount(card::RessourceType ressourceType) const
+int Player::getRessourceCount(card::Ressource ressourceType) const
 {
 	return m_ressources.at(ressourceType);
 }
@@ -143,7 +146,7 @@ int Player::getNumberOfRessources() const
 	return utility::getCount(m_ressources);
 }
 
-std::optional<card::RessourceType> Player::removeRessourceAtIndex(int index)
+std::optional<card::Ressource> Player::removeRessourceAtIndex(int index)
 {
 	const auto ressourceIterator = utility::getIndexIterator(m_ressources, index);
 
@@ -191,32 +194,37 @@ std::vector<card::DevelopmentCRef> Player::getUsedDevelopments() const
 void Player::setAllExchangeCosts(int newCost)
 {
 	std::for_each(m_exchangeCosts.begin(), m_exchangeCosts.end(),
-		[this, newCost](const std::pair<card::RessourceType, int>& exchangeCost)
+		[this, newCost](const std::pair<card::Ressource, int>& exchangeCost)
 	{
 		setExchangeCost(exchangeCost.first, newCost);
 	});
 }
 
-void Player::setExchangeCost(card::RessourceType ressourceType, int newCost)
+void Player::setExchangeCost(card::Ressource ressourceType, int newCost)
 {
 	if(m_exchangeCosts.at(ressourceType) > newCost)
 		m_exchangeCosts[ressourceType] = newCost;
 }
 
-int Player::getExchangeCost(card::RessourceType ressourceType) const
+int Player::getExchangeCost(card::Ressource ressourceType) const
 {
 	return m_exchangeCosts.at(ressourceType);
+}
+
+void Player::addGameEndListenner(GameEndingListenner* gameEndingListenner)
+{
+	m_gameEndingListenner = gameEndingListenner;
 }
 
 std::string Player::serialize() const
 {
 	// TODO: std::accumulate
 	std::string ressourcesCounts =
-		"L: " + std::to_string(m_ressources.at(card::RessourceType::LUMBER)) + " | " +
-		"B: " + std::to_string(m_ressources.at(card::RessourceType::BRICK)) + " | " +
-		"W: " + std::to_string(m_ressources.at(card::RessourceType::WOOL)) + " | " +
-		"G: " + std::to_string(m_ressources.at(card::RessourceType::GRAIN)) + " | " +
-		"O: " + std::to_string(m_ressources.at(card::RessourceType::ORE));
+		"L: " + std::to_string(m_ressources.at(card::Ressource::LUMBER)) + " | " +
+		"B: " + std::to_string(m_ressources.at(card::Ressource::BRICK)) + " | " +
+		"W: " + std::to_string(m_ressources.at(card::Ressource::WOOL)) + " | " +
+		"G: " + std::to_string(m_ressources.at(card::Ressource::GRAIN)) + " | " +
+		"O: " + std::to_string(m_ressources.at(card::Ressource::ORE));
 	
 	std::string devCards = serialize::containerSerialize(m_developmentCards, std::string(), std::string());
 

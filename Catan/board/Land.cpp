@@ -4,18 +4,19 @@
 
 namespace land {
 
-Land::Land(const card::RessourceType& ressourceType) : m_ressourceType(ressourceType)
+Land::Land(const card::Ressource& ressourceType) 
+	: m_ressourceType(ressourceType)
 {
 }
 
-card::RessourceType Land::getRessourceType() const
+card::Ressource Land::getRessourceType() const
 {
 	return m_ressourceType;
 }
 
 card::Ressource Land::produceRessource() const
 {
-	return card::Ressource(m_ressourceType);
+	return m_ressourceType;
 }
 
 } // namespace land

@@ -169,17 +169,17 @@ void fillMonopolyRessource(card::DevelopmentData & data)
 	std::cout << "Choose a Ressource (Monopoly): L, B, W, G, O" << std::endl;
 	std::cin >> ressource;
 
-	card::RessourceType type;
+	card::Ressource type;
 	if(ressource == "L")
-		type = card::RessourceType::LUMBER;
+		type = card::Ressource::LUMBER;
 	else if (ressource == "B")
-		type = card::RessourceType::BRICK;
+		type = card::Ressource::BRICK;
 	else if (ressource == "W")
-		type = card::RessourceType::WOOL;
+		type = card::Ressource::WOOL;
 	else if (ressource == "G")
-		type = card::RessourceType::GRAIN;
+		type = card::Ressource::GRAIN;
 	else if (ressource == "O")
-		type = card::RessourceType::ORE;
+		type = card::Ressource::ORE;
 	else
 		return;
 
@@ -209,17 +209,17 @@ void fillFreeRessources(card::DevelopmentData & data)
 	std::cout << "Choose a Ressource (Monopoly): L, B, W, G, O" << std::endl;
 	std::cin >> ressource1;
 
-	card::RessourceType type;
+	card::Ressource type;
 	if (ressource1 == "L")
-		type = card::RessourceType::LUMBER;
+		type = card::Ressource::LUMBER;
 	else if (ressource1 == "B")
-		type = card::RessourceType::BRICK;
+		type = card::Ressource::BRICK;
 	else if (ressource1 == "W")
-		type = card::RessourceType::WOOL;
+		type = card::Ressource::WOOL;
 	else if (ressource1 == "G")
-		type = card::RessourceType::GRAIN;
+		type = card::Ressource::GRAIN;
 	else if (ressource1 == "O")
-		type = card::RessourceType::ORE;
+		type = card::Ressource::ORE;
 	else
 		return;
 
@@ -227,17 +227,17 @@ void fillFreeRessources(card::DevelopmentData & data)
 	std::cout << "Choose a Ressource (Monopoly): L, B, W, G, O" << std::endl;
 	std::cin >> ressource2;
 
-	card::RessourceType type2;
+	card::Ressource type2;
 	if (ressource2 == "L")
-		type2 = card::RessourceType::LUMBER;
+		type2 = card::Ressource::LUMBER;
 	else if (ressource2 == "B")
-		type2 = card::RessourceType::BRICK;
+		type2 = card::Ressource::BRICK;
 	else if (ressource2 == "W")
-		type2 = card::RessourceType::WOOL;
+		type2 = card::Ressource::WOOL;
 	else if (ressource2 == "G")
-		type2 = card::RessourceType::GRAIN;
+		type2 = card::Ressource::GRAIN;
 	else if (ressource2 == "O")
-		type2 = card::RessourceType::ORE;
+		type2 = card::Ressource::ORE;
 	else
 		return;
 

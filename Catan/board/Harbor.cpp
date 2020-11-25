@@ -1,18 +1,18 @@
 #include <board/Harbor.hpp>
 
-Harbor::Harbor(card::RessourceType ressource)
+Harbor::Harbor(card::Ressource ressource)
 	: m_ressource(ressource)
 {
 }
 
-card::RessourceType Harbor::getRessourceType() const
+card::Ressource Harbor::getRessourceType() const
 {
 	return m_ressource;
 }
 
 int Harbor::getNewTradeCost() const
 {
-	return m_ressource == card::RessourceType::NO_RESSOURCE ? 3 : 2;
+	return m_ressource == card::Ressource::NO_RESSOURCE ? 3 : 2;
 }
 
 

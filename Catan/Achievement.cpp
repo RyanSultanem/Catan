@@ -11,36 +11,36 @@
 
 Achievement::Achievement(int minRequirement)
 	: m_minRequirement(minRequirement)
-	, m_player(std::nullopt)
+	, m_pointReceiver(std::nullopt)
 	, m_count(0)
 {
 }
 
-bool Achievement::update(player::Player & player, const AchievementChecker & checker)
+bool Achievement::update(player::PointReceiver & newPointReceiver, const AchievementChecker & checker)
 {
 	bool updated = false;
-	int newCount = checker.getAchievementCount(player.getId());
+	int newCount = checker.getAchievementCount(newPointReceiver.getId());
 
 	if(newCount >= m_minRequirement && newCount > m_count)
 	{
-		updated = (player.getId() != (m_player ? m_player->get().getId() : -1));
+		updated = (newPointReceiver.getId() != (m_pointReceiver ? m_pointReceiver->get().getId() : -1));
 		m_count = newCount;
 
 		if (updated)
 		{
-			updatePlayerInformation(player);
+			updatePlayerInformation(newPointReceiver);
 		}
 	}
 
 	return updated;
 }
 
-void Achievement::updatePlayerInformation(player::Player & player)
+void Achievement::updatePlayerInformation(player::PointReceiver & newPointReceiver)
 {
-	if (m_player)
-		m_player->get().receivePoints(-2);
-	player.receivePoints(2);
-	m_player = player;
+	if (m_pointReceiver)
+		m_pointReceiver->get().receivePoints(-2);
+	newPointReceiver.receivePoints(2);
+	m_pointReceiver = newPointReceiver;
 }
 
 LongestRoadChecker::LongestRoadChecker(const board::Edge & edge)
@@ -105,6 +105,7 @@ int LongestRoadChecker::getAchievementCount(int playerId) const
 
 	std::vector<board::VertexCRef> vertices = m_edge.getVertices();
 	std::set<int> visitedEdgesIds;
+
 	int firstSideLongest = getSideLongest(m_edge, vertices.at(0), playerId, visitedEdgesIds);
 	visitedEdgesIds.erase(m_edge.getId());
 	int secondSideLonget = getSideLongest(m_edge, vertices.at(1), playerId, visitedEdgesIds);

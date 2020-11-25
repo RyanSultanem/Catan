@@ -17,7 +17,7 @@ namespace cell {
 class Cell : public serialize::Serializable
 {
 public:
-	Cell(const card::RessourceType& ressource, unsigned int number, const std::vector<board::VertexRef>& vertices, int id = 0);
+	Cell(const card::Ressource& ressource, unsigned int number, const std::vector<board::VertexRef>& vertices, int id = 0);
 	card::Ressource produceLandRessource() const;
 	int getId() const;
 

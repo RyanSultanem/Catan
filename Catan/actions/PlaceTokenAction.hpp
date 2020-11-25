@@ -5,18 +5,21 @@
 
 #include <Achievement.fwd.hpp>
 
+#include <board/Board.fwd.hpp>
+
 #include <player/Player.fwd.hpp>
 
-class PlaceSettlementAction : public Action // TODO: mutualise code between all PlaceTokensAction
+class PlaceSettlementAction : public Action // TODO: mutualise code between all PlaceTokensAction?
 {
 public:
-	PlaceSettlementAction(player::Player & player, int position);
+	PlaceSettlementAction(player::Player & player, board::Board & board, int position);
 
-	bool execute(board::Board & board) override;
+	bool execute() override;
 	ActionType getType() const override;
 
 private:
 	player::Player & m_player;
+	board::Board & m_board;
 	int m_position;
 
 	bool preExecute() const;
@@ -26,15 +29,16 @@ private:
 class PlaceInitialSettlementRoadAction : public Action
 {
 public:
-	PlaceInitialSettlementRoadAction(player::Player & player, int settlementPosition, int roadPosition);
+	PlaceInitialSettlementRoadAction(player::Player & player, board::Board & board, int settlementPosition, int roadPosition);
 
-	bool execute(board::Board & board) override;
+	bool execute() override;
 
 	ActionType getType() const override;
 	void setSecondRun(bool secondRun);
 
 private:
 	player::Player & m_player;
+	board::Board & m_board;
 	int m_settlementPosition;
 	int m_roadPosition;
 	bool m_secondRun;
@@ -45,13 +49,14 @@ private:
 class PlaceRoadAction : public Action
 {
 public:
-	PlaceRoadAction(player::Player & player, int position, Achievement & longestRoad);
+	PlaceRoadAction(player::Player & player, board::Board & board, int position, Achievement & longestRoad);
 
-	bool execute(board::Board & board) override;
+	bool execute() override;
 	ActionType getType() const override;
 
 private:
 	player::Player & m_player;
+	board::Board & m_board;
 	int m_position;
 	Achievement & m_longestRoad;
 
@@ -62,7 +67,7 @@ private:
 class PlaceFreeRoadAction : public PlaceRoadAction
 {
 public:
-	PlaceFreeRoadAction(player::Player & player, int position, Achievement & longestRoad);
+	PlaceFreeRoadAction(player::Player & player, board::Board & board, int position, Achievement & longestRoad);
 
 private:
 	bool preExecute(player::Player & player) const override;
@@ -71,13 +76,14 @@ private:
 class PlaceCityAction : public Action
 {
 public:
-	PlaceCityAction(player::Player & player, int position);
+	PlaceCityAction(player::Player & player, board::Board & board, int position);
 
-	bool execute(board::Board & board) override;
+	bool execute() override;
 	ActionType getType() const override;
 
 private:
 	player::Player & m_player;
+	board::Board & m_board;
 	int m_position;
 
 	bool preExecute() const;

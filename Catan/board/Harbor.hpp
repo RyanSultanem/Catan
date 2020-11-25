@@ -8,13 +8,13 @@
 class Harbor
 {
 public:
-	explicit Harbor(card::RessourceType ressource);
+	explicit Harbor(card::Ressource ressource);
 
-	card::RessourceType getRessourceType() const;
+	card::Ressource getRessourceType() const;
 	int getNewTradeCost() const;
 
 private:
-	card::RessourceType m_ressource;
+	card::Ressource m_ressource;
 };
 
 #endif // !BOARD_HARBOR_HBB

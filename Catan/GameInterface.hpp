@@ -11,7 +11,7 @@
 #include <unordered_map>
 #include <vector>
 
-class GameInterface // TODO: should change to contain game
+class GameInterface // TODO: change to contain game ? will expose Game.hpp
 {
 public:
 	virtual bool placeInitialSetlementRoad(int settlementPosition, int roadPosition) = 0;
@@ -27,8 +27,11 @@ public:
 	virtual bool rollDice() = 0;
 	virtual bool done() = 0;
 
-	// Info for display
+	// Game End info
 	virtual bool gameEnded() const = 0;
+	virtual std::optional<int> getWinnerId() const = 0;
+	
+	// Info for display
 	virtual int getActivePlayerId() const = 0;
 	virtual std::vector<ActionType> getPossibleActions() const = 0;
 	virtual std::string getBoardInfo() const = 0;

@@ -1,8 +1,6 @@
 #ifndef ACTIONS_ACTIONS_HPP
 #define ACTIONS_ACTIONS_HPP
 
-#include <board/Board.fwd.hpp>
-
 // TODO: can be replaced by doubledispatch with State. worth it?
 // For now it makes more sense to only have a type.
 enum class ActionType
@@ -25,7 +23,7 @@ enum class ActionType
 class Action
 {
 public:
-	virtual bool execute(board::Board & board) = 0; // TODO: check if board should really be passed here or for each needed construcotr.
+	virtual bool execute() = 0;
 	virtual ActionType getType() const = 0;
 };
 

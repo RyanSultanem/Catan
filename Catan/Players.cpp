@@ -1,10 +1,15 @@
 #include <Players.hpp>
 
-void Players::initializePlayers(int numberOfPlayers)
+#include <utility/Utility.hpp>
+
+void Players::initializePlayers(int numberOfPlayers, GameEndingListenner * gameEndListenner)
 {
 	m_players.reserve(numberOfPlayers);
 	for (int i = 0; i < numberOfPlayers; ++i)
+	{
 		m_players.push_back(player::Player(i));
+		m_players[i].addGameEndListenner(gameEndListenner);
+	}
 }
 
 int Players::getNumberOfPlayers() const
@@ -39,6 +44,6 @@ void Players::setNextActivePlayer()
 
 void Players::setNextActivePlayer(int playerId)
 {
-	if (playerId < m_players.size() && playerId >= 0)
+	if (utility::isValidPosition(m_players, playerId))
 		m_activePlayer = playerId;
 }

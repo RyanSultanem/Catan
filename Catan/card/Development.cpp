@@ -17,11 +17,11 @@
 
 namespace {
 
-const std::unordered_map<card::RessourceType, int> DEVELOPMENT_COST = 
+const std::unordered_map<card::Ressource, int> DEVELOPMENT_COST = 
 {
-	{card::RessourceType::ORE, 1},
-	{card::RessourceType::GRAIN, 1},
-	{card::RessourceType::WOOL, 1}
+	{card::Ressource::ORE, 1},
+	{card::Ressource::GRAIN, 1},
+	{card::Ressource::WOOL, 1}
 };
 
 } // namespace anonymous
@@ -90,12 +90,12 @@ void DevelopmentData::setCellVertexPosition(const std::pair<int, int> & cellVert
 	m_cellVertexPosition = cellVertexPosition;
 }
 
-void DevelopmentData::setMonopolyRessource(RessourceType monopolyRessource)
+void DevelopmentData::setMonopolyRessource(Ressource monopolyRessource)
 {
 	m_monopolyRessource = monopolyRessource;
 }
 
-void DevelopmentData::setFreeRessources(const std::pair<RessourceType, RessourceType>& freeRessources)
+void DevelopmentData::setFreeRessources(const std::pair<Ressource, Ressource>& freeRessources)
 {
 	m_freeRessources = freeRessources;
 }
@@ -115,12 +115,12 @@ std::optional<std::pair<int, int>> DevelopmentData::getCellVertexPosition() cons
 	return m_cellVertexPosition;
 }
 
-std::optional<RessourceType> DevelopmentData::getMonopolyRessource() const
+std::optional<Ressource> DevelopmentData::getMonopolyRessource() const
 {
 	return m_monopolyRessource;
 }
 
-std::optional<std::pair<RessourceType, RessourceType>> DevelopmentData::getFreeRessources() const
+std::optional<std::pair<Ressource, Ressource>> DevelopmentData::getFreeRessources() const
 {
 	return m_freeRessources;
 }
@@ -140,7 +140,7 @@ bool DevelopmentAction::execute(player::Player & player, const DevelopmentData &
    return success;
 }
 
-const std::unordered_map<card::RessourceType, int> & getDevelopmentCost()
+const std::unordered_map<card::Ressource, int> & getDevelopmentCost()
 {
 	return DEVELOPMENT_COST;
 }
@@ -166,8 +166,8 @@ bool KnightAction::validData(const DevelopmentData & data) const
 bool KnightAction::apply(player::Player & player, const DevelopmentData & data) const
 {
    std::pair<int,int> cellVertexPositions = data.getCellVertexPosition().value();
-   MoveRobberAction moveRobberAction(player, cellVertexPositions.first, cellVertexPositions.second, m_players, m_numberGenerator);
-   bool result = moveRobberAction.execute(m_board);
+   MoveRobberAction moveRobberAction(player, m_board, cellVertexPositions.first, cellVertexPositions.second, m_players, m_numberGenerator);
+   bool result = moveRobberAction.execute();
    
    if (result)
 	   m_strongestArmy.update(player, StrongestArmyChecker(player));;
@@ -187,7 +187,7 @@ bool FreeRessourcesAction::validData(const DevelopmentData & data) const
 
 bool FreeRessourcesAction::apply(player::Player & player, const DevelopmentData & data) const
 {
-   std::pair<card::RessourceType, card::RessourceType> ressources = data.getFreeRessources().value();
+   std::pair<card::Ressource, card::Ressource> ressources = data.getFreeRessources().value();
    player.addRessource(ressources.first, 1);
    player.addRessource(ressources.second, 1);
 
@@ -215,16 +215,16 @@ static bool applyTwoRoads(board::Board & board, player::Player & player, const D
 	int position1 = data.getRoadPositions().value().first;
 	int position2 = data.getRoadPositions().value().second;
 
-	PlaceFreeRoadAction buildRoad1(player, position1, longestRoad);
-	PlaceFreeRoadAction buildRoad2(player, position2, longestRoad);
+	PlaceFreeRoadAction buildRoad1(player, board, position1, longestRoad);
+	PlaceFreeRoadAction buildRoad2(player, board, position2, longestRoad);
 
-	bool result1 = buildRoad1.execute(board);
-	bool result2 = buildRoad2.execute(board);
+	bool result1 = buildRoad1.execute();
+	bool result2 = buildRoad2.execute();
 
 	if (result2 && !result1)
-		result1 = buildRoad1.execute(board);
+		result1 = buildRoad1.execute();
 	else if (result1 && !result2)
-		result2 = buildRoad2.execute(board);
+		result2 = buildRoad2.execute();
 
 	return result1 && result2;
 }
@@ -266,7 +266,7 @@ bool MonopolyAction::apply(player::Player & player, const DevelopmentData & data
    std::for_each(m_players.begin(), m_players.end(),
       [&player, &data](player::Player & sender)
    {
-      card::RessourceType ressource = data.getMonopolyRessource().value();
+      card::Ressource ressource = data.getMonopolyRessource().value();
       player::reactions::stealAllRessources(player, sender, ressource);
    });
 

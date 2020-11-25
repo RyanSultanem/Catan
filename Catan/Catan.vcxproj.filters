@@ -168,6 +168,7 @@
     </ClInclude>
     <ClInclude Include="Players.hpp" />
     <ClInclude Include="Players.fwd.hpp" />
+    <ClInclude Include="GameEndingListenner.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="board\Board.cpp">
@@ -208,9 +209,6 @@
     </ClCompile>
     <ClCompile Include="token\Building.cpp">
       <Filter>token</Filter>
-    </ClCompile>
-    <ClCompile Include="card\Card.cpp">
-      <Filter>card</Filter>
     </ClCompile>
     <ClCompile Include="card\Development.cpp">
       <Filter>card</Filter>

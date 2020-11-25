@@ -56,32 +56,32 @@ void BoardFactory::createVertices()
 
 void BoardFactory::setHarbors()
 {
-	m_vertices.at(0).setHarbor(Harbor(card::RessourceType::NO_RESSOURCE));
-	m_vertices.at(3).setHarbor(Harbor(card::RessourceType::NO_RESSOURCE));
+	m_vertices.at(0).setHarbor(Harbor(card::Ressource::NO_RESSOURCE));
+	m_vertices.at(3).setHarbor(Harbor(card::Ressource::NO_RESSOURCE));
 
-	m_vertices.at(1).setHarbor(Harbor(card::RessourceType::GRAIN));
-	m_vertices.at(5).setHarbor(Harbor(card::RessourceType::GRAIN));
+	m_vertices.at(1).setHarbor(Harbor(card::Ressource::GRAIN));
+	m_vertices.at(5).setHarbor(Harbor(card::Ressource::GRAIN));
 
-	m_vertices.at(10).setHarbor(Harbor(card::RessourceType::ORE));
-	m_vertices.at(15).setHarbor(Harbor(card::RessourceType::ORE));
+	m_vertices.at(10).setHarbor(Harbor(card::Ressource::ORE));
+	m_vertices.at(15).setHarbor(Harbor(card::Ressource::ORE));
 
-	m_vertices.at(26).setHarbor(Harbor(card::RessourceType::NO_RESSOURCE));
-	m_vertices.at(32).setHarbor(Harbor(card::RessourceType::NO_RESSOURCE));
+	m_vertices.at(26).setHarbor(Harbor(card::Ressource::NO_RESSOURCE));
+	m_vertices.at(32).setHarbor(Harbor(card::Ressource::NO_RESSOURCE));
 
-	m_vertices.at(42).setHarbor(Harbor(card::RessourceType::WOOL));
-	m_vertices.at(46).setHarbor(Harbor(card::RessourceType::WOOL));
+	m_vertices.at(42).setHarbor(Harbor(card::Ressource::WOOL));
+	m_vertices.at(46).setHarbor(Harbor(card::Ressource::WOOL));
 
-	m_vertices.at(49).setHarbor(Harbor(card::RessourceType::NO_RESSOURCE));
-	m_vertices.at(52).setHarbor(Harbor(card::RessourceType::NO_RESSOURCE));
+	m_vertices.at(49).setHarbor(Harbor(card::Ressource::NO_RESSOURCE));
+	m_vertices.at(52).setHarbor(Harbor(card::Ressource::NO_RESSOURCE));
 
-	m_vertices.at(51).setHarbor(Harbor(card::RessourceType::NO_RESSOURCE));
-	m_vertices.at(47).setHarbor(Harbor(card::RessourceType::NO_RESSOURCE));
+	m_vertices.at(51).setHarbor(Harbor(card::Ressource::NO_RESSOURCE));
+	m_vertices.at(47).setHarbor(Harbor(card::Ressource::NO_RESSOURCE));
 
-	m_vertices.at(33).setHarbor(Harbor(card::RessourceType::BRICK));
-	m_vertices.at(38).setHarbor(Harbor(card::RessourceType::BRICK));
+	m_vertices.at(33).setHarbor(Harbor(card::Ressource::BRICK));
+	m_vertices.at(38).setHarbor(Harbor(card::Ressource::BRICK));
 
-	m_vertices.at(11).setHarbor(Harbor(card::RessourceType::LUMBER));
-	m_vertices.at(16).setHarbor(Harbor(card::RessourceType::LUMBER));
+	m_vertices.at(11).setHarbor(Harbor(card::Ressource::LUMBER));
+	m_vertices.at(16).setHarbor(Harbor(card::Ressource::LUMBER));
 }
 
 void BoardFactory::createEdges()
@@ -137,25 +137,25 @@ void BoardFactory::initializeCells()
 {
 	m_cells.reserve(19);
 
-	m_cells.push_back(cell::Cell(card::RessourceType::ORE, 5, createVerticesVector({ 21,16,22,28,33,27 }), m_cellId++));
-	m_cells.push_back(cell::Cell(card::RessourceType::GRAIN, 11, createVerticesVector({ 11,7,12,17,22,16 }), m_cellId++));
-	m_cells.push_back(cell::Cell(card::RessourceType::ORE, 8, createVerticesVector({ 3,0,4,8,12,7 }), m_cellId++));
-	m_cells.push_back(cell::Cell(card::RessourceType::LUMBER, 4, createVerticesVector({ 4,1,5,9,13,8 }), m_cellId++));
-	m_cells.push_back(cell::Cell(card::RessourceType::BRICK, 6, createVerticesVector({ 5,2,6,10,14,9 }), m_cellId++));
-	m_cells.push_back(cell::Cell(card::RessourceType::WOOL, 10, createVerticesVector({ 14,10,15,20,25,19 }), m_cellId++));
-	m_cells.push_back(cell::Cell(card::RessourceType::GRAIN, 9, createVerticesVector({ 25,20,26,32,37,31 }), m_cellId++));
-	m_cells.push_back(cell::Cell(card::RessourceType::WOOL, 6, createVerticesVector({ 36,31,37,42,46,41 }), m_cellId++));
-	m_cells.push_back(cell::Cell(card::RessourceType::LUMBER, 5, createVerticesVector({ 45,41,46,50,53,49 }), m_cellId++));
-	m_cells.push_back(cell::Cell(card::RessourceType::BRICK, 4, createVerticesVector({ 44,40,45,49,52,48 }), m_cellId++));
-	m_cells.push_back(cell::Cell(card::RessourceType::WOOL, 10, createVerticesVector({ 43,39,44,48,51,47 }), m_cellId++));
-	m_cells.push_back(cell::Cell(card::RessourceType::GRAIN, 2, createVerticesVector({ 33,28,34,39,43,38 }), m_cellId++));
-	m_cells.push_back(cell::Cell(card::RessourceType::WOOL, 9, createVerticesVector({ 22,17,23,29,34,28 }), m_cellId++));
-	m_cells.push_back(cell::Cell(card::RessourceType::LUMBER, 3, createVerticesVector({ 12,8,13,18,23,17 }), m_cellId++));
-	m_cells.push_back(cell::Cell(card::RessourceType::ORE, 12, createVerticesVector({ 13,9,14,19,24,18 }), m_cellId++));
-	m_cells.push_back(cell::Cell(card::RessourceType::GRAIN, 11, createVerticesVector({ 24,19,25,31,36,30 }), m_cellId++));
-	m_cells.push_back(cell::Cell(card::RessourceType::BRICK, 3, createVerticesVector({ 35,30,36,41,45,40 }), m_cellId++));
-	m_cells.push_back(cell::Cell(card::RessourceType::LUMBER, 8, createVerticesVector({ 34,29,35,40,44,39 }), m_cellId++));
-	m_cells.push_back(cell::Cell(card::RessourceType::NO_RESSOURCE, 0, createVerticesVector({ 23,18,24,30,35,30 }), m_cellId++));
+	m_cells.push_back(cell::Cell(card::Ressource::ORE, 5, createVerticesVector({ 21,16,22,28,33,27 }), m_cellId++));
+	m_cells.push_back(cell::Cell(card::Ressource::GRAIN, 11, createVerticesVector({ 11,7,12,17,22,16 }), m_cellId++));
+	m_cells.push_back(cell::Cell(card::Ressource::ORE, 8, createVerticesVector({ 3,0,4,8,12,7 }), m_cellId++));
+	m_cells.push_back(cell::Cell(card::Ressource::LUMBER, 4, createVerticesVector({ 4,1,5,9,13,8 }), m_cellId++));
+	m_cells.push_back(cell::Cell(card::Ressource::BRICK, 6, createVerticesVector({ 5,2,6,10,14,9 }), m_cellId++));
+	m_cells.push_back(cell::Cell(card::Ressource::WOOL, 10, createVerticesVector({ 14,10,15,20,25,19 }), m_cellId++));
+	m_cells.push_back(cell::Cell(card::Ressource::GRAIN, 9, createVerticesVector({ 25,20,26,32,37,31 }), m_cellId++));
+	m_cells.push_back(cell::Cell(card::Ressource::WOOL, 6, createVerticesVector({ 36,31,37,42,46,41 }), m_cellId++));
+	m_cells.push_back(cell::Cell(card::Ressource::LUMBER, 5, createVerticesVector({ 45,41,46,50,53,49 }), m_cellId++));
+	m_cells.push_back(cell::Cell(card::Ressource::BRICK, 4, createVerticesVector({ 44,40,45,49,52,48 }), m_cellId++));
+	m_cells.push_back(cell::Cell(card::Ressource::WOOL, 10, createVerticesVector({ 43,39,44,48,51,47 }), m_cellId++));
+	m_cells.push_back(cell::Cell(card::Ressource::GRAIN, 2, createVerticesVector({ 33,28,34,39,43,38 }), m_cellId++));
+	m_cells.push_back(cell::Cell(card::Ressource::WOOL, 9, createVerticesVector({ 22,17,23,29,34,28 }), m_cellId++));
+	m_cells.push_back(cell::Cell(card::Ressource::LUMBER, 3, createVerticesVector({ 12,8,13,18,23,17 }), m_cellId++));
+	m_cells.push_back(cell::Cell(card::Ressource::ORE, 12, createVerticesVector({ 13,9,14,19,24,18 }), m_cellId++));
+	m_cells.push_back(cell::Cell(card::Ressource::GRAIN, 11, createVerticesVector({ 24,19,25,31,36,30 }), m_cellId++));
+	m_cells.push_back(cell::Cell(card::Ressource::BRICK, 3, createVerticesVector({ 35,30,36,41,45,40 }), m_cellId++));
+	m_cells.push_back(cell::Cell(card::Ressource::LUMBER, 8, createVerticesVector({ 34,29,35,40,44,39 }), m_cellId++));
+	m_cells.push_back(cell::Cell(card::Ressource::NO_RESSOURCE, 0, createVerticesVector({ 23,18,24,30,35,30 }), m_cellId++));
 }
 
 void BoardFactory::initializeRobber()
@@ -163,7 +163,7 @@ void BoardFactory::initializeRobber()
 	auto desertIt = std::find_if(m_cells.begin(), m_cells.end(),
 		[](const cell::Cell & cell)
 		{
-			return (cell.getLand().getRessourceType() == card::RessourceType::NO_RESSOURCE);
+			return (cell.getLand().getRessourceType() == card::Ressource::NO_RESSOURCE);
 		});
 
 	if (desertIt != m_cells.end())

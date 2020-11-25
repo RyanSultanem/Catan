@@ -50,21 +50,21 @@ public:
 
 	void setDevelopmentType(DevelopmentType developmentType);
 	void setCellVertexPosition(const std::pair<int,int> & cellVertexPosition);
-	void setMonopolyRessource(RessourceType monopolyRessource);
-	void setFreeRessources(const std::pair<RessourceType,RessourceType> & freeRessources);
+	void setMonopolyRessource(Ressource monopolyRessource);
+	void setFreeRessources(const std::pair<Ressource,Ressource> & freeRessources);
 	void setRoadPosition(const std::pair<int,int> & roadPositions);
 
 	DevelopmentType getDevelopmentType() const;
 	std::optional<std::pair<int,int>> getCellVertexPosition() const;
-	std::optional<RessourceType> getMonopolyRessource() const;
-	std::optional<std::pair<RessourceType, RessourceType>> getFreeRessources() const;
+	std::optional<Ressource> getMonopolyRessource() const;
+	std::optional<std::pair<Ressource, Ressource>> getFreeRessources() const;
 	std::optional<std::pair<int,int>> getRoadPositions() const;
 
 private:
 	DevelopmentType m_developmentType;
 	std::optional<std::pair<int,int>> m_cellVertexPosition;
-	std::optional<RessourceType> m_monopolyRessource;
-	std::optional<std::pair<RessourceType,RessourceType>> m_freeRessources;
+	std::optional<Ressource> m_monopolyRessource;
+	std::optional<std::pair<Ressource,Ressource>> m_freeRessources;
 	std::optional<std::pair<int,int>> m_roadPositions;
 };
 
@@ -80,7 +80,7 @@ private:
 	virtual bool apply(player::Player & player, const DevelopmentData & data) const = 0;
 };
 
-const std::unordered_map<card::RessourceType,int> & getDevelopmentCost();
+const std::unordered_map<card::Ressource,int> & getDevelopmentCost();
 
 class KnightAction : public DevelopmentAction
 {

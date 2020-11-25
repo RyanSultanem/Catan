@@ -41,7 +41,7 @@ private:
 	int m_id;
 	std::vector<EdgeRef> m_edges;
 
-	std::optional<token::building::Building*> m_building;
+	std::optional<token::building::Building*> m_building; // TODO BuildingRef?
 
 	std::optional<Harbor> m_harbor;
 };

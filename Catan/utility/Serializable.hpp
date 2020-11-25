@@ -2,6 +2,7 @@
 #define UTILITY_SERIALIZE_HPP
 
 #include <algorithm>
+#include <iterator>
 #include <numeric>
 #include <string>
 #include <vector>

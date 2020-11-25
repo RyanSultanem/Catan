@@ -15,7 +15,7 @@ class BuyDevelopmentAction : public Action
 public:
 	explicit BuyDevelopmentAction(player::Player & player, DevelopmentStock & developmentStock);
 
-	bool execute(board::Board & board) override;
+	bool execute() override;
 	ActionType getType() const override;
 
 private:
@@ -30,7 +30,7 @@ class UseDevelopmentAction : public Action
 public:
 	UseDevelopmentAction(player::Player & player, const card::DevelopmentData & developmentData, Achievement & strongestArmy);
 
-	bool execute(board::Board & board) override;
+	bool execute() override;
 	ActionType getType() const override;
 
 	bool validPrePlayerDecisionUse(bool developmentUsed) const;

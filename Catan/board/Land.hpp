@@ -10,12 +10,12 @@ namespace land {
 class Land
 {
 public:
-	Land(const card::RessourceType& ressourceType);
-	card::RessourceType getRessourceType() const;
+	Land(const card::Ressource& ressourceType);
+	card::Ressource getRessourceType() const;
 	card::Ressource produceRessource() const;
 
 private:
-	card::RessourceType m_ressourceType;
+	card::Ressource m_ressourceType;
 };
 
 } // namespace land

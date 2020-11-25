@@ -16,10 +16,10 @@ namespace reactions {
 
 namespace {
 
-void playerPayRessources(Player & player, const std::unordered_map<card::RessourceType, int> & costs)
+void playerPayRessources(Player & player, const std::unordered_map<card::Ressource, int> & costs)
 {
 	std::for_each(costs.begin(), costs.end(),
-		[&player](const std::unordered_map<card::RessourceType, unsigned int>::value_type& ressourceInt)
+		[&player](const std::unordered_map<card::Ressource, unsigned int>::value_type& ressourceInt)
 	{
 		player.removeRessource(ressourceInt.first, ressourceInt.second);
 	});
@@ -27,18 +27,27 @@ void playerPayRessources(Player & player, const std::unordered_map<card::Ressour
 
 } // namespace anonymous
 
-bool ressourcesAvailable(const Player & player, const std::unordered_map<card::RessourceType, int> & costs)
+bool ressourcesAvailable(const Player & player, const std::unordered_map<card::Ressource, int> & costs)
 {
 	bool hasRessources = true;
 
 	std::for_each(costs.begin(), costs.end(),
-		[&player, &hasRessources](const std::unordered_map<card::RessourceType, unsigned int>::value_type& ressourceInt)
+		[&player, &hasRessources](const std::unordered_map<card::Ressource, unsigned int>::value_type& ressourceInt)
 	{
 		if (player.getRessourceCount(ressourceInt.first) < ressourceInt.second)
 			hasRessources = false;
 	});
 
 	return hasRessources;
+}
+
+void receiveRessources(Player & player, const std::vector<card::Ressource> & ressources)
+{
+	std::for_each(ressources.begin(), ressources.end(),
+		[&player](const card::Ressource ressource)
+		{
+			player.addRessource(ressource, 1);
+		});
 }
 
 //bool settlementRessourcesAvailable(const Player & player)
@@ -138,7 +147,7 @@ void tokenPlaced(Player & player, const token::Token & token)
 	token.accept(visitorPlaced);
 }
 
-bool performExchangeCards(Player & player, card::RessourceType ressourceResult, card::RessourceType ressourceToTrade)
+bool performExchangeCards(Player & player, card::Ressource ressourceResult, card::Ressource ressourceToTrade)
 {
    if (ressourceToTrade == ressourceResult)
       return false;
@@ -155,7 +164,7 @@ bool performExchangeCards(Player & player, card::RessourceType ressourceResult, 
 
 void settlementPlacedOnHarbor(Player & player, const Harbor & harbor)
 {
-	if (harbor.getRessourceType() != card::RessourceType::NO_RESSOURCE)
+	if (harbor.getRessourceType() != card::Ressource::NO_RESSOURCE)
 		player.setExchangeCost(harbor.getRessourceType(), harbor.getNewTradeCost());
 	else
 		player.setAllExchangeCosts(harbor.getNewTradeCost());
@@ -166,12 +175,12 @@ void stealPlayerCard(Player & receiver, Player & giver, int randomIndex)
 	if (receiver.getId() == giver.getId())
 		return; 
 
-	std::optional<card::RessourceType> randomRessource = giver.removeRessourceAtIndex(randomIndex);
+	std::optional<card::Ressource> randomRessource = giver.removeRessourceAtIndex(randomIndex);
 	if(randomRessource)
 		receiver.addRessource(*randomRessource, 1);
 }
 
-void stealAllRessources(Player & receiver, Player & sender, card::RessourceType ressource)
+void stealAllRessources(Player & receiver, Player & sender, card::Ressource ressource)
 {
    if (receiver.getId() == sender.getId())
       return;
@@ -181,7 +190,7 @@ void stealAllRessources(Player & receiver, Player & sender, card::RessourceType 
    receiver.addRessource(ressource, ressourceCount);
 }
 
-bool burnCards(Player & player, const std::unordered_map<card::RessourceType, int> & ressourcesToBurn)
+bool burnCards(Player & player, const std::unordered_map<card::Ressource, int> & ressourcesToBurn)
 {
 	if (!ressourcesAvailable(player, ressourcesToBurn))
 		return false;

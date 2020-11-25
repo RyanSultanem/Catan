@@ -31,12 +31,13 @@ public:
 	Board copyBoard(std::vector<cell::Cell> && cells, std::vector<Vertex> && vertices, std::vector<Edge> && edges, token::Robber & robber) const;
 
 	int getNumberOfCells() const;
-	int getNumberOfLand(const card::RessourceType& ressource) const;
+	int getNumberOfLand(const card::Ressource& ressource) const;
 	int getNumberOfVertices() const;
 	int getNumberOfEdges() const;
 	int getCellId(int index) const;
 
 	bool isConnectedEdges(const std::vector<int> & edgeIds) const;
+	bool checkAdjacent(int cellPosition, int vertexPosition) const;
 	
 	bool placeSettlement(int position, token::building::Settlement & settlement, const PlaceSettlementCondition & condition);
 	bool placeRoad(int position, token::Road & road, const PlaceRoadCondition & condition);
@@ -44,7 +45,7 @@ public:
 
 	bool moveRobber(int position);
 
-	std::vector<card::RessourceType> getRessourcesFromVertexPosition(int position) const;
+	std::vector<card::Ressource> getRessourcesFromVertexPosition(int position) const;
 	// TODO: check if harbor check should really be done through Board, or can find a better solution; could be done through vertex if cost is not directly in player maybe, but in player also makes sense..
 	std::optional<HarborCRef> getHarbor(int position) const;
 	std::vector<cell::CellCRef> getCellsWithNumber(int value) const;

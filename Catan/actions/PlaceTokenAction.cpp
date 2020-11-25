@@ -9,13 +9,14 @@
 
 #include <token/Conditions.hpp>
 
-PlaceSettlementAction::PlaceSettlementAction(player::Player & player, int position)
+PlaceSettlementAction::PlaceSettlementAction(player::Player & player, board::Board & board, int position)
 	: m_player(player)
+	, m_board(board)
 	, m_position(position)
 {
 }
 
-bool PlaceSettlementAction::execute(board::Board & board)
+bool PlaceSettlementAction::execute()
 {
 	bool isSuccess = preExecute();
 
@@ -23,10 +24,10 @@ bool PlaceSettlementAction::execute(board::Board & board)
 
 	if (isSuccess && optSettlement)
 	{
-		isSuccess = board.placeSettlement(m_position, *optSettlement, PlaceSettlementCondition(m_player.getId()));
+		isSuccess = m_board.placeSettlement(m_position, *optSettlement, PlaceSettlementCondition(m_player.getId()));
 
 		if (isSuccess)
-			postExecute(board);
+			postExecute(m_board);
 	}
 
 	return isSuccess;
@@ -63,15 +64,16 @@ void PlaceSettlementAction::postExecute(const board::Board & board) const
 	}
 }
 
-PlaceInitialSettlementRoadAction::PlaceInitialSettlementRoadAction(player::Player & player, int settlementPosition, int roadPosition)
+PlaceInitialSettlementRoadAction::PlaceInitialSettlementRoadAction(player::Player & player, board::Board & board, int settlementPosition, int roadPosition)
 	: m_player(player)
+	, m_board(board)
 	, m_settlementPosition(settlementPosition)
 	, m_roadPosition(roadPosition)
 	, m_secondRun(false)
 {
 }
 
-bool PlaceInitialSettlementRoadAction::execute(board::Board & board)
+bool PlaceInitialSettlementRoadAction::execute()
 {
 	bool isSuccess = false;
 
@@ -80,11 +82,11 @@ bool PlaceInitialSettlementRoadAction::execute(board::Board & board)
 
 	if (optSettlement && optRoad)
 	{
-		isSuccess = board.placeSettlement(m_settlementPosition, *optSettlement, PlaceInitialSettlementCondition(m_player.getId(), m_roadPosition));
-		isSuccess = isSuccess && board.placeRoad(m_roadPosition, *optRoad, PlaceInitialRoadCondition(m_player.getId(), m_settlementPosition));
+		isSuccess = m_board.placeSettlement(m_settlementPosition, *optSettlement, PlaceInitialSettlementCondition(m_player.getId(), m_roadPosition));
+		isSuccess = isSuccess && m_board.placeRoad(m_roadPosition, *optRoad, PlaceInitialRoadCondition(m_player.getId(), m_settlementPosition));
 
 		if (isSuccess)
-			postExecute(board);
+			postExecute(m_board);
 	}
 	else
 		isSuccess = false;
@@ -111,23 +113,20 @@ void PlaceInitialSettlementRoadAction::postExecute(const board::Board & board) c
 
 	if (m_secondRun)
 	{
-		const std::vector<card::RessourceType> ressources = board.getRessourcesFromVertexPosition(m_settlementPosition);
-		std::for_each(ressources.begin(), ressources.end(), // TODO: should be moved under player::reactions
-			[this](const card::RessourceType ressource)
-			{
-				m_player.addRessource(ressource, 1);
-			});
+		const std::vector<card::Ressource> ressources = board.getRessourcesFromVertexPosition(m_settlementPosition);
+		player::reactions::receiveRessources(m_player, ressources);
 	}
 }
 
-PlaceRoadAction::PlaceRoadAction(player::Player & player, int position, Achievement & longestRoad)
+PlaceRoadAction::PlaceRoadAction(player::Player & player, board::Board & board, int position, Achievement & longestRoad)
 	: m_player(player)
+	, m_board(board)
 	, m_position(position)
 	, m_longestRoad(longestRoad)
 {
 }
 
-bool PlaceRoadAction::execute(board::Board & board)
+bool PlaceRoadAction::execute()
 {
 	bool isSuccess = preExecute(m_player);
 
@@ -135,10 +134,10 @@ bool PlaceRoadAction::execute(board::Board & board)
 
 	if (isSuccess && optRoad)
 	{
-		isSuccess = board.placeRoad(m_position, *optRoad, PlaceRoadCondition(m_player.getId()));
+		isSuccess = m_board.placeRoad(m_position, *optRoad, PlaceRoadCondition(m_player.getId()));
 
 		if (isSuccess)
-			postExecute(board);
+			postExecute(m_board);
 	}
 	else
 		isSuccess = false;
@@ -166,13 +165,14 @@ void PlaceRoadAction::postExecute(board::Board & board) const
 	}
 }
 
-PlaceCityAction::PlaceCityAction(player::Player & player, int position)
+PlaceCityAction::PlaceCityAction(player::Player & player, board::Board & board, int position)
 	: m_player(player)
+	, m_board(board)
 	, m_position(position)
 {
 }
 
-bool PlaceCityAction::execute(board::Board & board)
+bool PlaceCityAction::execute()
 {
 	bool isSuccess = preExecute();
 
@@ -180,7 +180,7 @@ bool PlaceCityAction::execute(board::Board & board)
 
 	if (isSuccess && optCity)
 	{
-		isSuccess = board.placeCity(m_position, *optCity, PlaceCityCondition(m_player.getId()));
+		isSuccess = m_board.placeCity(m_position, *optCity, PlaceCityCondition(m_player.getId()));
 
 		if (isSuccess)
 			postExecute();
@@ -208,8 +208,8 @@ void PlaceCityAction::postExecute() const
 		player::reactions::tokenPlaced(m_player, m_player.getCity().value());
 }
 
-PlaceFreeRoadAction::PlaceFreeRoadAction(player::Player & player, int position, Achievement & longestRoad)
-	: PlaceRoadAction(player, position, longestRoad)
+PlaceFreeRoadAction::PlaceFreeRoadAction(player::Player & player, board::Board & board, int position, Achievement & longestRoad)
+	: PlaceRoadAction(player, board, position, longestRoad)
 {
 }
 

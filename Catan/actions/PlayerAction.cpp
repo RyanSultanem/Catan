@@ -13,8 +13,9 @@
 
 #include <iterator>
 
-RollDice::RollDice(board::Dice & dice, std::vector<player::Player> & players, int activePlayer)
-	: m_dice(dice)
+RollDice::RollDice(board::Board & board, board::Dice & dice, std::vector<player::Player> & players, int activePlayer)
+	: m_board(board)
+	, m_dice(dice)
 	, m_players(players)
 	, m_activePlayer(activePlayer)
 	, m_shouldChangeRobber(false)
@@ -23,7 +24,7 @@ RollDice::RollDice(board::Dice & dice, std::vector<player::Player> & players, in
 {
 }
 
-bool RollDice::execute(board::Board & board)
+bool RollDice::execute()
 {
 	int diceValue = m_dice.roll().getValue();
 
@@ -33,7 +34,7 @@ bool RollDice::execute(board::Board & board)
 		checkCardBurn();
 	}
 
-	giveRessources(board, diceValue);
+	giveRessources(m_board, diceValue);
 
 	return true;
 }
@@ -73,7 +74,7 @@ void RollDice::giveRessources(const board::Board & board, int diceValue) const
 				[this, &activeCell](const token::building::Building * activeBuilding)
 				{
 					player::Player & player = m_players.at(activeBuilding->getReference());
-					player.addRessource(activeCell.produceLandRessource().getType(), activeBuilding->getPoints());
+					player.addRessource(activeCell.produceLandRessource(), activeBuilding->getPoints());
 				});
 		});
 }
@@ -100,7 +101,7 @@ Done::Done()
 {
 }
 
-bool Done::execute(board::Board & /*board*/)
+bool Done::execute()
 {
 	return true;
 }
@@ -117,9 +118,9 @@ ExchangeCardsAction::ExchangeCardsAction(player::Player & player, int typeResult
 {
 }
 
-bool ExchangeCardsAction::execute(board::Board & /*board*/)
+bool ExchangeCardsAction::execute()
 {
-	return player::reactions::performExchangeCards(m_player, static_cast<card::RessourceType>(m_typeResult), static_cast<card::RessourceType>(m_typeToTrade));
+	return player::reactions::performExchangeCards(m_player, static_cast<card::Ressource>(m_typeResult), static_cast<card::Ressource>(m_typeToTrade));
 }
 
 ActionType ExchangeCardsAction::getType() const
@@ -127,8 +128,9 @@ ActionType ExchangeCardsAction::getType() const
 	return ActionType::ExchangeCards;
 }
 
-MoveRobberAction::MoveRobberAction(player::Player & player, int cellPosition, int vertexPosition, std::vector<player::Player> & players, const NumberGenerator & numberGenerator)
+MoveRobberAction::MoveRobberAction(player::Player & player, board::Board & board, int cellPosition, int vertexPosition, std::vector<player::Player> & players, const NumberGenerator & numberGenerator)
 	: m_player(player)
+	, m_board(board)
 	, m_cellPosition(cellPosition)
 	, m_vertexPosition(vertexPosition)
 	, m_players(players)
@@ -136,28 +138,40 @@ MoveRobberAction::MoveRobberAction(player::Player & player, int cellPosition, in
 {
 }
 
-bool MoveRobberAction::execute(board::Board & board)
+bool MoveRobberAction::execute()
 {
-	// TODO: check cellPosition and VertexPosition are adjacent..
-	bool isSucess = board.moveRobber(m_cellPosition);
-
-	if (isSucess)
+	bool isSuccess = preExecute();
+	
+	if (isSuccess)
 	{
-		std::optional<int> playerRef = board.getVertexPlayerRef(m_vertexPosition);
-		if (playerRef)
-		{
-			player::Player & fromPlayer = m_players.at(playerRef.value());
-			int ressourceIndex = m_numberGenerator.generateNumber(1, fromPlayer.getNumberOfRessources());
-			player::reactions::stealPlayerCard(m_player, fromPlayer, ressourceIndex);
-		}
+		isSuccess = m_board.moveRobber(m_cellPosition);
+
+		if (isSuccess)
+			postExecute();
 	}
 
-	return isSucess;
+	return isSuccess;
 }
 
 ActionType MoveRobberAction::getType() const
 {
 	return ActionType::MoveRobber;
+}
+
+bool MoveRobberAction::preExecute()
+{
+	return m_board.checkAdjacent(m_cellPosition, m_vertexPosition);
+}
+
+void MoveRobberAction::postExecute()
+{
+	std::optional<int> playerRef = m_board.getVertexPlayerRef(m_vertexPosition);
+	if (playerRef)
+	{
+		player::Player & fromPlayer = m_players.at(playerRef.value());
+		int ressourceIndex = m_numberGenerator.generateNumber(1, fromPlayer.getNumberOfRessources());
+		player::reactions::stealPlayerCard(m_player, fromPlayer, ressourceIndex);
+	}
 }
 
 CardBurnAction::CardBurnAction(player::Player & player, const std::unordered_map<int, int> & ressourcesToBurn)
@@ -167,11 +181,11 @@ CardBurnAction::CardBurnAction(player::Player & player, const std::unordered_map
 	std::transform(ressourcesToBurn.begin(), ressourcesToBurn.end(), std::inserter(m_ressourcesToBurn, m_ressourcesToBurn.begin()),
 		[](const std::pair<int, int> & element)
 		{
-			return std::pair<card::RessourceType, int>(static_cast<card::RessourceType>(element.first), element.second);
+			return std::pair<card::Ressource, int>(static_cast<card::Ressource>(element.first), element.second);
 		});
 }
 
-bool CardBurnAction::execute(board::Board & /*board*/)
+bool CardBurnAction::execute()
 {
 	if (!preExecute())
 		return false;

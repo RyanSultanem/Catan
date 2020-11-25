@@ -5,7 +5,7 @@
 
 namespace cell {
 
-Cell::Cell(const card::RessourceType& ressource, unsigned int number, const std::vector<board::VertexRef>& vertices, int id)
+Cell::Cell(const card::Ressource& ressource, unsigned int number, const std::vector<board::VertexRef>& vertices, int id)
 	: m_id(id), m_land(ressource), m_number(number), m_vertices(vertices)
 {
 }
@@ -51,7 +51,7 @@ const std::vector<token::building::Building*> Cell::getActiveBuildings() const
 	std::vector<token::building::Building*> activeBuildings;
 	activeBuildings.reserve(3);
 
-	// TODO: check if can be replaced by copy_if
+	// TODO: check if can be replaced by copy_if: actually should be copy_if then transofrm.. this might be clearer
 	std::for_each(m_vertices.begin(), m_vertices.end(), 
 		[&activeBuildings](const board::Vertex & vertex)
 	{

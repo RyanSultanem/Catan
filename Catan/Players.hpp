@@ -1,6 +1,8 @@
 #ifndef PLAYERS_HPP
 #define PLAYERS_HPP
 
+#include <GameEndingListenner.hpp>
+
 #include <player/Player.hpp>
 
 #include <vector>
@@ -8,8 +10,7 @@
 class Players
 {
 public:
-
-	void initializePlayers(int numberOfPlayers);
+	void initializePlayers(int numberOfPlayers, GameEndingListenner * gameEndListenner);
 
 	int getNumberOfPlayers() const;
 	int getActivePlayerId() const;

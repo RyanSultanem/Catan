@@ -3,12 +3,12 @@
 
 #include <functional>
 
-namespace cell {
+namespace board {
 
 class Cell;
 typedef std::reference_wrapper<Cell> CellRef;
 typedef std::reference_wrapper<const Cell> CellCRef;
 
-}
+} // namespace board
 
 #endif // !BOARD_CELL_FWD_HPP

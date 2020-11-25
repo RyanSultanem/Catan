@@ -63,18 +63,18 @@ void RollDice::giveRessources(const board::Board & board, int diceValue) const
 {
 	// TODO: ...ugly
 	// TODO: should be moved under player::reactions
-	const std::vector<cell::CellCRef> activeCells = board.getCellsWithNumber(diceValue);
+	const std::vector<board::CellCRef> activeCells = board.getCellsWithNumber(diceValue);
 
 	std::for_each(activeCells.begin(), activeCells.end(),
-		[this](const cell::Cell & activeCell)
+		[this](const board::Cell & activeCell)
 		{
 			const std::vector<token::building::Building*> activeBuildings = activeCell.getActiveBuildings();
 
 			std::for_each(activeBuildings.begin(), activeBuildings.end(),
 				[this, &activeCell](const token::building::Building * activeBuilding)
 				{
-					player::Player & player = m_players.at(activeBuilding->getReference());
-					player.addRessource(activeCell.produceLandRessource(), activeBuilding->getPoints());
+					player::Player & player = m_players.at(activeBuilding->getPlayerId());
+					player.addRessource(activeCell.getRessource(), activeBuilding->getPoints());
 				});
 		});
 }
@@ -160,7 +160,10 @@ ActionType MoveRobberAction::getType() const
 
 bool MoveRobberAction::preExecute()
 {
-	return m_board.checkAdjacent(m_cellPosition, m_vertexPosition);
+	bool validCellToBeRobbed = m_board.getRobbedCell().has_value() ? m_board.getRobbedCell()->get().getId() != m_cellPosition : true;
+
+	return m_board.checkAdjacent(m_cellPosition, m_vertexPosition)
+		&& validCellToBeRobbed;
 }
 
 void MoveRobberAction::postExecute()

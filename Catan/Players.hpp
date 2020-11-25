@@ -14,9 +14,11 @@ public:
 
 	int getNumberOfPlayers() const;
 	int getActivePlayerId() const;
+	int getLastPlayerId() const;
 	player::Player & getActivePlayer();
-	const std::vector<player::Player> getPlayers() const;
-	std::vector<player::Player> getPlayers();
+
+	const std::vector<player::Player> & getPlayers() const;
+	std::vector<player::Player> & getPlayers();
 
 	void setNextActivePlayer();
 	void setNextActivePlayer(int playerId);

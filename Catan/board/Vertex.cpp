@@ -85,7 +85,7 @@ bool Vertex::hasAtLeastOneAdjecentRoad(int playerReference) const
 
 bool Vertex::hasBuildingOfPlayer(int playerReference) const
 {
-	return m_building.has_value() && m_building.value()->getReference() == playerReference;
+	return m_building.has_value() && m_building.value()->getPlayerId() == playerReference;
 }
 
 std::vector<EdgeCRef> Vertex::getOtherEdges(const Edge & givenEdge) const

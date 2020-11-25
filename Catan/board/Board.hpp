@@ -8,7 +8,6 @@
 #include <board/Cell.hpp>
 #include <board/Edge.hpp>
 #include <board/Harbor.fwd.hpp>
-#include <board/Land.fwd.hpp>
 #include <board/Vertex.hpp>
 
 #include <token/Conditions.fwd.hpp>
@@ -26,9 +25,9 @@ class Board : public serialize::Serializable
 {
 public:
 	Board();
-	Board(std::vector<cell::Cell> && cells, std::vector<Vertex> && vertices, std::vector<Edge> && edges, const token::Robber & robber);
+	Board(std::vector<Cell> && cells, std::vector<Vertex> && vertices, std::vector<Edge> && edges, const token::Robber & robber);
 
-	Board copyBoard(std::vector<cell::Cell> && cells, std::vector<Vertex> && vertices, std::vector<Edge> && edges, token::Robber & robber) const;
+	Board copyBoard(std::vector<Cell> && cells, std::vector<Vertex> && vertices, std::vector<Edge> && edges, token::Robber & robber) const;
 
 	int getNumberOfCells() const;
 	int getNumberOfLand(const card::Ressource& ressource) const;
@@ -44,18 +43,19 @@ public:
 	bool placeCity(int position, token::building::City & city, const PlaceCityCondition & condition);
 
 	bool moveRobber(int position);
+	const std::optional<CellRef> & getRobbedCell() const;
 
 	std::vector<card::Ressource> getRessourcesFromVertexPosition(int position) const;
 	// TODO: check if harbor check should really be done through Board, or can find a better solution; could be done through vertex if cost is not directly in player maybe, but in player also makes sense..
 	std::optional<HarborCRef> getHarbor(int position) const;
-	std::vector<cell::CellCRef> getCellsWithNumber(int value) const;
+	std::vector<CellCRef> getCellsWithNumber(int value) const;
 	std::optional<EdgeCRef> getEdgeAt(int position) const;
 	std::optional<int> getVertexPlayerRef(int position) const;
 
 	std::string serialize() const override;
 
 private:
-	std::vector<cell::Cell> m_cells;
+	std::vector<Cell> m_cells;
 	std::vector<Vertex> m_vertices;
 	std::vector<Edge> m_edges;
 

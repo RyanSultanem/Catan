@@ -47,7 +47,7 @@ bool edgesHasPlayerRoad(const std::vector<EdgeCRef> & edges, int playerReference
 		[playerReference, &vertexBetweenRoads](const Edge & otherEdge)
 	{
 		std::optional<token::Road*> optRoad = otherEdge.getRoad();
-		if (optRoad && optRoad.value()->getReference() == playerReference)
+		if (optRoad && optRoad.value()->getPlayerId() == playerReference)
 			return true;
 
 		return false;
@@ -76,7 +76,7 @@ bool Edge::hasVertex(int vertexReference) const
 
 bool Edge::hasRoadOfPlayer(int playerReference) const
 {
-	return m_road.has_value() && m_road.value()->getReference() == playerReference;
+	return m_road.has_value() && m_road.value()->getPlayerId() == playerReference;
 }
 
 std::optional<VertexCRef> Edge::getOtherVertex(const Vertex& vertex) const

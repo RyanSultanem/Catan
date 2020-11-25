@@ -14,22 +14,22 @@ namespace token {
 class Token : public serialize::Serializable
 {
 public:
-   explicit Token(int reference) : m_reference(reference) {}
+   explicit Token(int playerId) : m_playerId(playerId) {}
 
 	virtual const std::unordered_map<card::Ressource, int>& getCost() const = 0;
 
-   int getReference() const { return m_reference; }
+   int getPlayerId() const { return m_playerId; }
 
    virtual void accept(const TokenVisitor & visitor) const = 0;
 
-   std::string serialize() const override { return std::to_string(getReference()); }
+   std::string serialize() const override { return std::to_string(getPlayerId()); }
 
-   bool operator==(const Token & other) const { return m_reference == other.m_reference; }
+   bool operator==(const Token & other) const { return m_playerId == other.m_playerId; }
 
 	virtual ~Token() {};
 
 private:
-   int m_reference; // TODO: should be playerId/playerReference or Owner?
+   int m_playerId; // TODO: should be player::Owner?
 };
 
 } // namespace token

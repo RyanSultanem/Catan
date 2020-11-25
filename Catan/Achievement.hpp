@@ -24,7 +24,7 @@ private:
 	int m_count;
 
 private:
-	void updatePlayerInformation(player::PointReceiver & newPointReceiver);
+	bool updatePlayerInformation(player::PointReceiver & newPointReceiver);
 };
 
 class AchievementChecker

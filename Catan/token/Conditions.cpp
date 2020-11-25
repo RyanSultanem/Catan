@@ -48,8 +48,8 @@ bool PlaceInitialRoadCondition::checkCondition(const board::Edge & edge) const
 	return !edge.getRoad() && edge.hasVertex(m_initialSettlementPosition);
 }
 
-PlaceCityCondition::PlaceCityCondition(int playerReference)
-	: m_playerReference(playerReference)
+PlaceCityCondition::PlaceCityCondition(int playerId)
+	: m_playerId(playerId)
 {
 }
 
@@ -60,7 +60,7 @@ bool PlaceCityCondition::checkCondition(const board::Vertex & vertex) const
 	{
 		token::building::Settlement * settlement = dynamic_cast<token::building::Settlement *>(*optBuilding);
 
-		if (settlement && settlement->getReference() == m_playerReference)
+		if (settlement && settlement->getPlayerId() == m_playerId)
 		{
 			return true;
 		}

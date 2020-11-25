@@ -22,17 +22,22 @@ int Players::getActivePlayerId() const
 	return m_activePlayer;
 }
 
+int Players::getLastPlayerId() const
+{
+	return m_players.back().getId();
+}
+
 player::Player & Players::getActivePlayer()
 {
 	return m_players[m_activePlayer];
 }
 
-const std::vector<player::Player> Players::getPlayers() const
+const std::vector<player::Player> & Players::getPlayers() const
 {
 	return m_players;
 }
 
-std::vector<player::Player> Players::getPlayers()
+std::vector<player::Player> & Players::getPlayers()
 {
 	return m_players;
 }

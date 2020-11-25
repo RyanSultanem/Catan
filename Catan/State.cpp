@@ -18,17 +18,15 @@ NextStateResult::NextStateResult(std::unique_ptr<State> && newState)
 {
 }
 
-bool NextStateResult::getIsUpdated() const
+bool NextStateResult::isUpdated() const
 {
 	return m_updated;
 }
 
-std::unique_ptr<State> NextStateResult::getNewState()
+std::unique_ptr<State> NextStateResult::takeNewState()
 {
 	return std::move(m_newState);
 }
-
-// TODO: dynamic_casts can be changed with ActionData from alll Actions with optionals (like Development), check if should be done.
 
 InitialSettlementState::InitialSettlementState()
 	: m_secondRun(false)
@@ -40,20 +38,19 @@ bool InitialSettlementState::isValid(const Action & action) const
 	return action.getType() == ActionType::PlaceInitialSettlementRoad;
 }
 
-NextStateResult InitialSettlementState::nextState(Players & players, const Action & action)
+NextStateResult InitialSettlementState::computeNextState(Players & players, const Action & action)
 {
-	if (!isValid(action)) // TODO: needed?
-		return NextStateResult();
-
-	// TODO: check if can do something more understandable: currently works but not very clear
-	bool updated = updatePlayersSecondRun(players);
+	bool oldSecondRunValue = m_secondRun;
+	updateSecondRun(players);
 	
 	if (m_secondRun && players.getActivePlayerId() == 0)
 	{
 		return NextStateResult(std::make_unique<PrePlayerDecision>());
 	}
 
-	if (!updated)
+	bool updatedSecondRun = m_secondRun;
+	bool onSecondRunUpdate = updatedSecondRun != oldSecondRunValue;
+	if (!onSecondRunUpdate)
 	{
 		int currentActivePlayer = players.getActivePlayerId();
 		players.setNextActivePlayer(m_secondRun ? --currentActivePlayer : ++currentActivePlayer);
@@ -72,20 +69,12 @@ void InitialSettlementState::preProcessAction(PlaceInitialSettlementRoadAction &
 	action.setSecondRun(m_secondRun);
 }
 
-bool InitialSettlementState::updatePlayersSecondRun(Players & players)
+void InitialSettlementState::updateSecondRun(const Players & players)
 {
-	bool updated = false;
+	if (m_secondRun)
+		return;
 
-	if (!m_secondRun)
-	{
-		if (players.getActivePlayerId() == players.getNumberOfPlayers() - 1)
-		{
-			m_secondRun = true;
-			updated = true;
-		}
-	}
-
-	return updated;
+	m_secondRun = (players.getActivePlayerId() == players.getLastPlayerId());
 }
 
 bool PrePlayerDecision::isValid(const Action & action) const
@@ -94,29 +83,32 @@ bool PrePlayerDecision::isValid(const Action & action) const
 		|| validDevelopmentUse(action); 
 }
 
-NextStateResult PrePlayerDecision::nextState(Players & players, const Action & action)
+static std::unique_ptr<State> computeRollDiceNextState(const RollDice & rollDiceAction, Players & players, bool developmentUsed)
+{
+	if (rollDiceAction.shouldBurn())
+	{
+		return std::make_unique<CardBurnState>(players, players.getActivePlayerId(), rollDiceAction.getPlayerBurnQueue(), developmentUsed);
+	}
+	
+	if (rollDiceAction.shouldChangeRobber())
+	{
+		return std::make_unique<MovingRobberState>(developmentUsed);
+	}
+	
+	return std::make_unique<PlayerDecision>(developmentUsed);
+}
+
+NextStateResult PrePlayerDecision::computeNextState(Players & players, const Action & action)
 {
 	if (validDevelopmentUse(action))
 	{
 		m_developmentUsed = true;
 	}
 	else if (action.getType() == ActionType::RollDice)
-	{
-		std::unique_ptr<State> nextState;
-		
+	{		
 		const RollDice * rollDiceAction = dynamic_cast<const RollDice *>(&action);
-		if (rollDiceAction && rollDiceAction->shouldBurn()) //TODO: check if rollDiceAction shoudl really be checked for validity.
-		{
-			nextState = std::make_unique<CardBurnState>(players, players.getActivePlayerId(), rollDiceAction->getPlayerBurnQueue(), m_developmentUsed);
-		}
-		else if (rollDiceAction && rollDiceAction->shouldChangeRobber())
-		{
-			nextState = std::make_unique<MovingRobberState>(m_developmentUsed);
-		}
-		else
-			nextState = std::make_unique<PlayerDecision>(m_developmentUsed);
 
-		return NextStateResult(std::move(nextState));
+		return NextStateResult(std::move(computeRollDiceNextState(*rollDiceAction, players, m_developmentUsed)));
 	}
 
 	return NextStateResult();
@@ -153,7 +145,7 @@ bool PlayerDecision::isValid(const Action & action) const
 	  || action.getType() == ActionType::Done; 
 }
 
-NextStateResult PlayerDecision::nextState(Players & players, const Action & action)
+NextStateResult PlayerDecision::computeNextState(Players & players, const Action & action)
 {
 	if (action.getType() == ActionType::UseDevelopment)
 	{
@@ -200,7 +192,7 @@ bool CardBurnState::isValid(const Action & action) const
 	return action.getType() == ActionType::CardBurn;
 }
 
-NextStateResult CardBurnState::nextState(Players & players, const Action & action)
+NextStateResult CardBurnState::computeNextState(Players & players, const Action & action)
 {
 	if (m_playersBurn.empty())
 	{
@@ -212,7 +204,7 @@ NextStateResult CardBurnState::nextState(Players & players, const Action & actio
 		setBurnActivePlayer(players);
 	}
 
-	return NextStateResult(false);
+	return NextStateResult();
 }
 
 std::vector<ActionType> CardBurnState::getPossibleActions()
@@ -236,7 +228,7 @@ bool MovingRobberState::isValid(const Action & action) const
 	return action.getType() == ActionType::MoveRobber;
 }
 
-NextStateResult MovingRobberState::nextState(Players & players, const Action & /*action*/)
+NextStateResult MovingRobberState::computeNextState(Players & players, const Action & /*action*/)
 {
 	return NextStateResult(std::make_unique<PlayerDecision>(m_developmentUsed));
 }

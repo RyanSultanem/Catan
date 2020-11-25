@@ -55,7 +55,7 @@ public:
 
 private:
 	std::unique_ptr<NumberGenerator> m_numberGenerator;
-	std::unique_ptr<State> m_state; // TODO: Possible enhancement, have State as a non polymoprhic type, with and internal polymoprhic data.
+	std::unique_ptr<State> m_state; // TODO: Possible enhancement, have State as a non polymoprhic type, with and internal polymoprhic data. This way State will handle its own changes, not Game Anymore
 	
 	board::Board m_board;
 	board::Dice m_dice;

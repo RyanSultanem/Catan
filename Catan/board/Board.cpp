@@ -1,7 +1,5 @@
 #include <board/Board.hpp>
 
-#include <board/Land.hpp>
-
 #include <card/Card.hpp>
 
 #include <token/Building.hpp>
@@ -18,7 +16,7 @@ Board::Board()
 {
 }
 
-Board::Board(std::vector<cell::Cell> && cells, std::vector<Vertex> && vertices, std::vector<Edge> && edges, const token::Robber & robber)
+Board::Board(std::vector<Cell> && cells, std::vector<Vertex> && vertices, std::vector<Edge> && edges, const token::Robber & robber)
 	: m_cells(std::move(cells))
 	, m_vertices(std::move(vertices))
 	, m_edges(std::move(edges))
@@ -26,7 +24,7 @@ Board::Board(std::vector<cell::Cell> && cells, std::vector<Vertex> && vertices, 
 {
 }
 
-Board Board::copyBoard(std::vector<cell::Cell>&& cells, std::vector<Vertex>&& vertices, std::vector<Edge>&& edges, token::Robber & robber) const
+Board Board::copyBoard(std::vector<Cell>&& cells, std::vector<Vertex>&& vertices, std::vector<Edge>&& edges, token::Robber & robber) const
 {
 	for (int i = 0; i < vertices.size(); ++i)
 	{
@@ -52,8 +50,8 @@ int Board::getNumberOfCells() const
 
 int Board::getNumberOfLand(const card::Ressource& ressource) const
 {
-	return std::count_if(m_cells.begin(), m_cells.end(), [&](const cell::Cell& p) {
-		return p.getLand().getRessourceType() == ressource;
+	return std::count_if(m_cells.begin(), m_cells.end(), [&](const Cell& cell) {
+		return cell.getRessource() == ressource;
 	});
 }
 
@@ -98,7 +96,7 @@ bool Board::checkAdjacent(int cellPosition, int vertexPosition) const
 	if(!utility::isValidPosition(m_cells, cellPosition) || !utility::isValidPosition(m_vertices, vertexPosition))
 		return false;
 
-	 const cell::Cell & cell = m_cells[cellPosition];
+	 const Cell & cell = m_cells[cellPosition];
 	 const Vertex & vertex = m_vertices[vertexPosition];
 
 	 return cell.hasVertex(vertex.getId());
@@ -161,17 +159,22 @@ bool Board::moveRobber(int position)
 	return true;
 }
 
+const std::optional<CellRef>& Board::getRobbedCell() const
+{
+	return m_robber.getCell();
+}
+
 std::vector<card::Ressource> Board::getRessourcesFromVertexPosition(int position) const
 {
 	std::vector<card::Ressource> ressources;
 	ressources.reserve(3);
 
 	std::for_each(m_cells.begin(), m_cells.end(),
-	[&](const cell::Cell & cell)
+	[&](const Cell & cell)
 	{
 		if(cell.hasVertex(position))
 		{
-			card::Ressource ressourceType = cell.produceLandRessource();
+			card::Ressource ressourceType = cell.getRessource();
 			
 			if(ressourceType != card::Ressource::NO_RESSOURCE)
 				return ressources.push_back(ressourceType);
@@ -200,14 +203,14 @@ std::string Board::serialize() const
    return board;
 }
 
-std::vector<cell::CellCRef> Board::getCellsWithNumber(int value) const
+std::vector<CellCRef> Board::getCellsWithNumber(int value) const
 {
-	std::vector<cell::CellCRef> cellsWithNumber;
+	std::vector<CellCRef> cellsWithNumber;
 	cellsWithNumber.reserve(2);
 
 	// TODO: check if can be replaced by copy_if
 	std::for_each(m_cells.begin(), m_cells.end(), 
-		[&cellsWithNumber, &value](const cell::Cell & cell)
+		[&cellsWithNumber, &value](const Cell & cell)
 	{
 		if(cell.getNumber() == value)
 		{
@@ -234,7 +237,7 @@ std::optional<int> Board::getVertexPlayerRef(int position) const
 	const std::optional<token::building::Building*> & building = m_vertices[position].getBuilding();
 	
 	if (building)
-		return building.value()->getReference();
+		return building.value()->getPlayerId();
 	else
 		return std::nullopt;
 }

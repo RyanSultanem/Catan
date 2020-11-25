@@ -5,20 +5,20 @@
 namespace token {
 
 Robber::Robber()
-	: m_cell(nullptr)
+	: m_cell(std::nullopt)
 	, m_cellValue(0)
 {
 }
 
-void Robber::initializeRobberCell(cell::Cell & cell)
+void Robber::initializeRobberCell(board::Cell & cell)
 {
-	m_cell = &cell;
+	m_cell = cell;
 	m_cellValue = cell.getNumber();
 }
 
-bool Robber::applyTo(cell::Cell & newCell)
+bool Robber::applyTo(board::Cell & newCell)
 {	
-	if (!m_cell || m_cell->getId() == newCell.getId())
+	if (!m_cell || m_cell->get().getId() == newCell.getId())
 		return false;
 
 	resetOldCellValue();
@@ -27,16 +27,21 @@ bool Robber::applyTo(cell::Cell & newCell)
 	return true;
 }
 
-void Robber::resetOldCellValue()
+const std::optional<board::CellRef>& Robber::getCell() const
 {
-	m_cell->setNumber(m_cellValue);
+	return m_cell;
 }
 
-void Robber::applyOnNewCell(cell::Cell & newCell)
+void Robber::resetOldCellValue()
+{
+	m_cell->get().setNumber(m_cellValue);
+}
+
+void Robber::applyOnNewCell(board::Cell & newCell)
 {
 	m_cellValue = newCell.getNumber();
-	m_cell = &newCell;
-	m_cell->setNumber(0);
+	m_cell = newCell;
+	m_cell->get().setNumber(0);
 }
 
 } // namespace token

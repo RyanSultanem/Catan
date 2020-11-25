@@ -18,29 +18,29 @@ Achievement::Achievement(int minRequirement)
 
 bool Achievement::update(player::PointReceiver & newPointReceiver, const AchievementChecker & checker)
 {
-	bool updated = false;
 	int newCount = checker.getAchievementCount(newPointReceiver.getId());
 
 	if(newCount >= m_minRequirement && newCount > m_count)
 	{
-		updated = (newPointReceiver.getId() != (m_pointReceiver ? m_pointReceiver->get().getId() : -1));
 		m_count = newCount;
-
-		if (updated)
-		{
-			updatePlayerInformation(newPointReceiver);
-		}
+		return updatePlayerInformation(newPointReceiver);
 	}
 
-	return updated;
+	return false;
 }
 
-void Achievement::updatePlayerInformation(player::PointReceiver & newPointReceiver)
+bool Achievement::updatePlayerInformation(player::PointReceiver & newPointReceiver)
 {
-	if (m_pointReceiver)
+	if (m_pointReceiver.has_value() && m_pointReceiver->get().getId() == newPointReceiver.getId())
+		return false;
+	
+	if (m_pointReceiver.has_value())
 		m_pointReceiver->get().receivePoints(-2);
+
 	newPointReceiver.receivePoints(2);
 	m_pointReceiver = newPointReceiver;
+
+	return true;
 }
 
 LongestRoadChecker::LongestRoadChecker(const board::Edge & edge)

@@ -17,11 +17,11 @@ public:
 	NextStateResult();
 	explicit NextStateResult(std::unique_ptr<State> && newState);
 
-	bool getIsUpdated() const;
-	std::unique_ptr<State> getNewState();
+	bool isUpdated() const;
+	std::unique_ptr<State> takeNewState();
 
 private:
-	bool m_updated = false; // TODO: can be replaced by an interface and 2 subclasses - UpdatedState SameState with NexStateResult as interface - Probably not worth it and better this way.
+	bool m_updated = false;
 	std::unique_ptr<State> m_newState = nullptr;
 };
 
@@ -30,18 +30,18 @@ class State
 {
 public:
 	virtual bool isValid(const Action & action) const = 0;
-	virtual NextStateResult nextState(Players & players, const Action & action) = 0; // TODO: might need to rename.
+	virtual NextStateResult computeNextState(Players & players, const Action & action) = 0;
 
 	virtual std::vector<ActionType> getPossibleActions() = 0;
 };
 
-class InitialSettlementState : public State // TODO: Fix name
+class InitialSettlementState : public State
 {
 public:
 	InitialSettlementState();
 
 	bool isValid(const Action & action) const override;
-	NextStateResult nextState(Players & players, const Action & action) override;
+	NextStateResult computeNextState(Players & players, const Action & action) override;
 
 	std::vector<ActionType> getPossibleActions() override;
 	void preProcessAction(PlaceInitialSettlementRoadAction & action);
@@ -49,14 +49,14 @@ public:
 private:
 	bool m_secondRun;
 
-	bool updatePlayersSecondRun(Players & players);
+	void updateSecondRun(const Players & players);
 };
 
 class PrePlayerDecision : public State
 {
 public:
 	bool isValid(const Action & action) const override;
-	NextStateResult nextState(Players & players, const Action & action) override;
+	NextStateResult computeNextState(Players & players, const Action & action) override;
 
 	std::vector<ActionType> getPossibleActions() override;
 
@@ -72,7 +72,7 @@ public:
 	explicit PlayerDecision(bool developmentUsed);
 
 	bool isValid(const Action & action) const override;
-	NextStateResult nextState(Players & players, const Action & action) override;
+	NextStateResult computeNextState(Players & players, const Action & action) override;
 
 	std::vector<ActionType> getPossibleActions() override;
 
@@ -88,7 +88,7 @@ public:
 	explicit CardBurnState(Players & players, int currentPlayer, const std::queue<int> & playersBurn, bool developmentUsed);
 
 	bool isValid(const Action & action) const override;
-	NextStateResult nextState(Players & players, const Action & action) override;
+	NextStateResult computeNextState(Players & players, const Action & action) override;
 
 	std::vector<ActionType> getPossibleActions() override;
 
@@ -106,7 +106,7 @@ public:
 	explicit MovingRobberState(bool developmentUsed);
 
 	bool isValid(const Action & action) const override;
-	NextStateResult nextState(Players & players, const Action & action) override;
+	NextStateResult computeNextState(Players & players, const Action & action) override;
 
 	std::vector<ActionType> getPossibleActions() override;
 

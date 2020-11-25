@@ -17,7 +17,7 @@ public:
 
 private:
 	int m_cellId = 0;
-	std::vector<cell::Cell> m_cells;
+	std::vector<Cell> m_cells;
 
 	int m_vertexId = 0;
 	std::vector<Vertex> m_vertices;

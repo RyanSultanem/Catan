@@ -3,16 +3,19 @@
 
 #include <card/Card.hpp>
 
-namespace cell {
+namespace board {
 
 Cell::Cell(const card::Ressource& ressource, unsigned int number, const std::vector<board::VertexRef>& vertices, int id)
-	: m_id(id), m_land(ressource), m_number(number), m_vertices(vertices)
+	: m_id(id)
+	, m_ressource(ressource)
+	, m_number(number)
+	, m_vertices(vertices)
 {
 }
 
-card::Ressource Cell::produceLandRessource() const
+card::Ressource Cell::getRessource() const
 {
-	return m_land.produceRessource();
+	return m_ressource;
 }
 
 int Cell::getId() const
@@ -33,7 +36,7 @@ std::string Cell::serialize() const
 {
 	return std::to_string(m_id) + ',' +
 		std::to_string(m_number) + ',' +
-		std::to_string(static_cast<int>(m_land.getRessourceType()));
+		std::to_string(static_cast<int>(m_ressource));
 }
 
 int Cell::getNumber() const
@@ -66,10 +69,5 @@ const std::vector<token::building::Building*> Cell::getActiveBuildings() const
 	return activeBuildings;
 }
 
-land::Land Cell::getLand() const
-{
-	return m_land;
-}
-
-}
+} // namespace board 
 

@@ -121,7 +121,7 @@ bool Game::done()
 
 bool Game::gameEnded() const
 {
-	return m_winnerId != std::nullopt;
+	return m_winnerId.has_value();
 }
 
 std::optional<int> Game::getWinnerId() const
@@ -196,9 +196,9 @@ bool Game::processAction(Action & action)
 
 void Game::updateStateWithAction(Action & action)
 {
-	NextStateResult newStateResult = m_state->nextState(m_players, action);
-	if (newStateResult.getIsUpdated())
-		m_state = std::move(newStateResult.getNewState());
+	NextStateResult newStateResult = m_state->computeNextState(m_players, action);
+	if (newStateResult.isUpdated())
+		m_state = std::move(newStateResult.takeNewState());
 }
 
 namespace builder {

@@ -55,11 +55,11 @@ private:
 class PlaceCityCondition : public PlaceTokenCondition<board::Vertex>
 {
 public:
-	explicit PlaceCityCondition(int playerReference);
+	explicit PlaceCityCondition(int playerId);
 	bool checkCondition(const board::Vertex & vertex) const override;
 
 private:
-	int m_playerReference;
+	int m_playerId;
 };
 
 #endif // !TOKEN_CONDITION_FWD_CPP

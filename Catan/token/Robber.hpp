@@ -3,21 +3,25 @@
 
 #include <board/Cell.fwd.hpp>
 
+#include <optional>
+
 namespace token {
 
 class Robber
 {
 public:
 	Robber();
-	void initializeRobberCell(cell::Cell & cell);
-	bool applyTo(cell::Cell & newCell);
+	void initializeRobberCell(board::Cell & cell);
+	bool applyTo(board::Cell & newCell);
+
+	const std::optional<board::CellRef> & getCell() const;
 
 private:
-	cell::Cell * m_cell; // TODO: check if can do better
+	std::optional<board::CellRef> m_cell; // TODO: check if can do better
 	int m_cellValue;
 
 	void resetOldCellValue();
-	void applyOnNewCell(cell::Cell & newCell);
+	void applyOnNewCell(board::Cell & newCell);
 };
 
 } // namespace token

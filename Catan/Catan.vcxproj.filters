@@ -42,16 +42,10 @@
     <ClInclude Include="board\Harbor.fwd.hpp">
       <Filter>board</Filter>
     </ClInclude>
-    <ClInclude Include="board\Land.fwd.hpp">
-      <Filter>board</Filter>
-    </ClInclude>
     <ClInclude Include="board\Board.hpp">
       <Filter>board</Filter>
     </ClInclude>
     <ClInclude Include="board\Vertex.hpp">
-      <Filter>board</Filter>
-    </ClInclude>
-    <ClInclude Include="board\Land.hpp">
       <Filter>board</Filter>
     </ClInclude>
     <ClInclude Include="board\Cell.hpp">
@@ -181,9 +175,6 @@
       <Filter>board</Filter>
     </ClCompile>
     <ClCompile Include="board\Vertex.cpp">
-      <Filter>board</Filter>
-    </ClCompile>
-    <ClCompile Include="board\Land.cpp">
       <Filter>board</Filter>
     </ClCompile>
     <ClCompile Include="board\Harbor.cpp">

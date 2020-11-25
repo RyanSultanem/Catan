@@ -9,10 +9,10 @@
 
 #include <utility/NumberGenerator.hpp>
 
+#include <array>
+
 #include <gtest/gtest.h>
 
-
-// TODO: place in a seperate mock file.. myabe too small till now
 class AchievementCheckerMock : public AchievementChecker
 {
 public:
@@ -115,9 +115,14 @@ static void simulateUseDevelopment(player::Player & player, const card::Developm
 		player.receiveDevelopment(card::Development(developmentAction));
 
 	card::DevelopmentData data;
-	data.setCellVertexPosition({5, 5}); // random values
+	std::array<std::pair<int, int>, 2> cellVertexPositons;
+	cellVertexPositons[0] = { 5,10 }; // random different valid cell/vertex values for correct robber movement
+	cellVertexPositons[1] = { 6,20 };
+
 	for (int i = 0; i < countUsed; ++i)
 	{
+		std::pair<int, int> cellVertexPosition = cellVertexPositons[i%cellVertexPositons.size()];
+		data.setCellVertexPosition({ cellVertexPosition.first, cellVertexPosition.second });
 		auto & developmentOpt = player.getUnusedDevelopment(developmentAction.getType());
 		if (developmentOpt)
 			developmentOpt->get().executeAction(player, data);

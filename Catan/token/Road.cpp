@@ -8,8 +8,8 @@ const std::unordered_map<card::Ressource, int> ROAD_COST =
 	{ card::Ressource::BRICK, 1 }
 };
 
-Road::Road(int reference) 
-   : Token(reference)
+Road::Road(const player::Owner & owner)
+   : Token(owner)
 {
 }
 

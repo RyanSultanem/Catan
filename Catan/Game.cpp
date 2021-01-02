@@ -79,7 +79,7 @@ bool Game::exchangeCards(int resultType, int typeToTrade)
 
 bool Game::moveRobber(int cellPosition, int vertexPosition)
 {
-	MoveRobberAction moveRobberAction(m_players.getActivePlayer(), m_board, cellPosition, vertexPosition, m_players.getPlayers(), *m_numberGenerator);
+	MoveRobberAction moveRobberAction(m_players, m_board, cellPosition, vertexPosition, *m_numberGenerator);
 
 	return processAction(moveRobberAction);
 }
@@ -107,7 +107,7 @@ bool Game::useDevelopmentCard(const card::DevelopmentData & developmentData)
 
 bool Game::rollDice()
 {
-	RollDice action(m_board, m_dice, m_players.getPlayers(), m_players.getActivePlayerId());
+	RollDice action(m_board, m_dice, m_players);
 
 	return processAction(action);
 }
@@ -132,11 +132,6 @@ std::optional<int> Game::getWinnerId() const
 std::vector<ActionType> Game::getPossibleActions() const
 {
 	return m_state.get()->getPossibleActions();
-}
-
-int Game::getPlayerCount() const
-{
-	return m_players.getNumberOfPlayers();
 }
 
 void Game::updateGameEnd(int playerId)
@@ -178,7 +173,7 @@ void Game::setupPlayers(int numberOfPlayers)
 
 void Game::initalizeDevelopmentStock()
 {
-	m_developmentStock.initialize(m_players.getPlayers(), m_board, m_longestRoad, m_strongestArmy);
+	m_developmentStock.initialize(m_players, m_board, m_longestRoad, m_strongestArmy);
 }
 
 bool Game::processAction(Action & action)

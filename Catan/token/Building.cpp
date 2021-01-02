@@ -21,13 +21,13 @@ const std::unordered_map<card::Ressource, int> CITY_COST =
 
 const int CITY_POINTS = 2;
 
-Building::Building(int reference) 
-   : Token(reference)
+Building::Building(const player::Owner & owner)
+   : Token(owner)
 {
 }
 
-Settlement::Settlement(int reference) 
-	: Building(reference)
+Settlement::Settlement(const player::Owner & owner)
+	: Building(owner)
 {
 }
 
@@ -51,8 +51,8 @@ std::string Settlement::serialize() const
    return "S|" + Token::serialize();
 }	
 
-City::City(int reference) 
-	: Building(reference)
+City::City(const player::Owner & owner)
+	: Building(owner)
 {
 }
 

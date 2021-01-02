@@ -3,6 +3,8 @@
 #include <card/Development.hpp>
 #include <board/Board.hpp>
 #include <board/factory/BoardFactory.hpp>
+
+#include <Players.hpp>
 #include <player/Player.hpp>
 
 #include <mock/PlaceConditionMock.hpp>
@@ -131,13 +133,15 @@ static void simulateUseDevelopment(player::Player & player, const card::Developm
 
 TEST(StrongestArmyTest, KnightCountAndUsedEqual)
 {
-	player::Player player(0);
+	Players players;
+	players.initializePlayers(1, nullptr);
+	player::Player & player = players.getPlayer(0);
+	
 	int knightCount = 3;
 	int knightCountUsed = 3;
 
 	// TODO: Required here for scope.. should be able to do better when development reduces dependency
 	board::Board board = board::BoardFactory().generateBoard();
-	std::vector<player::Player> players{ player };
 	Achievement strongestArmy(3);
 	card::KnightAction knightAction(players, board, strongestArmy, RandomNumberGenerator());
 	simulateUseDevelopment(player, knightAction, knightCount, knightCountUsed);
@@ -150,13 +154,15 @@ TEST(StrongestArmyTest, KnightCountAndUsedEqual)
 
 TEST(StrongestArmyTest, KnightCountGreaterThanUsed)
 {
-	player::Player player(0);
+	Players players;
+	players.initializePlayers(1, nullptr);
+	player::Player & player = players.getPlayer(0);	
+	
 	int knightCount = 5;
 	int knightCountUsed = 2;
 
 	// TODO: Required here for scope.. should be able to do better
 	board::Board board = board::BoardFactory().generateBoard();
-	std::vector<player::Player> players{ player };
 	Achievement strongestArmy(3);
 	card::KnightAction knightAction(players, board, strongestArmy, RandomNumberGenerator());
 	simulateUseDevelopment(player, knightAction, knightCount, knightCountUsed);
@@ -169,13 +175,15 @@ TEST(StrongestArmyTest, KnightCountGreaterThanUsed)
 
 TEST(StrongestArmyTest, KnightCountUsedWithOtherDevelopmentInPlay)
 {
-	player::Player player(0);
+	Players players;
+	players.initializePlayers(1, nullptr);
+	player::Player & player = players.getPlayer(0);	
+	
 	int knightCount = 5;
 	int knightCountUsed = 2;
 
 	// TODO: Required here for scope.. should be able to do better
 	board::Board board = board::BoardFactory().generateBoard();
-	std::vector<player::Player> players{ player };
 	Achievement strongestArmy(3);
 	card::KnightAction knightAction(players, board, strongestArmy, RandomNumberGenerator());
 	simulateUseDevelopment(player, knightAction, knightCount, knightCountUsed);

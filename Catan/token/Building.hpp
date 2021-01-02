@@ -14,7 +14,7 @@ namespace building {
 class Building : public Token
 {
 public:
-   explicit Building(int reference);
+   explicit Building(const player::Owner & owner);
 
    virtual int getPoints() const = 0;
 };
@@ -22,7 +22,7 @@ public:
 class Settlement : public Building
 {
 public:
-   explicit Settlement(int reference);
+   explicit Settlement(const player::Owner & owner);
 
 	const std::unordered_map<card::Ressource, int>& getCost() const override;
 
@@ -35,7 +35,7 @@ public:
 class City : public Building
 {
 public:
-   explicit City(int reference);
+   explicit City(const player::Owner & owner);
 
 	const std::unordered_map<card::Ressource, int>& getCost() const override;
 

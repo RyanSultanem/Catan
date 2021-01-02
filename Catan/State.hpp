@@ -26,6 +26,7 @@ private:
 };
 
 // TODO: Rename to Phase?
+// TODO: Change State to be non polymorphic and contains strategy to correct state, + becomes selfsufficient, no need to reconstruct in game
 class State
 {
 public:

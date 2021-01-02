@@ -8,6 +8,10 @@ namespace player {
 class Player;
 typedef std::reference_wrapper<Player> PlayerRef;
 
+class Owner;
+typedef std::reference_wrapper<Owner> OwnerRef;
+typedef std::reference_wrapper<const Owner> OwnerCRef;
+
 class PointReceiver;
 typedef std::reference_wrapper<PointReceiver> PointReceiverRef;
 

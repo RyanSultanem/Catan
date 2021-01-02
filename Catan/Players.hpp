@@ -17,15 +17,31 @@ public:
 	int getLastPlayerId() const;
 	player::Player & getActivePlayer();
 
+	player::Player & getPlayer(int playerId);
+	const player::Player & getPlayer(int playerId) const;
+
 	const std::vector<player::Player> & getPlayers() const;
-	std::vector<player::Player> & getPlayers();
 
 	void setNextActivePlayer();
 	void setNextActivePlayer(int playerId);
+
+	template<typename Function>
+	void forEachPlayer(Function func);
 
 private:
 	std::vector<player::Player> m_players;
 	int m_activePlayer;
 };
+
+
+template<typename Function>
+void Players::forEachPlayer(Function func)
+{
+	std::for_each(m_players.begin(), m_players.end(),
+		[&func](player::Player & player)
+		{
+			func(player);
+		});
+}
 
 #endif // !PLAYERS_HPP

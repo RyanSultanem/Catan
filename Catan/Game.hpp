@@ -49,8 +49,6 @@ public:
 	std::string getPlayersInfo() const override;
 	int getDiceValue() const override;
 
-	int getPlayerCount() const;
-
 	void updateGameEnd(int playerId) override;
 
 private:

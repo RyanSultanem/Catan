@@ -14,7 +14,7 @@ namespace token {
 class Road : public Token
 {
 public:
-   explicit Road(int reference);
+   explicit Road(const player::Owner & owner);
 
 	const std::unordered_map<card::Ressource, int>& getCost() const override;
 

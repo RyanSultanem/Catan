@@ -1,3 +1,6 @@
+#ifndef MOCK_PLACECONDICITONMOCK_HPP
+#define MOCK_PLACECONDICITONMOCK_HPP
+
 #include <token/Conditions.hpp>
 
 class PlaceRoadConditionMock : public PlaceRoadCondition
@@ -12,3 +15,5 @@ public:
 		return true;
 	};
 };
+
+#endif // !MOCK_PLACECONDICITONMOCK_HPP

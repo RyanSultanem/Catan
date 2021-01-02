@@ -5,7 +5,7 @@
 
 #include <board/Board.fwd.hpp>
 
-#include <player/Player.fwd.hpp>
+#include <Players.fwd.hpp>
 
 #include <utility/NumberGenerator.fwd.hpp>
 
@@ -19,7 +19,7 @@ public:
 	DevelopmentStock(const NumberGenerator & numberGenerator);
 	std::optional<card::Development> drawCard();
 	bool empty() const;
-	void initialize(std::vector<player::Player> & players, board::Board & board, Achievement & longestRoad, Achievement & strongestArmy); // TODO: dependency on board shouldnt be on stock level, maybe players dependecy too.
+	void initialize(Players & players, board::Board & board, Achievement & longestRoad, Achievement & strongestArmy); // TODO: dependency on board shouldnt be on stock level, maybe players dependecy too.
 
 private:
 	std::unordered_map<card::DevelopmentType, int> m_developmentCardCount; // TODO: two maps could be combined as 1 with pair on second element ? 

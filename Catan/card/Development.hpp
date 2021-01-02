@@ -8,6 +8,7 @@
 #include <card/Development.fwd.hpp>
 
 #include <player/Player.fwd.hpp>
+#include <Players.fwd.hpp>
 
 #include <utility/NumberGenerator.fwd.hpp>
 #include <utility/Serializable.hpp>
@@ -85,12 +86,12 @@ const std::unordered_map<card::Ressource,int> & getDevelopmentCost();
 class KnightAction : public DevelopmentAction
 {
 public:
-	explicit KnightAction(std::vector<player::Player> & players, board::Board & board, Achievement & strongestArmy, const NumberGenerator & numberGenerator);
+	explicit KnightAction(Players & players, board::Board & board, Achievement & strongestArmy, const NumberGenerator & numberGenerator);
 
 	DevelopmentType getType() const override;
 
 private:
-	std::vector<player::Player> & m_players;
+	Players & m_players;
 	board::Board & m_board;
 	Achievement & m_strongestArmy;
 	const NumberGenerator & m_numberGenerator;
@@ -129,12 +130,12 @@ private:
 class MonopolyAction : public DevelopmentAction
 {
 public:
-	explicit MonopolyAction(std::vector<player::Player> & players);
+	explicit MonopolyAction(Players & players);
 
 	DevelopmentType getType() const override;
 
 private:
-	std::vector<player::Player> & m_players;
+	Players & m_players;
 
 	bool validData(const DevelopmentData & data) const override;
 	bool apply(player::Player & player, const DevelopmentData & data) const override;

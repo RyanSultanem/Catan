@@ -3,6 +3,8 @@
 #include <board/Board.hpp>
 #include <board/Dice.hpp>
 
+#include <Players.hpp>
+
 #include <player/Player.hpp>
 #include <player/PlayerReactions.hpp>
 
@@ -13,13 +15,11 @@
 
 #include <iterator>
 
-RollDice::RollDice(board::Board & board, board::Dice & dice, std::vector<player::Player> & players, int activePlayer)
+RollDice::RollDice(board::Board & board, board::Dice & dice, Players & players)
 	: m_board(board)
 	, m_dice(dice)
 	, m_players(players)
-	, m_activePlayer(activePlayer)
 	, m_shouldChangeRobber(false)
-	, m_shouldBurn(false)
 	, m_playerBurn()
 {
 }
@@ -51,7 +51,7 @@ bool RollDice::shouldChangeRobber() const
 
 bool RollDice::shouldBurn() const
 {
-	return m_shouldBurn;
+	return !m_playerBurn.empty();
 }
 
 const std::queue<int>& RollDice::getPlayerBurnQueue() const
@@ -73,7 +73,7 @@ void RollDice::giveRessources(const board::Board & board, int diceValue) const
 			std::for_each(activeBuildings.begin(), activeBuildings.end(),
 				[this, &activeCell](const token::building::Building * activeBuilding)
 				{
-					player::Player & player = m_players.at(activeBuilding->getPlayerId());
+					player::Player & player = m_players.getActivePlayer();
 					player.addRessource(activeCell.getRessource(), activeBuilding->getPoints());
 				});
 		});
@@ -81,20 +81,19 @@ void RollDice::giveRessources(const board::Board & board, int diceValue) const
 
 void RollDice::checkCardBurn()
 {
-	int numberOfPlayers = m_players.size();
-	int playerIndex = m_activePlayer;
+	int numberOfPlayers = m_players.getNumberOfPlayers();
+	int playerIndex = m_players.getActivePlayerId();
 
 	// TODO: kind of weird way to do the check.. but might be okay
 	// TODO: should CERTAINLY NOT be here and expose the queue.
 	do
 	{
 		playerIndex = (playerIndex + 1) % numberOfPlayers; // Start with next player
-		if (m_players.at(playerIndex).getNumberOfRessources() >= 8) // TODO: Magic Number
+		if (m_players.getPlayer(playerIndex).getNumberOfRessources() >= 8) // TODO: Magic Number
 		{
 			m_playerBurn.push(playerIndex);
-			m_shouldBurn = true;
 		}
-	} while (playerIndex != m_activePlayer);
+	} while (playerIndex != m_players.getActivePlayerId());
 }
 
 Done::Done()
@@ -128,12 +127,11 @@ ActionType ExchangeCardsAction::getType() const
 	return ActionType::ExchangeCards;
 }
 
-MoveRobberAction::MoveRobberAction(player::Player & player, board::Board & board, int cellPosition, int vertexPosition, std::vector<player::Player> & players, const NumberGenerator & numberGenerator)
-	: m_player(player)
+MoveRobberAction::MoveRobberAction(Players & players, board::Board & board, int cellPosition, int vertexPosition, const NumberGenerator & numberGenerator)
+	: m_players(players)
 	, m_board(board)
 	, m_cellPosition(cellPosition)
 	, m_vertexPosition(vertexPosition)
-	, m_players(players)
 	, m_numberGenerator(numberGenerator)
 {
 }
@@ -171,9 +169,9 @@ void MoveRobberAction::postExecute()
 	std::optional<int> playerRef = m_board.getVertexPlayerRef(m_vertexPosition);
 	if (playerRef)
 	{
-		player::Player & fromPlayer = m_players.at(playerRef.value());
+		player::Player & fromPlayer = m_players.getPlayer(playerRef.value());
 		int ressourceIndex = m_numberGenerator.generateNumber(1, fromPlayer.getNumberOfRessources());
-		player::reactions::stealPlayerCard(m_player, fromPlayer, ressourceIndex);
+		player::reactions::stealPlayerCard(m_players.getActivePlayer(), fromPlayer, ressourceIndex);
 	}
 }
 

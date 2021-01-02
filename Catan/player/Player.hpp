@@ -1,6 +1,7 @@
 #ifndef PLAYER_PLAYER_HPP
 #define PLAYER_PLAYER_HPP
 
+#include <player/Player.fwd.hpp>
 #include <player/PlayerInterface.hpp>
 
 #include <card/Development.fwd.hpp>

@@ -8,6 +8,7 @@
 #include <board/Board.hpp>
 #include <board/factory/BoardFactory.hpp>
 
+#include <Players.hpp>
 #include <player/Player.hpp>
 #include <player/PlayerReactions.hpp>
 
@@ -145,7 +146,7 @@ const std::unordered_map<card::Ressource, int> & getDevelopmentCost()
 	return DEVELOPMENT_COST;
 }
 
-KnightAction::KnightAction(std::vector<player::Player> & players, board::Board & board, Achievement & strongestArmy, const NumberGenerator & numberGenerator)
+KnightAction::KnightAction(Players & players, board::Board & board, Achievement & strongestArmy, const NumberGenerator & numberGenerator)
 	: m_players(players)
 	, m_board(board)
 	, m_strongestArmy(strongestArmy)
@@ -166,7 +167,7 @@ bool KnightAction::validData(const DevelopmentData & data) const
 bool KnightAction::apply(player::Player & player, const DevelopmentData & data) const
 {
    std::pair<int,int> cellVertexPositions = data.getCellVertexPosition().value();
-   MoveRobberAction moveRobberAction(player, m_board, cellVertexPositions.first, cellVertexPositions.second, m_players, m_numberGenerator);
+   MoveRobberAction moveRobberAction(m_players, m_board, cellVertexPositions.first, cellVertexPositions.second, m_numberGenerator);
    bool result = moveRobberAction.execute();
    
    if (result)
@@ -246,7 +247,7 @@ bool BuildTwoFreeRoadsAction::applyOnCopiesCheck(player::Player & player, const 
 	return applyTwoRoads(copyBoard, copyPlayer, data, copyLongestRoad);
 }
 
-MonopolyAction::MonopolyAction(std::vector<player::Player> & players)
+MonopolyAction::MonopolyAction(Players & players)
    : m_players(players)
 {
 }
@@ -263,12 +264,13 @@ bool MonopolyAction::validData(const DevelopmentData & data) const
 
 bool MonopolyAction::apply(player::Player & player, const DevelopmentData & data) const
 {
-   std::for_each(m_players.begin(), m_players.end(),
-      [&player, &data](player::Player & sender)
-   {
-      card::Ressource ressource = data.getMonopolyRessource().value();
-      player::reactions::stealAllRessources(player, sender, ressource);
-   });
+	m_players.forEachPlayer(
+		[&player, &data](player::Player & sender)
+		{
+			card::Ressource ressource = data.getMonopolyRessource().value();
+			player::reactions::stealAllRessources(player, sender, ressource);
+		});
+     
 
    return true;
 }

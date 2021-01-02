@@ -39,6 +39,9 @@
     <ClCompile Include="PlayerTest.cpp" />
     <ClCompile Include="Vertex.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="mock\OwnerMock.hpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{8726591E-DCEE-4FA0-80B9-8913039AC64E}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>

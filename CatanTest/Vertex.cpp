@@ -2,6 +2,8 @@
 
 #include <board/Vertex.hpp>
 
+#include <mock/OwnerMock.hpp>
+
 #include <token/Building.hpp>
 
 using namespace board;
@@ -26,7 +28,7 @@ TEST(VertexTest, VertexSettlmentConstruction)
 {
    Vertex vertex;
 
-   token::building::Settlement settlment(0);
+   token::building::Settlement settlment(OwnerMock(0));
    
    vertex.setBuilding(settlment);
 
@@ -38,7 +40,7 @@ TEST(VertexTest, VertexCityConsutrction)
 {
    Vertex vertex;
 
-   token::building::City city(0);
+   token::building::City city(OwnerMock(0));
 
    vertex.setBuilding(city);
 

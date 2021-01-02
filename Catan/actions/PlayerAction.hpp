@@ -18,7 +18,7 @@
 class RollDice : public Action
 {
 public:
-	RollDice(board::Board & board, board::Dice & dice, std::vector<player::Player> & players, int activePlayerRef);
+	RollDice(board::Board & board, board::Dice & dice, Players & players);
 
 	bool execute() override;
 	ActionType getType() const override;
@@ -30,11 +30,9 @@ public:
 private:
 	board::Board & m_board;
 	board::Dice & m_dice;
-	std::vector<player::Player> & m_players;
-	int m_activePlayer;
+	Players & m_players;
 
 	bool m_shouldChangeRobber;
-	bool m_shouldBurn;
 	std::queue<int> m_playerBurn;
 
 	void giveRessources(const board::Board & board, int diceValue) const;
@@ -68,17 +66,16 @@ private:
 class MoveRobberAction : public Action
 {
 public:
-	MoveRobberAction(player::Player & player, board::Board & board, int cellPosition, int vertexPosition, std::vector<player::Player> & players, const NumberGenerator & numberGenerator);
+	MoveRobberAction(Players & players, board::Board & board, int cellPosition, int vertexPosition, const NumberGenerator & numberGenerator);
 
 	bool execute() override;
 	ActionType getType() const override;
 
 private:
-	player::Player & m_player;
+	Players & m_players;
 	board::Board & m_board;
 	int m_cellPosition;
 	int m_vertexPosition;
-	std::vector<player::Player> & m_players;
 	const NumberGenerator & m_numberGenerator;
 
 private:

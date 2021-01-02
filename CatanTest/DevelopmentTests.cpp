@@ -7,6 +7,7 @@
 
 #include <mock/PlaceConditionMock.hpp>
 
+#include <Players.hpp>
 #include <player/Player.hpp>
 
 #include <gtest/gtest.h>
@@ -165,48 +166,45 @@ TEST(VictoryPont, OneVictory)
 
 TEST(Monopoly, AllMonopolyRessourceSteal)
 {
-	std::vector<player::Player> players;
-	players.emplace_back(0);
-	players.emplace_back(1);
-	players.emplace_back(2);
+	Players players;
+	players.initializePlayers(3, nullptr);
 
 	card::MonopolyAction action(players);
 
-	players[0].addRessource(card::Ressource::BRICK, 3);
-	players[1].addRessource(card::Ressource::BRICK, 5);
-	players[2].addRessource(card::Ressource::BRICK, 7);
+	players.getPlayer(0).addRessource(card::Ressource::BRICK, 3);
+	players.getPlayer(1).addRessource(card::Ressource::BRICK, 5);
+	players.getPlayer(2).addRessource(card::Ressource::BRICK, 7);
 
 	card::DevelopmentData data;
 	data.setMonopolyRessource(card::Ressource::BRICK);
 
-	action.execute(players[0], data);
+	action.execute(players.getPlayer(0), data);
 
-	EXPECT_EQ(players[0].getRessourceCount(card::Ressource::BRICK), 15);
-	EXPECT_EQ(players[1].getRessourceCount(card::Ressource::BRICK), 0);
-	EXPECT_EQ(players[2].getRessourceCount(card::Ressource::BRICK), 0);
+	EXPECT_EQ(players.getPlayer(0).getRessourceCount(card::Ressource::BRICK), 15);
+	EXPECT_EQ(players.getPlayer(1).getRessourceCount(card::Ressource::BRICK), 0);
+	EXPECT_EQ(players.getPlayer(2).getRessourceCount(card::Ressource::BRICK), 0);
 }
 
 TEST(Monopoly, DoesNot_Affect_NonMonopolyResssource)
 {
-	std::vector<player::Player> players;
-	players.emplace_back(0);
-	players.emplace_back(1);
+	Players players;
+	players.initializePlayers(2, nullptr);
 
 	card::MonopolyAction action(players);
 
-	players[0].addRessource(card::Ressource::BRICK, 3);
-	players[1].addRessource(card::Ressource::BRICK, 5);
+	players.getPlayer(0).addRessource(card::Ressource::BRICK, 3);
+	players.getPlayer(1).addRessource(card::Ressource::BRICK, 5);
 
-	players[0].addRessource(card::Ressource::WOOL, 2);
-	players[1].addRessource(card::Ressource::WOOL, 1);
+	players.getPlayer(0).addRessource(card::Ressource::WOOL, 2);
+	players.getPlayer(1).addRessource(card::Ressource::WOOL, 1);
 
 	card::DevelopmentData data;
 	data.setMonopolyRessource(card::Ressource::BRICK);
 
-	action.execute(players[0], data);
+	action.execute(players.getPlayer(0), data);
 
-	EXPECT_EQ(players[0].getRessourceCount(card::Ressource::WOOL), 2);
-	EXPECT_EQ(players[1].getRessourceCount(card::Ressource::WOOL), 1);
+	EXPECT_EQ(players.getPlayer(0).getRessourceCount(card::Ressource::WOOL), 2);
+	EXPECT_EQ(players.getPlayer(1).getRessourceCount(card::Ressource::WOOL), 1);
 }
 
 TEST(FreeRessources, AddingTwoDifferentRessources)

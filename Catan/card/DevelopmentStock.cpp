@@ -27,7 +27,7 @@ bool DevelopmentStock::empty() const
 	return utility::getCount(m_developmentCardCount) == 0;
 }
 
-void DevelopmentStock::initialize(std::vector<player::Player> & players, board::Board & board, Achievement & longestRoad, Achievement & strongestArmy)
+void DevelopmentStock::initialize(Players & players, board::Board & board, Achievement & longestRoad, Achievement & strongestArmy)
 {
 	m_developmentCardCount.emplace(card::DevelopmentType::Knight,				15);
 	m_developmentCardCount.emplace(card::DevelopmentType::FreeRessources,		2);

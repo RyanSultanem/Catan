@@ -32,12 +32,17 @@ player::Player & Players::getActivePlayer()
 	return m_players[m_activePlayer];
 }
 
-const std::vector<player::Player> & Players::getPlayers() const
+player::Player & Players::getPlayer(int playerId)
 {
-	return m_players;
+	return m_players[playerId];
 }
 
-std::vector<player::Player> & Players::getPlayers()
+const player::Player & Players::getPlayer(int playerId) const
+{
+	return getPlayer(playerId);
+}
+
+const std::vector<player::Player> & Players::getPlayers() const
 {
 	return m_players;
 }

@@ -52,4 +52,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="mock\OwnerMock.hpp">
+      <Filter>mocks</Filter>
+    </ClInclude>
+  </ItemGroup>
 </Project>

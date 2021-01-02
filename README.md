@@ -2,7 +2,7 @@
 
 This is a personal project designed for practicing code architecture for game logic using modern **C++**.
 
-The content of this project is directly related to the famous board game Catan (https://www.catan.com/).
+The content of this project is directly related to the famous board game [Catan](https://www.catan.com/).
 
 The solution is divided into several projects:
 
